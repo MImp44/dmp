@@ -407,58 +407,77 @@ function makeNodes(){
 svg.appendChild(makeStars());svg.appendChild(makeEdges());svg.appendChild(makeNodes());
 
 // ── PANEL ─────────────────────────────────────────────────────
+// Node URL map — direct navigation
+const NODE_URLS = {
+  studios:   null, // Opens Studios sub-directory
+  claude101: 'https://mimp44.github.io/claude101/claude101.html',
+};
+
+// Coming-soon toast
+function showToast(msg){
+  let t=document.getElementById('dmp-toast');
+  if(!t){t=document.createElement('div');t.id='dmp-toast';t.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:rgba(20,20,36,.95);border:1px solid rgba(200,168,75,.25);color:#C8A84B;font-size:12px;padding:8px 20px;border-radius:20px;z-index:500;pointer-events:none;backdrop-filter:blur(8px);transition:opacity .3s';document.body.appendChild(t);}
+  t.textContent=msg;t.style.opacity='1';
+  clearTimeout(t._t);t._t=setTimeout(()=>t.style.opacity='0',2200);
+}
+
 function openNode(id){
   const n=NODES.find(n=>n.id===id);if(!n)return;
-  const icons={dmp:'⬡',espn:'🏟️',studios:'🎬',streaming:'📺',experiences:'🎢',claude101:'🤖'};
-  document.getElementById('panel-icon').textContent=icons[id]||'📋';
-  document.getElementById('panel-title').textContent=n.dept||n.label;
-  const body=document.getElementById('panel-body');
-  let html='';
-  if(id==='dmp'){
-    html=`<div class="panel-badge badge-live" style="margin-bottom:10px">Hub</div>
-    <div class="panel-desc">Disney Marketing Platform — the unified intelligence layer connecting all five marketing segments. One data brain. Every team. Every title.</div>
-    <div class="panel-sec-label" style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--subtle);margin-bottom:8px">Live segments</div>
-    <div class="panel-coming">Studios — 3 tools live</div>
-    <div class="panel-coming">Claude 101 — Migration in progress</div>
-    <div class="panel-sec-label" style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--subtle);margin:10px 0 8px">Coming</div>
-    <div class="panel-coming">ESPN · Streaming/TV · Experiences — 2027-2028</div>`;
-  } else if(id==='studios'&&n.sub_tools){
-    html=`<div class="panel-badge badge-live" style="margin-bottom:10px">LIVE · Film Marketing</div>
-    <div class="panel-desc">${n.desc}</div>
-    <div class="panel-sec-label" style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--subtle);margin-bottom:10px">Tools</div>
-    ${n.sub_tools.map(t=>`<a class="sub-tool" href="${t.url}" target="_blank">
-      <div class="sub-tool-ico ${t.iconClass}">${t.icon}</div>
-      <div><div class="sub-tool-name">${t.name}</div><div class="sub-tool-desc">${t.desc}</div></div>
-      <span class="sub-tool-arrow">→</span>
-    </a>`).join('')}`;
-  } else if(id==='claude101'&&n.url){
-    html=`<div class="panel-badge badge-live" style="margin-bottom:10px">LIVE · AI Enablement</div>
-    <div class="panel-desc">${n.desc}</div>
-    <div class="panel-sec-label" style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--subtle);margin-bottom:8px">Capabilities</div>
-    ${(n.caps||[]).map(c=>`<div style="font-size:12px;color:var(--muted);padding:5px 0;border-bottom:1px solid var(--border)">• ${c}</div>`).join('')}
-    <div style="margin-top:14px;font-size:11px;color:var(--muted)">Built by Michael Imperato for Disney Marketing. Includes onboarding wizard, team-specific use cases, and responsible AI guidelines.</div>`;
-  } else if(n.migration){
-    html=`<div class="panel-badge badge-beta" style="margin-bottom:10px">BETA · Migration in progress</div>
-    <div class="panel-desc">${n.desc}</div>
-    <div class="panel-sec-label" style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--subtle);margin-bottom:8px">Capabilities</div>
-    ${(n.caps||[]).map(c=>`<div style="font-size:12px;color:var(--muted);padding:5px 0;border-bottom:1px solid var(--border)">• ${c}</div>`).join('')}
-    <div class="panel-coming" style="margin-top:14px">Files being migrated from github.disney.com — share exported files to complete integration</div>`;
-  } else {
-    html=`<div class="panel-badge badge-soon" style="margin-bottom:10px">COMING SOON</div>
-    <div class="panel-desc">${n.desc||''}</div>
-    ${n.caps?`<div class="panel-sec-label" style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--subtle);margin-bottom:8px">Planned capabilities</div>${n.caps.map(c=>`<div style="font-size:12px;color:var(--muted);padding:5px 0;border-bottom:1px solid var(--border)">• ${c}</div>`).join('')}`:''}
-    ${n.timeline?`<div class="panel-sec-label" style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--subtle);margin:12px 0 8px">Roadmap</div>${n.timeline.map(t=>`<div class="timeline-item"><div class="tl-dot"></div><div class="tl-label">${t}</div></div>`).join('')}`:''}`;
+
+  // DMP hub — scroll to segments below
+  if(id==='dmp'){scrollToBelow();return;}
+
+  // Claude 101 — direct navigation
+  if(id==='claude101'&&n.url){window.open(n.url,'_blank');return;}
+
+  // Studios — opens sub-tools in a lightweight overlay
+  if(id==='studios'){showStudiosMenu();return;}
+
+  // Coming-soon segments
+  if(n.status==='soon'){
+    const eta=(n.timeline&&n.timeline[0])||'Coming 2027';
+    showToast(n.label+' — '+eta.split('—')[0].trim());
+    return;
   }
-  body.innerHTML=html;
-  if(id==='claude101'&&n.url){
-    const footer=document.createElement('div');footer.style.cssText='padding:14px 18px;border-top:1px solid var(--border);flex-shrink:0';
-    footer.innerHTML=`<a href="${n.url}" target="_blank" class="panel-launch" style="display:block;text-align:center;text-decoration:none">Open Claude 101 →</a>`;
-    document.getElementById('detail-panel').appendChild(footer);
-  }
-  document.getElementById('panel-overlay').classList.add('open');
-  document.getElementById('detail-panel').classList.add('open');
+
+  // Any other live node with a URL
+  if(n.url){window.open(n.url,'_blank');return;}
 }
-function closePanel(){document.getElementById('panel-overlay').classList.remove('open');document.getElementById('detail-panel').classList.remove('open');}
+
+// Studios sub-directory overlay (lightweight, no full panel)
+function showStudiosMenu(){
+  let ov=document.getElementById('studios-ov');
+  if(!ov){
+    ov=document.createElement('div');ov.id='studios-ov';
+    ov.style.cssText='position:fixed;inset:0;z-index:400;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.6);backdrop-filter:blur(6px)';
+    ov.innerHTML=`<div style="background:#10101A;border:1px solid rgba(200,168,75,.25);border-radius:14px;width:400px;overflow:hidden">
+      <div style="background:#1A1A28;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #1E1E2C">
+        <div style="display:flex;align-items:center;gap:8px"><span style="font-size:18px">🎬</span><span style="font-size:14px;font-weight:600;color:#F0EFE8">Studios</span><span style="font-size:9px;background:rgba(200,168,75,.15);color:#C8A84B;border:1px solid rgba(200,168,75,.3);padding:2px 7px;border-radius:4px;font-weight:700;text-transform:uppercase">3 tools live</span></div>
+        <button onclick="document.getElementById('studios-ov').remove()" style="background:none;border:none;color:#7A7A96;font-size:18px;cursor:pointer;line-height:1">&#x2715;</button>
+      </div>
+      <div style="padding:12px">
+        <a href="https://mimp44.github.io/pgs-demo" target="_blank" style="display:flex;align-items:center;gap:12px;padding:12px;border:1px solid #1E1E2C;border-radius:8px;text-decoration:none;transition:border-color .15s;margin-bottom:8px;background:#0C0C18" onmouseover="this.style.borderColor='#C8A84B'" onmouseout="this.style.borderColor='#1E1E2C'">
+          <div style="width:36px;height:36px;border-radius:8px;background:rgba(200,168,75,.12);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">📋</div>
+          <div><div style="font-size:13px;font-weight:600;color:#F0EFE8;margin-bottom:2px">PGS 2.0</div><div style="font-size:11px;color:#7A7A96">Publicity Global System — junkets, press, screenings</div></div>
+          <span style="margin-left:auto;color:#C8A84B;font-size:13px">→</span>
+        </a>
+        <a href="https://mimp44.github.io/strategy-demo/strategy.html" target="_blank" style="display:flex;align-items:center;gap:12px;padding:12px;border:1px solid #1E1E2C;border-radius:8px;text-decoration:none;transition:border-color .15s;margin-bottom:8px;background:#0C0C18" onmouseover="this.style.borderColor='#C8A84B'" onmouseout="this.style.borderColor='#1E1E2C'">
+          <div style="width:36px;height:36px;border-radius:8px;background:rgba(61,123,204,.12);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">🎯</div>
+          <div><div style="font-size:13px;font-weight:600;color:#F0EFE8;margin-bottom:2px">Strategy</div><div style="font-size:11px;color:#7A7A96">Campaign strategy, briefs, highlights, timeline planning</div></div>
+          <span style="margin-left:auto;color:#C8A84B;font-size:13px">→</span>
+        </a>
+        <a href="https://mimp44.github.io/cd-demo/creative-director.html" target="_blank" style="display:flex;align-items:center;gap:12px;padding:12px;border:1px solid #1E1E2C;border-radius:8px;text-decoration:none;transition:border-color .15s;background:#0C0C18" onmouseover="this.style.borderColor='#C8A84B'" onmouseout="this.style.borderColor='#1E1E2C'">
+          <div style="width:36px;height:36px;border-radius:8px;background:rgba(200,168,75,.12);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">🎬</div>
+          <div><div style="font-size:13px;font-weight:600;color:#F0EFE8;margin-bottom:2px">Creative Director</div><div style="font-size:11px;color:#7A7A96">Concepting, copywriting, trailer briefs, presentations</div></div>
+          <span style="margin-left:auto;color:#C8A84B;font-size:13px">→</span>
+        </a>
+      </div>
+    </div>`;
+    ov.addEventListener('click',e=>{if(e.target===ov)ov.remove();});
+    document.body.appendChild(ov);
+  } else { ov.remove(); }
+}
+function closePanel(){} // no-op — panels removed
 
 // ── Q&A ENGINE ────────────────────────────────────────────────
 function placeholderDate(){const y=2026+Math.floor(Math.random()*2);const months=['January','February','March','April','May','June','July','August','September','October','November'];const m=months[Math.floor(Math.random()*months.length)];const d=Math.floor(Math.random()*25)+1;return `${m} ${d}, ${y}`;}
