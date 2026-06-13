@@ -182,7 +182,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-siz
 <section class="below" id="below">
   <div class="below-inner">
     <div class="stats-row">
-      <div class="stat-cell"><div class="stat-val">2<span> Live</span></div><div class="stat-lbl">Tools deployed</div></div>
+      <div class="stat-cell"><div class="stat-val">3<span> Live</span></div><div class="stat-lbl">Tools deployed</div></div>
       <div class="stat-cell"><div class="stat-val">40<span>+</span></div><div class="stat-lbl">Titles in the slate</div></div>
       <div class="stat-cell"><div class="stat-val">7</div><div class="stat-lbl">Teams connecting</div></div>
       <div class="stat-cell"><div class="stat-val">1</div><div class="stat-lbl">Unified data brain</div></div>
@@ -260,6 +260,7 @@ const NODES = [
 // Edges: [from, to]
 const EDGES = [
   ['dmp','publicity'],['dmp','creative'],['dmp','social'],['dmp','field'],
+  ['dmp','strategy'],['strategy','publicity'],['strategy','creative'],
   ['dmp','intl'],['dmp','partnerships'],['dmp','finance'],['dmp','screening'],
   ['publicity','intl'],['publicity','field'],
   ['creative','social'],['creative','partnerships'],
@@ -277,6 +278,10 @@ const TOOLS_GRID = [
   { id:'social',    icon:'📱', iconClass:'grey', name:'Social & Digital', dept:'Social & Digital', status:'soon',
     desc:'Social content planning, platform-native campaign management, and digital asset coordination. Coming Q3 2027.',
     footer:'Coming Q3 2027' },
+  { id:'strategy', icon:'🎯', iconClass:'dark', name:'Strategy', dept:'Marketing Strategy', status:'live',
+    url:'https://mimp44.github.io/strategy-demo/strategy.html',
+    desc:'Campaign strategy briefs, positioning, and highlights synthesis. Built on the full Disney slate with brief library, timeline planning, and real Mandalorian/Grogu campaign data.',
+    footer:'→ Open Strategy' },
   { id:'field',     icon:'🗺️', iconClass:'grey', name:'Field Marketing', dept:'Field Marketing', status:'soon',
     desc:'Regional campaign coordination, grassroots activations, and local market management. Coming Q4 2027.',
     footer:'Coming Q4 2027' },
@@ -290,7 +295,7 @@ const TOOLS_GRID = [
 
 // ── RENDER TOOLS GRID ─────────────────────────────────────────────
 document.getElementById('tools-grid').innerHTML = TOOLS_GRID.map(t => `
-  <div class="tool-card${t.status==='soon'?' soon':''}" onclick="${t.status==='live' ? `window.open('${t.url}','_blank')` : `openNode('${t.id}')`}">
+  <div class="tool-card${t.status==='soon'?' soon':''}" onclick="${t.status==='live' && t.url ? `window.open('${t.url}','_blank')` : `openNode('${t.id}')`}">
     <div class="tc-head">
       <div class="tc-icon ${t.iconClass}">${t.icon}</div>
       <div><div class="tc-name">${t.name}</div><div class="tc-dept">${t.dept}</div></div>
