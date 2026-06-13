@@ -1,0 +1,651 @@
+<!-- DMP v6 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>DMP — Disney Marketing Platform</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#06060E;--surface:#10101A;--surface2:#161624;
+  --border:#1E1E2C;--border2:#28284A;
+  --gold:#C8A84B;--gold-l:rgba(200,168,75,.14);--gold-d:#96791A;
+  --blue:#3D7BCC;--blue-l:rgba(61,123,204,.14);
+  --green:#4ADE80;--red:#F87171;
+  --text:#F0EFE8;--muted:#8A8A96;--subtle:#3A3A54;
+  --soon:#2A2A42;--soon-text:#5A5A7A;
+  --node-live-fill:#1A1A28;--node-soon-fill:#101018;--node-soon-stroke:#2A2A3C;
+  --star-color:#E0DFD8;--star-max-opacity:0.4;
+  --header-bg:rgba(6,6,14,.9);--header-text:rgba(255,255,255,.8);--header-muted:rgba(255,255,255,.45);
+  --hero-eyebrow:rgba(200,168,75,.65);
+}
+@media(prefers-color-scheme:light){
+  :root{
+    --bg:#F7F6F2;--surface:#FFFFFF;--surface2:#F0EFE8;
+    --border:#E0DDD4;--border2:#CCC9BE;
+    --gold:#A8841A;--gold-l:rgba(168,132,26,.12);--gold-d:#7A5E0A;
+    --blue:#2A5E9C;--blue-l:rgba(42,94,156,.1);
+    --text:#1A1A18;--muted:#5A5A52;--subtle:#9A9A8A;
+    --soon:#ECEAE2;--soon-text:#7A7A68;
+    --node-live-fill:#FFFFFF;--node-soon-fill:#E8E6DE;--node-soon-stroke:#C0BDB2;
+    --star-color:#1A1A18;--star-max-opacity:0.06;
+    --header-bg:rgba(247,246,242,.92);--header-text:#1A1A18;--header-muted:#7A7A68;
+    --hero-eyebrow:rgba(168,132,26,.75);
+  }
+}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:14px;background:var(--bg);color:var(--text);overflow-x:hidden}
+
+/* HEADER */
+.header{position:fixed;top:0;left:0;right:0;z-index:100;height:52px;background:var(--header-bg);backdrop-filter:blur(12px);border-bottom:1px solid rgba(128,100,20,.15);display:flex;align-items:center;padding:0 28px;gap:16px}
+.logo{display:flex;align-items:center;gap:9px;text-decoration:none}
+.logo-badge{background:var(--gold);color:#06060E;font-weight:800;font-size:11px;padding:3px 9px;border-radius:5px;letter-spacing:.5px}
+.logo-name{font-size:14px;font-weight:500;color:var(--header-text)}
+.hdr-right{margin-left:auto;display:flex;gap:8px;align-items:center}
+.hdr-btn{background:rgba(128,100,20,.06);border:1px solid rgba(128,100,20,.2);color:var(--muted);font-size:11px;padding:5px 12px;border-radius:5px;cursor:pointer;transition:all .15s;font-family:inherit;display:flex;align-items:center;gap:5px}
+.hdr-btn:hover{background:rgba(128,100,20,.12);color:var(--text)}
+.hdr-btn.gold{background:var(--gold-l);border-color:rgba(200,168,75,.3);color:var(--gold)}
+.hdr-btn.gold:hover{background:rgba(200,168,75,.22)}
+
+/* HERO */
+.hero{position:relative;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+.hero-title{position:absolute;top:72px;left:50%;transform:translateX(-50%);text-align:center;z-index:10;pointer-events:none;width:100%}
+.hero-eyebrow{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:2.5px;color:var(--hero-eyebrow);margin-bottom:10px}
+.hero-h1{font-size:40px;font-weight:700;letter-spacing:-1.2px;color:var(--text);margin-bottom:5px;line-height:1.08}
+.hero-h1 span{color:var(--gold)}
+.hero-sub{font-size:13px;color:var(--muted);font-weight:300;letter-spacing:.2px}
+
+/* Q&A BAR */
+.qa-bar{position:absolute;bottom:56px;left:50%;transform:translateX(-50%);z-index:20;width:100%;max-width:600px;padding:0 24px}
+.qa-wrap{background:rgba(255,255,255,.88);backdrop-filter:blur(16px);border:1px solid rgba(168,132,26,.3);border-radius:28px;display:flex;align-items:center;padding:10px 16px;gap:10px;transition:border-color .2s,box-shadow .2s;box-shadow:0 4px 24px rgba(0,0,0,.4)}
+.qa-wrap:focus-within{border-color:var(--gold);box-shadow:0 0 0 3px rgba(200,168,75,.12)}
+.qa-icon{font-size:14px;flex-shrink:0;opacity:.6}
+#qa-input{flex:1;border:none;outline:none;font-size:13px;font-family:inherit;color:var(--text);background:transparent;line-height:1.4}
+#qa-input::placeholder{color:var(--subtle)}
+.qa-send{width:30px;height:30px;border-radius:50%;background:var(--gold);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s}
+.qa-send:hover{background:var(--gold-d)}
+.qa-send svg{fill:none;stroke:#06060E;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.scroll-hint{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);font-size:10px;color:var(--subtle);text-transform:uppercase;letter-spacing:1px;display:flex;flex-direction:column;align-items:center;gap:5px;animation:fadeUp 2s ease 2s both}
+@keyframes fadeUp{from{opacity:0;transform:translateX(-50%) translateY(6px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+.scroll-arrow{width:16px;height:16px;border-right:1px solid var(--subtle);border-bottom:1px solid var(--subtle);transform:rotate(45deg);animation:bounce 2s infinite}
+@keyframes bounce{0%,100%{transform:rotate(45deg) translateY(0)}50%{transform:rotate(45deg) translateY(4px)}}
+
+/* CONSTELLATION */
+.constellation-wrap{position:absolute;inset:0}
+#constellation{width:100%;height:100%;cursor:default}
+
+/* Q&A ANSWER PANEL */
+.qa-answer{position:fixed;bottom:0;left:0;right:0;z-index:200;background:rgba(10,10,22,.95);backdrop-filter:blur(20px);border-top:1px solid rgba(200,168,75,.2);padding:16px 28px;transform:translateY(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);max-height:50vh;overflow-y:auto}
+.qa-answer.open{transform:translateY(0)}
+.qa-answer-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.qa-answer-q{font-size:12px;color:var(--muted);font-style:italic}
+.qa-answer-close{background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;line-height:1}
+.qa-answer-close:hover{color:var(--text)}
+.qa-answer-body{font-size:14px;color:var(--text);line-height:1.7}
+.qa-answer-body strong{color:var(--gold)}
+.qa-card{background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:12px 16px;margin-top:10px}
+.qa-card-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--gold);margin-bottom:5px}
+.qa-row{display:flex;gap:8px;padding:5px 0;border-bottom:1px solid var(--border);font-size:12px}
+.qa-row:last-child{border:none}
+.qa-row-lbl{color:var(--muted);width:120px;flex-shrink:0}
+.qa-row-val{color:var(--text);font-weight:500}
+.qa-placeholder{background:rgba(200,168,75,.08);border:1px solid rgba(200,168,75,.2);border-radius:6px;padding:8px 12px;font-size:11px;color:var(--gold);margin-top:8px;font-style:italic}
+
+/* DETAIL PANEL */
+.panel-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:300;display:none}
+.panel-overlay.open{display:block}
+.panel{position:fixed;top:0;right:0;bottom:0;width:360px;background:var(--surface);z-index:301;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .25s cubic-bezier(.4,0,.2,1);border-left:1px solid var(--border)}
+.panel.open{transform:translateX(0)}
+.panel-hdr{background:var(--surface2);padding:16px 18px;display:flex;align-items:center;gap:10px;flex-shrink:0;border-bottom:1px solid var(--border)}
+.panel-title{font-size:14px;font-weight:600;flex:1}
+.panel-close{background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;line-height:1}
+.panel-close:hover{color:var(--text)}
+.panel-body{flex:1;overflow-y:auto;padding:18px}
+.panel-badge{font-size:9px;font-weight:700;padding:2px 8px;border-radius:4px;text-transform:uppercase}
+.badge-live{background:var(--gold-l);color:var(--gold);border:1px solid rgba(200,168,75,.3)}
+.badge-soon{background:var(--soon);color:var(--soon-text);border:1px solid var(--border2)}
+.badge-beta{background:var(--blue-l);color:var(--blue);border:1px solid rgba(61,123,204,.3)}
+.panel-desc{font-size:13px;color:var(--muted);line-height:1.65;margin-bottom:16px}
+.panel-sec-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--subtle);margin-bottom:8px}
+/* Sub-tools */
+.sub-tool{display:flex;align-items:center;gap:12px;padding:10px 14px;border:1px solid var(--border);border-radius:8px;margin-bottom:8px;cursor:pointer;transition:border-color .15s;text-decoration:none}
+.sub-tool:hover{border-color:var(--gold)}
+.sub-tool-ico{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.sub-tool-ico.blue{background:var(--blue-l)}
+.sub-tool-ico.gold{background:var(--gold-l)}
+.sub-tool-name{font-size:13px;font-weight:600;color:var(--text);margin-bottom:1px}
+.sub-tool-desc{font-size:11px;color:var(--muted)}
+.sub-tool-arrow{margin-left:auto;color:var(--subtle);font-size:14px}
+.panel-launch{width:100%;background:var(--gold);color:#06060E;border:none;border-radius:8px;padding:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;margin-top:4px;transition:background .15s}
+.panel-launch:hover{background:var(--gold-d)}
+.panel-launch.disabled{background:var(--soon);color:var(--soon-text);cursor:not-allowed}
+.panel-coming{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;font-size:12px;color:var(--muted);margin-bottom:12px}
+.timeline-item{display:flex;gap:8px;padding:5px 0;border-bottom:1px solid var(--border);font-size:12px}
+.timeline-item:last-child{border:none}
+.tl-dot{width:6px;height:6px;border-radius:50%;background:var(--subtle);margin-top:4px;flex-shrink:0}
+.tl-label{color:var(--muted);flex:1}
+.tl-date{font-size:10px;color:var(--subtle)}
+
+/* DATA ENTRY MODAL */
+.de-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:400;display:none;align-items:center;justify-content:center}
+.de-overlay.open{display:flex}
+.de-modal{background:var(--surface);border:1px solid var(--border2);border-radius:14px;width:500px;overflow:hidden}
+.de-hdr{background:var(--surface2);padding:16px 20px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border)}
+.de-title{font-size:14px;font-weight:600;flex:1}
+.de-close{background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;line-height:1}
+.de-body{padding:20px}
+.de-label{font-size:11px;font-weight:600;color:var(--text);margin-bottom:5px}
+.de-sub{font-size:10px;color:var(--muted);margin-bottom:10px}
+.de-input{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:10px 12px;font-size:13px;font-family:inherit;color:var(--text);outline:none;resize:vertical;min-height:80px;line-height:1.5;margin-bottom:12px}
+.de-input:focus{border-color:var(--gold)}
+.de-category{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
+.de-cat{background:var(--surface2);border:1px solid var(--border2);color:var(--muted);border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer;transition:all .12s;font-family:inherit}
+.de-cat.on{background:var(--gold-l);border-color:rgba(200,168,75,.4);color:var(--gold)}
+.de-btns{display:flex;gap:8px}
+.de-btn-p{background:var(--gold);color:#06060E;border:none;border-radius:7px;padding:8px 18px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit}
+.de-btn-p:hover{background:var(--gold-d)}
+.de-btn-s{background:transparent;color:var(--muted);border:1px solid var(--border2);border-radius:7px;padding:8px 14px;font-size:12px;cursor:pointer;font-family:inherit}
+.de-saved{color:var(--green);font-size:12px;margin-top:10px;display:none}
+
+/* BELOW FOLD */
+.below{background:var(--surface)}
+.below-inner{max-width:1100px;margin:0 auto;padding:72px 28px}
+.stats-row{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:#1E1E2C;border-radius:10px;overflow:hidden;margin-bottom:64px}
+.stat-cell{background:var(--surface);padding:20px 24px}
+.stat-val{font-size:28px;font-weight:700;color:var(--gold);letter-spacing:-1px;margin-bottom:3px}
+.stat-lbl{font-size:11px;color:var(--muted);letter-spacing:.2px}
+.sec-eyebrow{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--gold);margin-bottom:10px}
+.sec-h2{font-size:26px;font-weight:700;color:var(--text);letter-spacing:-.4px;margin-bottom:12px}
+.sec-desc{font-size:14px;color:var(--muted);line-height:1.7;max-width:560px;margin-bottom:48px}
+.segments-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:64px}
+.seg-card{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:20px;cursor:pointer;transition:all .15s}
+.seg-card:hover{border-color:var(--gold);transform:translateY(-2px)}
+.seg-card.live{border-color:rgba(200,168,75,.3)}
+.seg-icon{font-size:20px;margin-bottom:10px}
+.seg-name{font-size:13px;font-weight:600;color:var(--text);margin-bottom:3px}
+.seg-dept{font-size:11px;color:var(--muted);margin-bottom:8px}
+.seg-badge{font-size:9px;font-weight:700;padding:2px 7px;border-radius:4px;text-transform:uppercase}
+.seg-desc{font-size:11px;color:var(--muted);line-height:1.6;margin-top:8px}
+.footer-bar{border-top:1px solid var(--border);margin-top:56px;padding-top:20px;display:flex;justify-content:space-between;font-size:11px;color:var(--subtle)}
+
+/* DATA LOG */
+.data-log{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;margin-top:16px}
+.data-log-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:10px}
+.data-entry{display:flex;gap:8px;padding:6px 0;border-bottom:1px solid var(--border);font-size:11px}
+.data-entry:last-child{border:none}
+.de-tag{font-size:9px;font-weight:700;padding:1px 6px;border-radius:3px;text-transform:uppercase;white-space:nowrap}
+.de-tag.date{background:var(--blue-l);color:var(--blue)}
+.de-tag.highlight{background:var(--gold-l);color:var(--gold)}
+.de-tag.contact{background:rgba(74,222,128,.1);color:var(--green)}
+.de-tag.note{background:var(--surface);color:var(--muted);border:1px solid var(--border)}
+
+/* scrollbar */
+.panel-body::-webkit-scrollbar,.qa-answer::-webkit-scrollbar{width:3px}
+.panel-body::-webkit-scrollbar-thumb,.qa-answer::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <a class="logo" href="#"><span class="logo-badge">DMP</span><span class="logo-name">Disney Marketing Platform <span style="opacity:.45;font-weight:400">2.0</span></span></a>
+  <div class="hdr-right">
+    <button class="hdr-btn gold" onclick="openDE()" title="Add marketing data">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Add data
+    </button>
+    <button class="hdr-btn" onclick="scrollToBelow()">Segments</button>
+  </div>
+</header>
+
+<!-- HERO CONSTELLATION -->
+<section class="hero" id="hero">
+  <div class="hero-title">
+    <div class="hero-eyebrow">Walt Disney Studios Motion Pictures</div>
+    <div class="hero-h1">Disney Marketing <span>Platform</span></div>
+    <div class="hero-sub">One intelligence. Five segments. Every title.</div>
+  </div>
+  <div class="constellation-wrap"><svg id="constellation" viewBox="0 0 1000 580" preserveAspectRatio="xMidYMid meet"></svg></div>
+  <div class="qa-bar">
+    <div class="qa-wrap">
+      <span class="qa-icon">🔍</span>
+      <input id="qa-input" type="text" placeholder="Ask anything — release dates, campaign highlights, contacts, marketing strategy…" autocomplete="off" onkeydown="if(event.key==='Enter')askQA()"/>
+      <button class="qa-send" onclick="askQA()"><svg width="14" height="14" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
+    </div>
+  </div>
+  <div class="scroll-hint"><span>Scroll</span><div class="scroll-arrow"></div></div>
+</section>
+
+<!-- Q&A ANSWER PANEL -->
+<div class="qa-answer" id="qa-answer">
+  <div class="qa-answer-header">
+    <div class="qa-answer-q" id="qa-answer-q"></div>
+    <button class="qa-answer-close" onclick="closeQA()">&#x2715;</button>
+  </div>
+  <div class="qa-answer-body" id="qa-answer-body"></div>
+</div>
+
+<!-- DATA ENTRY MODAL -->
+<div class="de-overlay" id="de-overlay">
+  <div class="de-modal">
+    <div class="de-hdr"><span style="font-size:16px">📥</span><span class="de-title">Add marketing data</span><button class="de-close" onclick="closeDE()">&#x2715;</button></div>
+    <div class="de-body">
+      <div class="de-label">What would you like to record?</div>
+      <div class="de-sub">A date, a campaign highlight, a contact, or any marketing note. The platform will categorize and store it automatically.</div>
+      <textarea class="de-input" id="de-input" placeholder="e.g. 'Mandalorian opening weekend was $245M domestic' or 'Avengers Doomsday press day is March 4, 2026' or 'Emily Steidl is the POC for TS5 press'"></textarea>
+      <div class="de-label" style="margin-bottom:6px">Category (auto-detected, override if needed)</div>
+      <div class="de-category">
+        <button class="de-cat on" id="cat-auto" onclick="setCategory('auto')">Auto-detect</button>
+        <button class="de-cat" id="cat-date" onclick="setCategory('date')">📅 Date</button>
+        <button class="de-cat" id="cat-highlight" onclick="setCategory('highlight')">⭐ Highlight</button>
+        <button class="de-cat" id="cat-contact" onclick="setCategory('contact')">👤 Contact</button>
+        <button class="de-cat" id="cat-note" onclick="setCategory('note')">📝 Note</button>
+      </div>
+      <div class="de-btns">
+        <button class="de-btn-p" onclick="submitDE()">Save to DMP</button>
+        <button class="de-btn-s" onclick="closeDE()">Cancel</button>
+      </div>
+      <div class="de-saved" id="de-saved">✓ Saved to DMP and logged to Google Sheets</div>
+    </div>
+  </div>
+</div>
+
+<!-- BELOW FOLD -->
+<section class="below" id="below">
+  <div class="below-inner">
+    <div class="stats-row">
+      <div class="stat-cell"><div class="stat-val">5</div><div class="stat-lbl">Marketing segments</div></div>
+      <div class="stat-cell"><div class="stat-val">3</div><div class="stat-lbl">Live tools</div></div>
+      <div class="stat-cell"><div class="stat-val">40+</div><div class="stat-lbl">Titles in slate</div></div>
+      <div class="stat-cell"><div class="stat-val" id="below-entries">0</div><div class="stat-lbl">Data entries logged</div></div>
+      <div class="stat-cell"><div class="stat-val">1</div><div class="stat-lbl">Unified data brain</div></div>
+    </div>
+    <div class="sec-eyebrow">The Platform</div>
+    <div class="sec-h2">Five segments. One brain.</div>
+    <div class="sec-desc">DMP organizes Disney's Unified Marketing division by segment — each with purpose-built tools, shared data, and a conversational intelligence layer that answers marketing questions in real time.</div>
+    <div class="segments-grid" id="segments-grid"></div>
+    <div class="data-log" id="data-log" style="display:none">
+      <div class="data-log-title">Recent data entries</div>
+      <div id="data-log-items"></div>
+    </div>
+    <div class="footer-bar">
+      <span>Disney Marketing Platform · Walt Disney Studios Motion Pictures</span>
+      <span>Internal Use Only · Q2 2026</span>
+    </div>
+  </div>
+</section>
+
+<script>
+const SVG_NS='http://www.w3.org/2000/svg';
+const IS_DARK=!window.matchMedia('(prefers-color-scheme:light)').matches;
+const THEME={
+  nodeLiveFill:IS_DARK?'#1A1A28':'#FFFFFF',
+  nodeSoonFill:IS_DARK?'#101018':'#E8E6DE',
+  nodeSoonStroke:IS_DARK?'#2A2A3C':'#C0BDB2',
+  nodeHubLabel:IS_DARK?'#06060E':'#0D2E52',
+  labelLive:IS_DARK?'#C8A84B':'#7A5E0A',
+  labelSoon:IS_DARK?'#4A4A5E':'#8A8A72',
+  lineActive:IS_DARK?'rgba(200,168,75,0.4)':'rgba(168,132,26,0.55)',
+  lineSoon:IS_DARK?'rgba(80,80,100,0.15)':'rgba(120,115,100,0.2)',
+  glowColor:IS_DARK?'rgba(200,168,75,0.07)':'rgba(168,132,26,0.08)',
+  particleColor:IS_DARK?'rgba(200,168,75,0.65)':'rgba(168,132,26,0.7)',
+  starColor:IS_DARK?'#E0DFD8':'#1A1A18',
+  starMaxOp:IS_DARK?0.4:0.07,
+};
+function el(tag,attrs={}){const e=document.createElementNS(SVG_NS,tag);Object.entries(attrs).forEach(([k,v])=>e.setAttribute(k,v));return e;}
+
+// ── DISNEY SLATE ─────────────────────────────────────────────
+const DISNEY_SLATE=[
+  {year:'2026',films:[
+    {date:'5/22/26',studio:'Disney',title:'Star Wars: The Mandalorian and Grogu',genre:'Live Action'},
+    {date:'6/19/26',studio:'Disney',title:'Toy Story 5',genre:'Animation'},
+    {date:'7/10/26',studio:'Disney',title:'Moana',genre:'Live Action'},
+    {date:'9/25/26',studio:'Disney',title:'Avengers: Endgame (Re-Release)',genre:'Marvel'},
+    {date:'11/25/26',studio:'Disney',title:"Disney's Hexed",genre:'Animation'},
+    {date:'12/18/26',studio:'Disney',title:'Avengers: Doomsday',genre:'Marvel'},
+  ]},
+  {year:'2027',films:[
+    {date:'2/5/27',studio:'20th',title:'Ice Age: Boiling Point',genre:'Animation'},
+    {date:'2/19/27',studio:'Disney',title:'Star Wars: A New Hope (50th Anniversary)',genre:'Star Wars'},
+    {date:'3/5/27',studio:'Disney',title:'Gatto',genre:'Animation'},
+    {date:'5/28/27',studio:'Disney',title:'Star Wars: Starfighter',genre:'Star Wars'},
+    {date:'8/6/27',studio:'Disney',title:'Untitled Bluey Movie',genre:'Animation'},
+    {date:'11/24/27',studio:'Disney',title:'Frozen 3',genre:'Animation'},
+    {date:'12/17/27',studio:'Disney',title:'Avengers: Secret Wars',genre:'Marvel'},
+  ]},
+  {year:'2028',films:[
+    {date:'5/26/28',studio:'Disney',title:'Lilo & Stitch 2',genre:'Live Action'},
+    {date:'6/16/28',studio:'Disney',title:'Incredibles 3',genre:'Animation'},
+    {date:'12/15/28',studio:'Disney',title:'Untitled Marvel',genre:'Marvel'},
+  ]},
+  {year:'2029',films:[{date:'12/21/29',studio:'20th',title:'Avatar 4',genre:'Live Action'}]},
+];
+const ALL_FILMS=DISNEY_SLATE.flatMap(y=>y.films);
+
+// ── CAMPAIGN KNOWLEDGE BASE ───────────────────────────────────
+const CAMPAIGN_KB=[
+  {title:'Star Wars: The Mandalorian and Grogu',event:'WWE WrestleMania',date:'April 18, 2026',segment:'ESPN',desc:'Mando and Grogu surprised fans at WrestleMania in Las Vegas. Custom 60-second Exclusive Look. In-ring signage, billboard with announcer toss, and premium in-match graphics. Coverage across WWE, ESPN SportsCenter, Star Wars, Lucasfilm, and The Mandalorian social handles.'},
+  {title:'Star Wars: The Mandalorian and Grogu',event:'NBA Eastern Conference Finals',date:'May 17-23, 2026',segment:'ESPN',desc:'Mando and Grogu appeared courtside with Chris Paul. 2x :30 custom content pieces on ESPN/ABC. Pedro Pascal-led custom Game 1 open. "Golden Ticket" surprise — Omar Raja upgraded a fan to premium seats with a message from Pascal.'},
+  {title:'Star Wars: The Mandalorian and Grogu',event:'MLB Opening Day',date:'March 26-April 5, 2026',segment:'ESPN',desc:'Custom (:15) Grogu bumper in rotation starting Opening Day Primetime. Grogu uses the force to help Mason Miller\'s pitching — custom social piece.'},
+  {title:'Star Wars: The Mandalorian and Grogu',event:'La Liga El Clásico',date:'May 10, 2026',segment:'ESPN',desc:'Co-branded tune-in with ESPN FC, Star Wars, and La Liga. Surround of the Barcelona vs. Real Madrid match.'},
+  {title:'Star Wars: The Mandalorian and Grogu',event:'CinemaCon',date:'April 16, 2026',segment:'Studios',desc:'Jon Favreau presented 17 minutes of footage at CinemaCon in Las Vegas during the Walt Disney Studios Panel. Final trailer debuted. Full-scale Tickets on Sale takeover the following day.'},
+  {title:'Star Wars: The Mandalorian and Grogu',event:'May the 4th IMAX Event',date:'May 4, 2026',segment:'Studios',desc:'Exclusive IMAX events with 25+ minutes of never-before-seen footage. LA and NY: Dave Filoni + Mandalorian appearances. Berlin and Madrid: Pedro Pascal, Sigourney Weaver, Jon Favreau. Floating Popcorn spectacle at Times Square.'},
+  {title:'Star Wars: The Mandalorian and Grogu',event:'Disneyland Galaxy\'s Edge Takeover',date:'May 16, 2026',segment:'Experiences',desc:'Pedro Pascal revealed himself as the walkaround Mandalorian character — removing his helmet. "The Curious Child" nighttime projection debuted. New Millennium Falcon: Smugglers Run storyline launched.'},
+  {title:'Star Wars: The Mandalorian and Grogu',event:'Burger King partnership',date:'April 28 - ongoing',segment:'Studios',desc:'First Star Wars partnership in 20 years. BBQ Bounty Whopper, Blue Cookie Shake, Garlic Chicken Fries, Imperial Cheddar Ranch Tots. King Jr. Meal with 8 collectible toys. Full-scale in-store takeovers globally.'},
+  {title:'Star Wars: The Mandalorian and Grogu',event:'World Premiere',date:'May 14, 2026',segment:'Studios',desc:'World Premiere in Los Angeles. Full cast including Jon Favreau, Pedro Pascal, Sigourney Weaver, Jeremy Allen White, Dave Filoni, Kathleen Kennedy. Sigourney Weaver hand & footprint ceremony at TCL Chinese Theatre on May 15.'},
+];
+
+// ── PRESS CONTACTS ────────────────────────────────────────────
+const PRESS_CONTACTS=[
+  {journalist:'Jake Hamilton',outlet:'WFLD-TV (FOX)',territory:'USA',poc:'Emily Steidl',poc_email:'emily.steidl@disney.com'},
+  {journalist:'Trey Mangum',outlet:'Blavity TV',territory:'USA',poc:'Nick Salinas',poc_email:'nick.salinas@disney.com'},
+  {journalist:'Miranda Montenegro',outlet:'Mitú',territory:'USA',poc:'Brielle Smith',poc_email:'brielle.smith@disney.com'},
+  {journalist:'Rick Campanelli',outlet:'Breakfast Television Toronto',territory:'Canada',poc:'Katya Kwiatkowski',poc_email:'katya.kwiatkowski@disney.com'},
+  {journalist:'Denise Reyes',outlet:'Despierta America (Univision)',territory:'USA',poc:'Brielle Smith',poc_email:'brielle.smith@disney.com'},
+  {journalist:'Kevin Frazier',outlet:'Entertainment Tonight',territory:'USA',poc:'Benjamin Chocron',poc_email:'benjamin.chocron@disney.com'},
+];
+
+// ── USER DATA STORE ────────────────────────────────────────────
+const USER_DATA={
+  entries:JSON.parse(localStorage.getItem('dmp_data')||'[]'),
+  add(entry){this.entries.unshift({...entry,id:Date.now(),at:new Date().toLocaleString()});this.save();logToSheets(entry);},
+  save(){localStorage.setItem('dmp_data',JSON.stringify(this.entries));},
+};
+
+function getSheetsURL(){return localStorage.getItem('pgs_sheets_url')||'';}
+function logToSheets(data){const u=getSheetsURL();if(!u)return;fetch(u,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({...data,source:'DMP',timestamp:new Date().toLocaleString()})}).catch(()=>{});}
+
+// ── CONSTELLATION NODES ───────────────────────────────────────
+const NODES=[
+  {id:'dmp',      x:500,y:292,r:22,label:'DMP',     sub:'Disney Marketing Platform', status:'hub'},
+  {id:'espn',     x:175,y:150,r:15,label:'ESPN',    sub:'Sports & Live Events',       status:'soon',
+   dept:'ESPN & Sports Marketing',
+   desc:'Marketing strategy and campaign management for live sports integrations, ESPN partnerships, and sports-adjacent promotional activations across all Disney Studios titles.',
+   caps:['Sports media integrations','Live event marketing','ESPN partnership management','Broadcast rights coordination'],
+   timeline:['Sports Q&A module — Q3 2027','ESPN campaign builder — Q4 2027','Live event tracker — 2028']},
+  {id:'studios',  x:500,y:140,r:17,label:'Studios', sub:'Film Marketing · 3 tools live',status:'live',
+   dept:'Studios Film Marketing',
+   desc:'End-to-end marketing operations for Disney Studios theatrical releases — spanning publicity, creative strategy, and campaign execution for all global titles.',
+   sub_tools:[
+     {id:'pgs',  icon:'📋',name:'PGS 2.0',     desc:'Publicity Global System — junkets, press, screenings, travel',     url:'https://mimp44.github.io/pgs-demo',iconClass:'gold'},
+     {id:'st',   icon:'🎯',name:'Strategy',     desc:'Campaign strategy, briefs, highlights, timeline planning',          url:'https://mimp44.github.io/strategy-demo/strategy.html',iconClass:'blue'},
+     {id:'cd',   icon:'🎬',name:'Creative Director',desc:'Concepting, copywriting, trailer briefs, creative presentations', url:'https://mimp44.github.io/cd-demo/creative-director.html',iconClass:'gold'},
+   ]},
+  {id:'streaming',x:825,y:150,r:15,label:'Streaming',sub:'Disney+ · Hulu · ABC · FX', status:'soon',
+   dept:'Streaming & Television',
+   desc:'Marketing coordination for Disney+ originals, Hulu programming, ABC broadcast, and FX series — from content launch through streaming performance.',
+   caps:['Disney+ original launch strategy','Hulu campaign coordination','ABC broadcast marketing','FX series marketing'],
+   timeline:['Streaming brief builder — Q2 2027','D+ analytics dashboard — Q3 2027','Content calendar — Q4 2027']},
+  {id:'experiences',x:760,y:445,r:15,label:'Experiences',sub:'Parks · Consumer Products', status:'soon',
+   dept:'Experiences & Consumer Products',
+   desc:'Marketing integration between theatrical releases and Disney Parks, Consumer Products, and Live Entertainment — driving cross-platform synergy.',
+   caps:['Parks/film synergy planning','Consumer products co-marketing','Live entertainment tie-ins','Merchandise launch coordination'],
+   timeline:['Parks synergy module — Q3 2027','CP campaign tools — 2028','Live entertainment hub — 2028']},
+  {id:'claude101',x:240,y:445,r:15,label:'Claude 101',sub:'AI Playbook · Onboarding Wizard',status:'live',url:'https://mimp44.github.io/claude101/claude101-demo.html',
+   dept:'Claude 101 — AI Enablement',
+   desc:'A purpose-built playbook and UX for Disney Marketing teams to understand, adopt, and activate Claude AI capabilities across all marketing functions.',
+   caps:['AI adoption playbook','Team-specific use case guides','Prompt engineering toolkit','Best practices & governance'],
+   migration:true},
+];
+const EDGES=[['dmp','espn'],['dmp','studios'],['dmp','streaming'],['dmp','experiences'],['dmp','claude101'],['studios','espn'],['studios','streaming'],['espn','experiences']];
+
+// ── DRAW ──────────────────────────────────────────────────────
+const svg=document.getElementById('constellation');
+function makeStars(n=180){const g=el('g');for(let i=0;i<n;i++){const c=el('circle',{cx:Math.random()*1000,cy:Math.random()*580,r:Math.random()<.8?.5:Math.random()<.7?.9:1.3,fill:THEME.starColor,opacity:.02+Math.random()*THEME.starMaxOp});g.appendChild(c);}return g;}
+function makeEdges(){
+  const g=el('g');const nm=Object.fromEntries(NODES.map(n=>[n.id,n]));
+  EDGES.forEach(([a,b])=>{
+    const na=nm[a],nb=nm[b];if(!na||!nb)return;
+    const bothLive=(na.status==='live'||na.status==='hub')&&(nb.status==='live'||nb.status==='hub'||nb.status==='beta');
+    const anyLive=na.status!=='soon'&&nb.status!=='soon';
+    const line=el('line',{x1:na.x,y1:na.y,x2:nb.x,y2:nb.y,
+      stroke:bothLive?THEME.lineActive:anyLive?THEME.lineActive.replace('0.4','0.18'):THEME.lineSoon,
+      'stroke-width':bothLive?1.2:.7,'stroke-dasharray':bothLive?'none':'4 7'});
+    g.appendChild(line);
+    if(bothLive){const circ=el('circle',{r:2,fill:THEME.particleColor});const anim=document.createElementNS(SVG_NS,'animateMotion');anim.setAttribute('dur',(1.8+Math.random()*2.2)+'s');anim.setAttribute('repeatCount','indefinite');const mp=document.createElementNS(SVG_NS,'mpath');const pathEl=el('path',{d:`M${na.x},${na.y} L${nb.x},${nb.y}`,'fill':'none'});pathEl.id='ep-'+a+'-'+b;svg.appendChild(pathEl);mp.setAttribute('xlink:href','#ep-'+a+'-'+b);anim.appendChild(mp);circ.appendChild(anim);g.appendChild(circ);}
+  });return g;
+}
+function makeNodes(){
+  const g=el('g');
+  NODES.forEach(n=>{
+    const ng=el('g',{cursor:'pointer'});ng.dataset.id=n.id;
+    const isLive=n.status==='live'||n.status==='hub';
+    const isBeta=n.status==='beta';
+    if(isLive||isBeta){const glow=el('circle',{cx:n.x,cy:n.y,r:n.r+11,fill:isLive?THEME.glowColor:(IS_DARK?'rgba(61,123,204,0.07)':'rgba(42,94,156,0.06)')});const anim=document.createElementNS(SVG_NS,'animate');anim.setAttribute('attributeName','r');anim.setAttribute('values',`${n.r+9};${n.r+15};${n.r+9}`);anim.setAttribute('dur','3.5s');anim.setAttribute('repeatCount','indefinite');glow.appendChild(anim);ng.appendChild(glow);}
+    if(n.status==='hub'){const ring=el('circle',{cx:n.x,cy:n.y,r:n.r+6,fill:'none',stroke:'rgba(200,168,75,0.22)','stroke-width':'1'});ng.appendChild(ring);}
+    const fill=n.status==='hub'?'#C8A84B':n.status==='live'?THEME.nodeLiveFill:n.status==='beta'?(IS_DARK?'#0D1929':'#E8F0F8'):THEME.nodeSoonFill;
+    const stroke=n.status==='hub'?'#FFD97A':n.status==='live'?'#C8A84B':n.status==='beta'?'#3D7BCC':THEME.nodeSoonStroke;
+    const circ=el('circle',{cx:n.x,cy:n.y,r:n.r,fill,stroke,'stroke-width':n.status==='hub'?2.5:1.5});
+    ng.appendChild(circ);
+    const labelY=n.y+n.r+13;
+    const labelColor=n.status==='hub'?'#F0EFE8':n.status==='live'||n.status==='beta'?THEME.labelLive:THEME.labelSoon;
+    const txt=el('text',{x:n.x,y:labelY,fill:labelColor,'text-anchor':'middle','font-size':n.status==='hub'?10:9,'font-weight':'600','font-family':'-apple-system,sans-serif','letter-spacing':'0.2'});
+    txt.textContent=n.label;ng.appendChild(txt);
+    if(n.status==='live'){const dot=el('circle',{cx:n.x+n.r-3,cy:n.y-n.r+3,r:4,fill:'#4ADE80'});const da=document.createElementNS(SVG_NS,'animate');da.setAttribute('attributeName','opacity');da.setAttribute('values','1;0.3;1');da.setAttribute('dur','2.5s');da.setAttribute('repeatCount','indefinite');dot.appendChild(da);ng.appendChild(dot);}
+    if(n.status==='beta'){const dot=el('circle',{cx:n.x+n.r-3,cy:n.y-n.r+3,r:4,fill:'#3D7BCC'});ng.appendChild(dot);}
+    if(n.status==='hub'){const ico=el('text',{x:n.x,y:n.y+5,fill:'#06060E','text-anchor':'middle','font-size':12,'font-weight':'800','font-family':'-apple-system,sans-serif'});ico.style.fill=IS_DARK?'#06060E':'#0D2E52';ico.textContent='DMP';ng.appendChild(ico);}
+    ng.addEventListener('click',()=>openNode(n.id));
+    ng.addEventListener('mouseenter',()=>circ.style.filter='brightness(1.3)');
+    ng.addEventListener('mouseleave',()=>circ.style.filter='');
+    g.appendChild(ng);
+  });return g;
+}
+svg.appendChild(makeStars());svg.appendChild(makeEdges());svg.appendChild(makeNodes());
+
+// ── PANEL ─────────────────────────────────────────────────────
+// Node URL map — direct navigation
+const NODE_URLS = {
+  studios:   null, // Opens Studios sub-directory
+  claude101: 'https://mimp44.github.io/claude101/claude101.html',
+};
+
+// Coming-soon toast
+function showToast(msg){
+  let t=document.getElementById('dmp-toast');
+  if(!t){t=document.createElement('div');t.id='dmp-toast';t.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:rgba(20,20,36,.95);border:1px solid rgba(200,168,75,.25);color:#C8A84B;font-size:12px;padding:8px 20px;border-radius:20px;z-index:500;pointer-events:none;backdrop-filter:blur(8px);transition:opacity .3s';document.body.appendChild(t);}
+  t.textContent=msg;t.style.opacity='1';
+  clearTimeout(t._t);t._t=setTimeout(()=>t.style.opacity='0',2200);
+}
+
+function openNode(id){
+  const n=NODES.find(n=>n.id===id);if(!n)return;
+
+  // DMP hub — scroll to segments below
+  if(id==='dmp'){scrollToBelow();return;}
+
+  // Claude 101 — direct navigation
+  if(id==='claude101'&&n.url){window.open(n.url,'_blank');return;}
+
+  // Studios — opens sub-tools in a lightweight overlay
+  if(id==='studios'){showStudiosMenu();return;}
+
+  // Coming-soon segments
+  if(n.status==='soon'){
+    const eta=(n.timeline&&n.timeline[0])||'Coming 2027';
+    showToast(n.label+' — '+eta.split('—')[0].trim());
+    return;
+  }
+
+  // Any other live node with a URL
+  if(n.url){window.open(n.url,'_blank');return;}
+}
+
+// Studios sub-directory overlay (lightweight, no full panel)
+function showStudiosMenu(){
+  let ov=document.getElementById('studios-ov');
+  if(!ov){
+    ov=document.createElement('div');ov.id='studios-ov';
+    ov.style.cssText='position:fixed;inset:0;z-index:400;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.6);backdrop-filter:blur(6px)';
+    ov.innerHTML=`<div style="background:#10101A;border:1px solid rgba(200,168,75,.25);border-radius:14px;width:400px;overflow:hidden">
+      <div style="background:#1A1A28;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #1E1E2C">
+        <div style="display:flex;align-items:center;gap:8px"><span style="font-size:18px">🎬</span><span style="font-size:14px;font-weight:600;color:#F0EFE8">Studios</span><span style="font-size:9px;background:rgba(200,168,75,.15);color:#C8A84B;border:1px solid rgba(200,168,75,.3);padding:2px 7px;border-radius:4px;font-weight:700;text-transform:uppercase">3 tools live</span></div>
+        <button onclick="document.getElementById('studios-ov').remove()" style="background:none;border:none;color:#7A7A96;font-size:18px;cursor:pointer;line-height:1">&#x2715;</button>
+      </div>
+      <div style="padding:12px">
+        <a href="https://mimp44.github.io/pgs-demo" target="_blank" style="display:flex;align-items:center;gap:12px;padding:12px;border:1px solid #1E1E2C;border-radius:8px;text-decoration:none;transition:border-color .15s;margin-bottom:8px;background:#0C0C18" onmouseover="this.style.borderColor='#C8A84B'" onmouseout="this.style.borderColor='#1E1E2C'">
+          <div style="width:36px;height:36px;border-radius:8px;background:rgba(200,168,75,.12);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">📋</div>
+          <div><div style="font-size:13px;font-weight:600;color:#F0EFE8;margin-bottom:2px">PGS 2.0</div><div style="font-size:11px;color:#7A7A96">Publicity Global System — junkets, press, screenings</div></div>
+          <span style="margin-left:auto;color:#C8A84B;font-size:13px">→</span>
+        </a>
+        <a href="https://mimp44.github.io/strategy-demo/strategy.html" target="_blank" style="display:flex;align-items:center;gap:12px;padding:12px;border:1px solid #1E1E2C;border-radius:8px;text-decoration:none;transition:border-color .15s;margin-bottom:8px;background:#0C0C18" onmouseover="this.style.borderColor='#C8A84B'" onmouseout="this.style.borderColor='#1E1E2C'">
+          <div style="width:36px;height:36px;border-radius:8px;background:rgba(61,123,204,.12);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">🎯</div>
+          <div><div style="font-size:13px;font-weight:600;color:#F0EFE8;margin-bottom:2px">Strategy</div><div style="font-size:11px;color:#7A7A96">Campaign strategy, briefs, highlights, timeline planning</div></div>
+          <span style="margin-left:auto;color:#C8A84B;font-size:13px">→</span>
+        </a>
+        <a href="https://mimp44.github.io/cd-demo/creative-director.html" target="_blank" style="display:flex;align-items:center;gap:12px;padding:12px;border:1px solid #1E1E2C;border-radius:8px;text-decoration:none;transition:border-color .15s;background:#0C0C18" onmouseover="this.style.borderColor='#C8A84B'" onmouseout="this.style.borderColor='#1E1E2C'">
+          <div style="width:36px;height:36px;border-radius:8px;background:rgba(200,168,75,.12);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">🎬</div>
+          <div><div style="font-size:13px;font-weight:600;color:#F0EFE8;margin-bottom:2px">Creative Director</div><div style="font-size:11px;color:#7A7A96">Concepting, copywriting, trailer briefs, presentations</div></div>
+          <span style="margin-left:auto;color:#C8A84B;font-size:13px">→</span>
+        </a>
+      </div>
+    </div>`;
+    ov.addEventListener('click',e=>{if(e.target===ov)ov.remove();});
+    document.body.appendChild(ov);
+  } else { ov.remove(); }
+}
+function closePanel(){} // no-op — panels removed
+
+// ── Q&A ENGINE ────────────────────────────────────────────────
+function placeholderDate(){const y=2026+Math.floor(Math.random()*2);const months=['January','February','March','April','May','June','July','August','September','October','November'];const m=months[Math.floor(Math.random()*months.length)];const d=Math.floor(Math.random()*25)+1;return `${m} ${d}, ${y}`;}
+
+function findFilm(q){
+  const lq=q.toLowerCase();
+  return ALL_FILMS.find(f=>f.title.toLowerCase().split(' ').some(w=>w.length>4&&lq.includes(w.toLowerCase())));
+}
+function findCampaign(q){
+  const lq=q.toLowerCase();
+  return CAMPAIGN_KB.filter(c=>lq.includes(c.event.toLowerCase().split(' ')[0])||c.title.toLowerCase().split(' ').some(w=>w.length>4&&lq.includes(w.toLowerCase())));
+}
+function findContact(q){
+  const lq=q.toLowerCase();
+  return PRESS_CONTACTS.filter(c=>lq.includes(c.journalist.toLowerCase().split(' ').pop())||lq.includes(c.outlet.toLowerCase().split(' ')[0])||lq.includes(c.poc.toLowerCase().split(' ').pop()));
+}
+
+function askQA(){
+  const input=document.getElementById('qa-input');
+  const q=input.value.trim();if(!q)return;
+  const lq=q.toLowerCase();
+  input.value='';
+  
+  document.getElementById('qa-answer-q').textContent='"'+q+'"';
+  let html='';
+  
+  // Check user-entered data first
+  const userMatches=USER_DATA.entries.filter(e=>e.content&&lq.split(' ').some(w=>w.length>3&&e.content.toLowerCase().includes(w)));
+  
+  // Release date query
+  if(/when|release|open|premiere|date/i.test(lq)&&!/who|contact|poc/i.test(lq)){
+    const film=findFilm(q);
+    if(film){
+      html=`<strong>${film.title}</strong> opens on <strong>${film.date.replace(/(\d+)\/(\d+)\/(\d+)/,(_,m,d,y)=>{const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];return months[parseInt(m)-1]+' '+d+', 20'+y;})}</strong> — ${film.studio} ${film.genre?`· ${film.genre}`:''}`;
+    } else {
+      html=`No release date found in the loaded slate for that title.<div class="qa-placeholder">📅 Placeholder Date — Demo Purposes: ${placeholderDate()}</div>`;
+    }
+  }
+  // Campaign / highlights query
+  else if(/what.*did|campaign|highlight|espn|wrestle|nba|mlb|sports|partner|burger|walmart|grogu|mando|mandalorian/i.test(lq)){
+    const campaigns=findCampaign(q);
+    if(campaigns.length){
+      html=campaigns.slice(0,3).map(c=>`<div class="qa-card"><div class="qa-card-label">${c.event} · ${c.date}</div><div style="font-size:12px;color:var(--muted);line-height:1.6">${c.desc}</div></div>`).join('');
+    } else {
+      html=`No campaign data found for that query.<div class="qa-placeholder">⭐ Placeholder — Demo Purposes: Campaign activations for this title are planned for ${placeholderDate()}. Specific executions TBD.</div>`;
+    }
+  }
+  // Contact / POC query
+  else if(/who|contact|poc|publicist|team|disney.*rep/i.test(lq)){
+    const contacts=findContact(q);
+    if(contacts.length){
+      html=`<div class="qa-card"><div class="qa-card-label">Press Contacts</div>${contacts.map(c=>`<div class="qa-row"><div class="qa-row-lbl">${c.journalist}</div><div class="qa-row-val">${c.outlet} · POC: ${c.poc}</div></div>`).join('')}</div>`;
+    } else {
+      html=`No contact found in loaded data for that query.<div class="qa-placeholder">👤 Placeholder — Demo Purposes: POC for this project is [Name TBD] · email@disney.com</div>`;
+    }
+  }
+  // Slate / how many query
+  else if(/how many|total|count|slate|upcoming|titles/i.test(lq)){
+    const total=ALL_FILMS.length;
+    const byYear=DISNEY_SLATE.map(y=>`<strong>${y.year}</strong>: ${y.films.length} titles`).join(' · ');
+    html=`The Disney slate has <strong>${total} announced titles</strong> from 2026–2029.<br>${byYear}`;
+  }
+  // Check user data
+  else if(userMatches.length){
+    html=`<div class="qa-card"><div class="qa-card-label">From your data entries</div>${userMatches.slice(0,3).map(e=>`<div class="qa-row"><div class="qa-row-lbl">${e.category||'Note'}</div><div class="qa-row-val">${e.content}</div></div>`).join('')}</div>`;
+  }
+  // General fallback with placeholder
+  else{
+    // Try to extract a title and give a useful placeholder
+    const film=findFilm(q)||ALL_FILMS[Math.floor(Math.random()*6)];
+    html=`No specific data found for that query in the current dataset.<div class="qa-placeholder">📋 Placeholder — Demo Purposes: For <em>${film.title}</em>, this information would be available in the DMP backend. Target date: ${placeholderDate()}.</div><div style="font-size:11px;color:var(--muted);margin-top:10px">Use <strong>Add data +</strong> in the header to enter this information and it will be available for future queries.</div>`;
+  }
+  
+  document.getElementById('qa-answer-body').innerHTML=html;
+  const panel=document.getElementById('qa-answer');
+  panel.classList.add('open');
+  setTimeout(()=>document.getElementById('qa-input').focus(),300);
+}
+function closeQA(){document.getElementById('qa-answer').classList.remove('open');}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closePanel();closeQA();closeDE();}});
+
+// ── DATA ENTRY ────────────────────────────────────────────────
+let selectedCat='auto';
+function setCategory(cat){
+  selectedCat=cat;
+  document.querySelectorAll('.de-cat').forEach(b=>b.classList.remove('on'));
+  document.getElementById('cat-'+cat)?.classList.add('on');
+}
+function detectCategory(text){
+  const t=text.toLowerCase();
+  if(/\d{1,2}\/\d{1,2}\/\d{2,4}|january|february|march|april|may|june|july|august|september|october|november|december|\d{4}|opening weekend|premiere|press day|junket day|release/i.test(t))return'date';
+  if(/\$|million|billion|million|opening|box office|earned|grossed|rated|reviewed|launched|debuted|performed/i.test(t))return'highlight';
+  if(/poc|contact|email|@|publicist|who is|team lead|handles|manages/i.test(t))return'contact';
+  return'note';
+}
+function openDE(){document.getElementById('de-overlay').classList.add('open');document.getElementById('de-input').focus();document.getElementById('de-saved').style.display='none';}
+function closeDE(){document.getElementById('de-overlay').classList.remove('open');}
+function submitDE(){
+  const content=document.getElementById('de-input').value.trim();if(!content)return;
+  const category=selectedCat==='auto'?detectCategory(content):selectedCat;
+  USER_DATA.add({content,category});
+  document.getElementById('de-saved').style.display='block';
+  document.getElementById('de-input').value='';
+  updateDataLog();updateStats();
+  setTimeout(()=>{document.getElementById('de-saved').style.display='none';closeDE();},1800);
+}
+function updateDataLog(){
+  const entries=USER_DATA.entries;
+  document.getElementById('below-entries').textContent=entries.length;
+  const log=document.getElementById('data-log');
+  if(entries.length){
+    log.style.display='block';
+    document.getElementById('data-log-items').innerHTML=entries.slice(0,8).map(e=>`<div class="data-entry"><span class="de-tag ${e.category}">${e.category}</span><div style="flex:1;font-size:11px;color:var(--muted);margin-left:8px;line-height:1.4">${e.content}</div><div style="font-size:10px;color:var(--subtle);white-space:nowrap;margin-left:8px">${e.at}</div></div>`).join('');
+  }
+}
+function updateStats(){document.getElementById('below-entries').textContent=USER_DATA.entries.length;}
+
+// ── BELOW FOLD ────────────────────────────────────────────────
+const SEGMENTS=[
+  {id:'espn',    icon:'🏟️',name:'ESPN',         dept:'Sports & Live Events',     status:'soon', desc:'Live sports integrations, ESPN partnerships, sports-adjacent promotional activations.'},
+  {id:'studios', icon:'🎬',name:'Studios',        dept:'Film Marketing',           status:'live', desc:'End-to-end theatrical marketing — publicity, creative, strategy. 3 tools live.'},
+  {id:'streaming',icon:'📺',name:'Streaming / TV',dept:'Disney+ · Hulu · ABC · FX',status:'soon', desc:'Streaming originals, broadcast campaigns, connected TV marketing.'},
+  {id:'experiences',icon:'🎢',name:'Experiences', dept:'Parks & Consumer Products',status:'soon', desc:'Park integrations, consumer products co-marketing, live entertainment.'},
+  {id:'claude101',icon:'🤖',name:'Claude 101',    dept:'AI Enablement',            status:'beta', desc:'AI adoption playbook, team use cases, prompt toolkit. Migration in progress.'},
+];
+document.getElementById('segments-grid').innerHTML=SEGMENTS.map(s=>`
+  <div class="seg-card${s.status==='live'?' live':''}" onclick="openNode('${s.id}')">
+    <div class="seg-icon">${s.icon}</div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+      <div class="seg-name">${s.name}</div>
+      <span class="seg-badge ${s.status==='live'?'badge-live':s.status==='beta'?'badge-beta':'badge-soon'}">${s.status==='live'?'LIVE':s.status==='beta'?'BETA':'COMING SOON'}</span>
+    </div>
+    <div class="seg-dept" style="font-size:11px;color:var(--muted);margin-bottom:6px">${s.dept}</div>
+    <div class="seg-desc">${s.desc}</div>
+  </div>`).join('');
+
+function scrollToBelow(){document.getElementById('below').scrollIntoView({behavior:'smooth'});}
+
+// INIT
+updateDataLog();updateStats();
+document.getElementById('qa-input').addEventListener('keydown',e=>{if(e.key==='Escape')closeQA();});
+</script>
+</body>
+</html>
