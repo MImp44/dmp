@@ -355,7 +355,7 @@ const NODES=[
    desc:'Marketing integration between theatrical releases and Disney Parks, Consumer Products, and Live Entertainment — driving cross-platform synergy.',
    caps:['Parks/film synergy planning','Consumer products co-marketing','Live entertainment tie-ins','Merchandise launch coordination'],
    timeline:['Parks synergy module — Q3 2027','CP campaign tools — 2028','Live entertainment hub — 2028']},
-  {id:'claude101',x:240,y:445,r:15,label:'Claude 101',sub:'AI Playbook · Migration in progress',status:'beta',
+  {id:'claude101',x:240,y:445,r:15,label:'Claude 101',sub:'AI Playbook · Onboarding Wizard',status:'live',url:'https://mimp44.github.io/claude101/',
    dept:'Claude 101 — AI Enablement',
    desc:'A purpose-built playbook and UX for Disney Marketing teams to understand, adopt, and activate Claude AI capabilities across all marketing functions.',
    caps:['AI adoption playbook','Team-specific use case guides','Prompt engineering toolkit','Best practices & governance'],
@@ -431,6 +431,12 @@ function openNode(id){
       <div><div class="sub-tool-name">${t.name}</div><div class="sub-tool-desc">${t.desc}</div></div>
       <span class="sub-tool-arrow">→</span>
     </a>`).join('')}`;
+  } else if(id==='claude101'&&n.url){
+    html=`<div class="panel-badge badge-live" style="margin-bottom:10px">LIVE · AI Enablement</div>
+    <div class="panel-desc">${n.desc}</div>
+    <div class="panel-sec-label" style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--subtle);margin-bottom:8px">Capabilities</div>
+    ${(n.caps||[]).map(c=>`<div style="font-size:12px;color:var(--muted);padding:5px 0;border-bottom:1px solid var(--border)">• ${c}</div>`).join('')}
+    <div style="margin-top:14px;font-size:11px;color:var(--muted)">Built by Michael Imperato for Disney Marketing. Includes onboarding wizard, team-specific use cases, and responsible AI guidelines.</div>`;
   } else if(n.migration){
     html=`<div class="panel-badge badge-beta" style="margin-bottom:10px">BETA · Migration in progress</div>
     <div class="panel-desc">${n.desc}</div>
@@ -444,6 +450,11 @@ function openNode(id){
     ${n.timeline?`<div class="panel-sec-label" style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--subtle);margin:12px 0 8px">Roadmap</div>${n.timeline.map(t=>`<div class="timeline-item"><div class="tl-dot"></div><div class="tl-label">${t}</div></div>`).join('')}`:''}`;
   }
   body.innerHTML=html;
+  if(id==='claude101'&&n.url){
+    const footer=document.createElement('div');footer.style.cssText='padding:14px 18px;border-top:1px solid var(--border);flex-shrink:0';
+    footer.innerHTML=`<a href="${n.url}" target="_blank" class="panel-launch" style="display:block;text-align:center;text-decoration:none">Open Claude 101 →</a>`;
+    document.getElementById('detail-panel').appendChild(footer);
+  }
   document.getElementById('panel-overlay').classList.add('open');
   document.getElementById('detail-panel').classList.add('open');
 }
