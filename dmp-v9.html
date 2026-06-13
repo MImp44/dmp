@@ -752,7 +752,7 @@ function segClr(seg){for(const[k,c]of Object.entries(SEG_COLORS)){if(seg.include
 function fmtD(d){if(!d)return'';const p=d.split('-');if(p.length<3)return d;return parseInt(p[1])+'/'+parseInt(p[2]);}
 
 const FQ_DEFS=[
-  {id:'fq34_26',fqs:['FY26 Q3','FY26 Q4'],label:'FY26 Q3–04',range:'Jun–Sep 2026',theme:'Summer tentpoles + World Cup'},
+  {id:'fq34_26',fqs:['FY26 Q3','FY26 Q4'],label:'FY26 Q3–Q4',range:'Jun–Sep 2026',theme:'Summer tentpoles + World Cup'},
   {id:'fq1_27',fqs:['FY27 Q1'],label:'FY27 Q1',range:'Oct–Dec 2026',theme:'Fall theatrical wave + Holiday',hot:true},
   {id:'fq2_27',fqs:['FY27 Q2'],label:'FY27 Q2',range:'Jan–Mar 2027',theme:'Peak congestion — Feb stacks 4+ Tier 1',hot:true},
   {id:'fq3_27',fqs:['FY27 Q3'],label:'FY27 Q3',range:'Apr–Jun 2027',theme:'Star Wars Celebration + Summer ramp'},
