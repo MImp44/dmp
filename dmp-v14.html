@@ -880,153 +880,178 @@ function exportCalendarCSV(){
 }
 
 function exportCalendarPDF(){
-  // Filter: print view shows only executive highlights per quarter
   const SC={'Studios':'#1a3a6e','Pixar':'#1a3a6e','Marvel':'#1a3a6e','Lucasfilm':'#1a3a6e','20th':'#1a3a6e','Brand':'#111','CSR':'#111','Disney+':'#006AC3','Hulu':'#006AC3','Streaming':'#006AC3','ESPN':'#CC0000','Sports':'#CC0000','ABC':'#CC0000','Experiences':'#2E7D32','Consumer Products':'#2E7D32','Cross-Company':'#5a3e8a','Awards':'#888'};
   function sc(s){for(const[k,c]of Object.entries(SC)){if(s&&s.includes(k))return c;}return'#555';}
   function fmtPD(d){if(!d)return'';const p=d.split('-');if(p.length<3)return d;return parseInt(p[1])+'/'+parseInt(p[2]);}
-  function nm(s){return(s||'').replace(' (Theatrical)','').replace(' Marketing Launch','').replace(' Brand Platform','').replace(' - Brand Platform','').replace(' Surround','').replace('*','').replace(' Re-Release','*').trim();}
+  function nm(s){return(s||'').replace(' (Theatrical)','').replace(' Marketing Launch','').replace(' Brand Platform','').replace(' - Brand Platform','').replace(' Surround','').replace(' Re-Release','*').trim();}
 
-  const colsHTML = FQ_DEFS.map(fq=>{
-    const evts = MARKETING_CALENDAR.filter(e=>fq.fqs.includes(e.fq));
-
-    // Tentpoles: only real theatrical/platform, tier 1+2, max 7
-    const tps = evts.filter(e=>
-      (e.type==='Tentpole'||e.type==='Campaign')&&
-      (e.tier==='1'||e.tier==='2')&&
-      e.type!=='Seasonal/Cultural'
-    ).sort((a,b)=>a.start.localeCompare(b.start)).slice(0,7);
-
-    // Premieres: use FQ_PREMIERES curated list, max 6
-    const prems = (FQ_PREMIERES[fq.id]||[]).slice(0,6);
-
-    // Always-on: sports + major campaigns, max 3
-    const ao = evts.filter(e=>
-      (e.type==='Sports'||(e.type==='Campaign'&&e.tier!=='1'))||
-      (e.type==='Streaming'&&e.tier==='2')
-    ).slice(0,3);
-
-    // Cultural: max 5
-    const cult = evts.filter(e=>e.type==='Seasonal/Cultural').map(e=>nm(e.moment)).filter(Boolean).slice(0,5);
-
-    // Competitive (only if toggle is on)
-    const comp = showCompetitive
-      ? COMPETITIVE_RELEASES.filter(c=>fq.fqs.includes(c.fq)||(fq.fqs.length>1&&fq.fqs[1]===c.fq)).slice(0,5)
-      : [];
-
-    const tpH = tps.length ? '<div class="sl">Tentpoles &amp; Platforms</div>'+tps.map(e=>{
-      const c=sc(e.segment);
-      return `<div class="card" style="border-left-color:${c}"><div class="cn">${nm(e.moment)}</div><div class="cm"><span class="cd">${fmtPD(e.start)}</span>${e.tier?`<span class="t${e.tier}">T${e.tier}</span>`:''}</div></div>`;
-    }).join('') : '';
-
-    const premH = prems.length ? '<div class="sl">Premieres &amp; TV</div><ul class="pl">'+prems.map(p=>`<li class="pi"><span class="pn">${p.name}</span><span class="pd">${p.date}</span></li>`).join('')+'</ul>' : '';
-
-    const aoH = ao.length ? '<div class="sl">Always-On &amp; Sports</div><div class="pills">'+ao.map(e=>{
-      const c=sc(e.segment);
-      return `<span class="pill" style="background:${c}15;color:${c};border:1px solid ${c}30">${nm(e.moment)}</span>`;
-    }).join('')+'</div>' : '';
-
-    const cultH = cult.length ? '<div class="sl">Cultural</div><div class="cult">'+cult.join(' &middot; ')+'</div>' : '';
-
-    const compH = comp.length ? '<div class="sl comp-lbl">Competitive</div>'+comp.map(c=>`<div class="ci"><span class="ct">${c.title}</span><span class="cs">${c.studio}</span></div>`).join('') : '';
-
-    return `<div class="col"><div class="ch"><div class="cl">${fq.label}</div><div class="cr2">${fq.range}</div><div class="ct2${fq.hot?' hot':''}">${fq.theme}</div></div><div class="cb">${tpH||''}${premH}${aoH}${cultH}${compH}</div></div>`;
+  const colsHTML=FQ_DEFS.map(fq=>{
+    const evts=MARKETING_CALENDAR.filter(e=>fq.fqs.includes(e.fq));
+    const tps=evts.filter(e=>(e.type==='Tentpole'||e.type==='Campaign')&&(e.tier==='1'||e.tier==='2')&&e.type!=='Seasonal/Cultural').sort((a,b)=>a.start.localeCompare(b.start)).slice(0,7);
+    const prems=(FQ_PREMIERES[fq.id]||[]).slice(0,6);
+    const ao=evts.filter(e=>(e.type==='Sports'||(e.type==='Campaign'&&e.tier!=='1')||(e.type==='Streaming'&&e.tier==='2'))).slice(0,3);
+    const cult=evts.filter(e=>e.type==='Seasonal/Cultural').map(e=>nm(e.moment)).filter(Boolean).slice(0,5);
+    const comp=showCompetitive?COMPETITIVE_RELEASES.filter(c=>fq.fqs.includes(c.fq)||(fq.fqs.length>1&&fq.fqs[1]===c.fq)).slice(0,5):[];
+    const tpH=tps.length?'<div class="sl">Tentpoles &amp; Platforms</div>'+tps.map(e=>{const c=sc(e.segment);return '<div class="card" style="border-left-color:'+c+'"><div class="cn">'+nm(e.moment)+'</div><div class="cm"><span class="cd">'+fmtPD(e.start)+'</span>'+(e.tier?'<span class="t'+e.tier+'">T'+e.tier+'</span>':'')+'</div></div>';}).join(''):'';
+    const premH=prems.length?'<div class="sl">Premieres &amp; TV</div><ul class="pl">'+prems.map(p=>'<li class="pi"><span class="pn">'+p.name+'</span><span class="pd">'+p.date+'</span></li>').join('')+'</ul>':'';
+    const aoH=ao.length?'<div class="sl">Always-On &amp; Sports</div><div class="pills">'+ao.map(e=>'<span class="pill" style="background:'+sc(e.segment)+'15;color:'+sc(e.segment)+';border:1px solid '+sc(e.segment)+'30">'+nm(e.moment)+'</span>').join('')+'</div>':'';
+    const cultH=cult.length?'<div class="sl">Cultural</div><div class="cult">'+cult.join(' &middot; ')+'</div>':'';
+    const compH=comp.length?'<div class="sl comp-lbl">Competitive</div>'+comp.map(c=>'<div class="ci"><span class="ct">'+c.title+'</span><span class="cs">'+c.studio+'</span></div>').join(''):'';
+    return '<div class="col"><div class="ch"><div class="cl">'+fq.label+'</div><div class="cr2">'+fq.range+'</div><div class="ct2'+(fq.hot?' hot':'')+' ">'+fq.theme+'</div></div><div class="cb">'+tpH+premH+aoH+cultH+compH+'</div></div>';
   }).join('');
 
-  const pdfHTML = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>Global Disney Marketing Calendar</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-@page{size:11in 8.5in landscape;margin:.22in .28in}
-html{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-body{font-family:'Segoe UI',Helvetica,Arial,sans-serif;font-size:6pt;color:#111;width:100%}
-#wrap{display:flex;flex-direction:column;width:10.44in;height:8.06in}
-.hdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:3px;flex-shrink:0}
-h1{font-size:13pt;font-weight:800;color:#002875;letter-spacing:-.3px;line-height:1.1}
-.sub{font-size:6.5pt;color:#E87722;margin:1px 0;font-weight:600}
-.meta{font-size:4.5pt;color:#777;line-height:1.5}
-.draft{font-size:6pt;color:#C00;font-weight:700}
-.leg{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:3px;padding:2px 0;border-bottom:1px solid #ddd;align-items:center;flex-shrink:0}
-.ll{font-size:5pt;font-weight:700;color:#555;margin-right:2px}
-.li{display:flex;align-items:center;gap:2px;font-size:4.5pt;color:#555}
-.ld{width:5px;height:5px;border-radius:50%;flex-shrink:0}
-.grid{display:grid;grid-template-columns:repeat(6,1fr);border:1px solid #bbb;border-radius:3px;overflow:hidden;flex:1;min-height:0}
-.col{border-right:1px solid #ddd;display:flex;flex-direction:column;overflow:hidden}
-.col:last-child{border-right:none}
-.ch{background:#f3f3f7;padding:3px 5px 2px;border-bottom:1px solid #ddd;flex-shrink:0}
-.cl{font-size:7pt;font-weight:800;color:#002875}
-.cr2{font-size:5pt;color:#777;margin-top:.5px}
-.ct2{font-size:4.5pt;color:#999;font-style:italic;line-height:1.3;margin-top:1px}
-.ct2.hot{color:#C00;font-weight:700;font-style:normal}
-.cb{padding:3px 4px;overflow:hidden;flex:1}
-.sl{font-size:4pt;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:#bbb;margin:3px 0 2px}
-.sl:first-child{margin-top:0}
-.comp-lbl{color:#8a6a9a}
-.card{border-left:2px solid #999;padding:2px 3px;margin-bottom:2px;background:#f7f7fa;border-radius:0 2px 2px 0}
-.cn{font-size:5.5pt;font-weight:700;color:#111;line-height:1.3}
-.cm{display:flex;align-items:center;gap:2px;margin-top:1px}
-.cd{font-size:4.5pt;color:#777}
-.t1{background:#FFF3CC;color:#7A4F00;font-size:4pt;font-weight:800;padding:0 2px;border-radius:2px}
-.t2{background:#E8F0FE;color:#1A3DB5;font-size:4pt;font-weight:800;padding:0 2px;border-radius:2px}
-.pl{margin:0;padding:0;list-style:none}
-.pi{display:flex;justify-content:space-between;padding:.5px 0;border-bottom:1px solid #f0f0f0;font-size:4.5pt;line-height:1.4}
-.pi:last-child{border:none}
-.pn{color:#222;flex:1}
-.pd{color:#888;white-space:nowrap;margin-left:2px;font-size:4pt}
-.pills{display:flex;flex-wrap:wrap;gap:2px}
-.pill{font-size:4pt;padding:1px 3px;border-radius:4px;font-weight:700;white-space:nowrap;line-height:1.5}
-.cult{font-size:4pt;color:#888;line-height:1.8}
-.ci{display:flex;justify-content:space-between;padding:.5px 0;border-bottom:1px solid #f5f0f7;font-size:4.5pt}
-.ci:last-child{border:none}
-.ct{color:#444;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.cs{font-size:4pt;color:#9a7aaa;white-space:nowrap;margin-left:2px;font-weight:600}
-.foot{display:flex;justify-content:space-between;margin-top:2px;padding-top:2px;border-top:1px solid #ddd;font-size:4pt;color:#aaa;flex-shrink:0}
-.pbtn{position:fixed;bottom:14px;right:14px;background:#002875;color:#fff;border:none;border-radius:8px;padding:8px 18px;font-size:10pt;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.2);font-family:inherit}
-@media print{.pbtn{display:none}#wrap{transform:scale(var(--s,1));transform-origin:top left}}
-</style></head><body>
-<div id="wrap">
-<div class="hdr">
-  <div><h1>Global Disney Marketing Calendar</h1>
-  <div class="sub">One-view executive summary &middot; June 2026 &ndash; December 2027 &middot; CMO &amp; Marketing Leadership</div>
-  <div class="meta">Fall &rsquo;26 &amp; Feb &rsquo;27 are the gravity centers &bull; cards = tentpoles &bull; pills = always-on/sports &bull; * = confirm date${showCompetitive?' &bull; <strong style="color:#5a3e8a">Competitive view ON</strong>':''}</div></div>
-  <div class="draft">DRAFT FOR REVIEW</div>
-</div>
-<div class="leg">
-  <span class="ll">Segment:</span>
-  <span class="li"><span class="ld" style="background:#1a3a6e"></span>Studios</span>
-  <span class="li"><span class="ld" style="background:#111"></span>Brand</span>
-  <span class="li"><span class="ld" style="background:#006AC3"></span>Disney+/Hulu</span>
-  <span class="li"><span class="ld" style="background:#CC0000"></span>ESPN</span>
-  <span class="li"><span class="ld" style="background:#2E7D32"></span>Experiences</span>
-  <span class="li"><span class="ld" style="background:#5a3e8a"></span>Cross-Co.</span>
-  <span style="margin-left:5px;font-size:4pt;color:#bbb">&bull; T1=enterprise tentpole &bull; T2=major release</span>
-</div>
-<div class="grid">${colsHTML}</div>
-<div class="foot">
-  <span>Sources: Planning Calendars Living Doc (6/1/26), BOD synergy deck &bull; Dates marked * per Living Doc — confirm &bull; Premiere detail FY27 only</span>
-  <span>Generated ${new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</span>
-</div>
-</div>
-<button class="pbtn" onclick="window.print()">&#128438;&nbsp; Print / Save PDF</button>
-<script>
-// Auto-scale to fit one landscape letter page
-window.addEventListener('load',function(){
-  var wrap=document.getElementById('wrap');
-  if(!wrap)return;
-  // Available printable area at 96dpi screen resolution
-  var availH=(8.5-0.44)*96;  // 8.5in minus margins
-  var availW=(11-0.56)*96;
-  var rH=wrap.scrollHeight, rW=wrap.scrollWidth;
-  if(rH>availH||rW>availW){
-    var s=Math.min(availH/rH, availW/rW);
-    wrap.style.transform='scale('+s+')';
-    wrap.style.transformOrigin='top left';
-    wrap.style.width=(availW/s)+'px';
-    document.documentElement.style.setProperty('--s',s);
-  }
-});
-<\/script>
-</body></html>`;
+  const pdfHTML='<!DOCTYPE html><html><head><meta charset="utf-8"><title>Global Disney Marketing Calendar</title>'
+  +'<style>*{margin:0;padding:0;box-sizing:border-box}'
+  +'@page{size:11in 8.5in landscape;margin:.22in .28in}'
+  +'html{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}'
+  +'body{font-family:\'Segoe UI\',Helvetica,Arial,sans-serif;font-size:6pt;color:#111;width:100%}'
+  +'#wrap{display:flex;flex-direction:column;width:10.44in;height:8.06in}'
+  +'.hdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:3px;flex-shrink:0}'
+  +'h1{font-size:13pt;font-weight:800;color:#002875;letter-spacing:-.3px;line-height:1.1}'
+  +'.sub{font-size:6.5pt;color:#E87722;margin:1px 0;font-weight:600}'
+  +'.meta{font-size:4.5pt;color:#777;line-height:1.5}'
+  +'.draft{font-size:6pt;color:#C00;font-weight:700}'
+  +'.leg{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:3px;padding:2px 0;border-bottom:1px solid #ddd;align-items:center;flex-shrink:0}'
+  +'.ll{font-size:5pt;font-weight:700;color:#555;margin-right:2px}'
+  +'.li{display:flex;align-items:center;gap:2px;font-size:4.5pt;color:#555}'
+  +'.ld{width:5px;height:5px;border-radius:50%;flex-shrink:0}'
+  +'.grid{display:grid;grid-template-columns:repeat(6,1fr);border:1px solid #bbb;border-radius:3px;overflow:hidden;flex:1;min-height:0}'
+  +'.col{border-right:1px solid #ddd;display:flex;flex-direction:column;overflow:hidden}'
+  +'.col:last-child{border-right:none}'
+  +'.ch{background:#f3f3f7;padding:3px 5px 2px;border-bottom:1px solid #ddd;flex-shrink:0}'
+  +'.cl{font-size:7pt;font-weight:800;color:#002875}'
+  +'.cr2{font-size:5pt;color:#777;margin-top:.5px}'
+  +'.ct2{font-size:4.5pt;color:#999;font-style:italic;line-height:1.3;margin-top:1px}'
+  +'.ct2.hot{color:#C00;font-weight:700;font-style:normal}'
+  +'.cb{padding:3px 4px;overflow:hidden;flex:1}'
+  +'.sl{font-size:4pt;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:#bbb;margin:3px 0 2px}'
+  +'.sl:first-child{margin-top:0}'
+  +'.comp-lbl{color:#8a6a9a}'
+  +'.card{border-left:2px solid #999;padding:2px 3px;margin-bottom:2px;background:#f7f7fa;border-radius:0 2px 2px 0}'
+  +'.cn{font-size:5.5pt;font-weight:700;color:#111;line-height:1.3}'
+  +'.cm{display:flex;align-items:center;gap:2px;margin-top:1px}'
+  +'.cd{font-size:4.5pt;color:#777}'
+  +'.t1{background:#FFF3CC;color:#7A4F00;font-size:4pt;font-weight:800;padding:0 2px;border-radius:2px}'
+  +'.t2{background:#E8F0FE;color:#1A3DB5;font-size:4pt;font-weight:800;padding:0 2px;border-radius:2px}'
+  +'.pl{margin:0;padding:0;list-style:none}'
+  +'.pi{display:flex;justify-content:space-between;padding:.5px 0;border-bottom:1px solid #f0f0f0;font-size:4.5pt;line-height:1.4}'
+  +'.pi:last-child{border:none}'
+  +'.pn{color:#222;flex:1}'
+  +'.pd{color:#888;white-space:nowrap;margin-left:2px;font-size:4pt}'
+  +'.pills{display:flex;flex-wrap:wrap;gap:2px}'
+  +'.pill{font-size:4pt;padding:1px 3px;border-radius:4px;font-weight:700;white-space:nowrap;line-height:1.5}'
+  +'.cult{font-size:4pt;color:#888;line-height:1.8}'
+  +'.ci{display:flex;justify-content:space-between;padding:.5px 0;border-bottom:1px solid #f5f0f7;font-size:4.5pt}'
+  +'.ci:last-child{border:none}'
+  +'.ct{color:#444;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}'
+  +'.cs{font-size:4pt;color:#9a7aaa;white-space:nowrap;margin-left:2px;font-weight:600}'
+  +'.foot{display:flex;justify-content:space-between;margin-top:2px;padding-top:2px;border-top:1px solid #ddd;font-size:4pt;color:#aaa;flex-shrink:0}'
+  +'.pbtn{position:fixed;bottom:14px;right:14px;background:#002875;color:#fff;border:none;border-radius:8px;padding:8px 18px;font-size:10pt;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.2);font-family:inherit}'
+  +'@media print{.pbtn{display:none}#wrap{transform:scale(var(--s,1));transform-origin:top left}}'
+  +'</style></head><body>'
+  +'<div id="wrap">'
+  +'<div class="hdr"><div>'
+  +'<h1>Global Disney Marketing Calendar</h1>'
+  +'<div class="sub">One-view executive summary &middot; June 2026 &ndash; December 2027 &middot; CMO &amp; Marketing Leadership</div>'
+  +'<div class="meta">Fall \'26 &amp; Feb \'27 are the gravity centers &bull; cards = tentpoles &bull; pills = always-on/sports &bull; * = confirm date'+(showCompetitive?' &bull; <strong style="color:#5a3e8a">Competitive view ON</strong>':'')+'</div>'
+  +'</div><div class="draft">DRAFT FOR REVIEW</div></div>'
+  +'<div class="leg">'
+  +'<span class="ll">Segment:</span>'
+  +'<span class="li"><span class="ld" style="background:#1a3a6e"></span>Studios</span>'
+  +'<span class="li"><span class="ld" style="background:#111"></span>Brand</span>'
+  +'<span class="li"><span class="ld" style="background:#006AC3"></span>Disney+/Hulu</span>'
+  +'<span class="li"><span class="ld" style="background:#CC0000"></span>ESPN</span>'
+  +'<span class="li"><span class="ld" style="background:#2E7D32"></span>Experiences</span>'
+  +'<span class="li"><span class="ld" style="background:#5a3e8a"></span>Cross-Co.</span>'
+  +'<span style="margin-left:5px;font-size:4pt;color:#bbb">&bull; T1=enterprise tentpole &bull; T2=major release</span>'
+  +'</div>'
+  +'<div class="grid">'+colsHTML+'</div>'
+  +'<div class="foot">'
+  +'<span>Sources: Planning Calendars Living Doc (6/1/26), BOD synergy deck &bull; * confirm date &bull; Premiere detail FY27 only</span>'
+  +'<span>Generated '+new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})+'</span>'
+  +'</div></div>'
+  +'<button class="pbtn" onclick="window.print()">🖼️&nbsp;Print / Save PDF</button>'
+  +'<script>'
+  +'window.addEventListener(\'load\',function(){'
+  +'var wrap=document.getElementById(\'wrap\');if(!wrap)return;'
+  +'var availH=(8.5-0.44)*96,availW=(11-0.56)*96;'
+  +'var rH=wrap.scrollHeight,rW=wrap.scrollWidth;'
+  +'if(rH>availH||rW>availW){'
+  +'var s=Math.min(availH/rH,availW/rW);'
+  +'wrap.style.transform=\'scale(\'+s+\')\';'
+  +'wrap.style.transformOrigin=\'top left\';'
+  +'wrap.style.width=(availW/s)+\'px\';'
+  +'document.documentElement.style.setProperty(\'--s\',s);}'
+  +'});'
+  +'<\/scr'+'ipt>'
+  +'</body></html>';
 
   const w=window.open('','_blank','width=1250,height=820');
   w.document.write(pdfHTML);
   w.document.close();
-}>
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closePanel();closeQA();closeDE();}});
+
+// ── DATA ENTRY ────────────────────────────────────────────────
+let selectedCat='auto';
+function setCategory(cat){
+  selectedCat=cat;
+  document.querySelectorAll('.de-cat').forEach(b=>b.classList.remove('on'));
+  document.getElementById('cat-'+cat)?.classList.add('on');
+}
+function detectCategory(text){
+  const t=text.toLowerCase();
+  if(/\d{1,2}\/\d{1,2}\/\d{2,4}|january|february|march|april|may|june|july|august|september|october|november|december|\d{4}|opening weekend|premiere|press day|junket day|release/i.test(t))return'date';
+  if(/\$|million|billion|million|opening|box office|earned|grossed|rated|reviewed|launched|debuted|performed/i.test(t))return'highlight';
+  if(/poc|contact|email|@|publicist|who is|team lead|handles|manages/i.test(t))return'contact';
+  return'note';
+}
+function openDE(){document.getElementById('de-overlay').classList.add('open');document.getElementById('de-input').focus();document.getElementById('de-saved').style.display='none';}
+function closeDE(){document.getElementById('de-overlay').classList.remove('open');}
+function submitDE(){
+  const content=document.getElementById('de-input').value.trim();if(!content)return;
+  const category=selectedCat==='auto'?detectCategory(content):selectedCat;
+  USER_DATA.add({content,category});
+  document.getElementById('de-saved').style.display='block';
+  document.getElementById('de-input').value='';
+  updateDataLog();updateStats();
+  setTimeout(()=>{document.getElementById('de-saved').style.display='none';closeDE();},1800);
+}
+function updateDataLog(){
+  const entries=USER_DATA.entries;
+  document.getElementById('below-entries').textContent=entries.length;
+  const log=document.getElementById('data-log');
+  if(entries.length){
+    log.style.display='block';
+    document.getElementById('data-log-items').innerHTML=entries.slice(0,8).map(e=>`<div class="data-entry"><span class="de-tag ${e.category}">${e.category}</span><div style="flex:1;font-size:11px;color:var(--muted);margin-left:8px;line-height:1.4">${e.content}</div><div style="font-size:10px;color:var(--subtle);white-space:nowrap;margin-left:8px">${e.at}</div></div>`).join('');
+  }
+}
+function updateStats(){document.getElementById('below-entries').textContent=USER_DATA.entries.length;}
+
+// ── BELOW FOLD ────────────────────────────────────────────────
+const SEGMENTS=[
+  {id:'espn',    icon:'🏟️',name:'ESPN',         dept:'Sports & Live Events',     status:'soon', desc:'Live sports integrations, ESPN partnerships, sports-adjacent promotional activations.'},
+  {id:'studios', icon:'🎬',name:'Studios',        dept:'Film Marketing',           status:'live', desc:'End-to-end theatrical marketing — publicity, creative, strategy. 3 tools live.'},
+  {id:'streaming',icon:'📺',name:'Streaming / TV',dept:'Disney+ · Hulu · ABC · FX',status:'soon', desc:'Streaming originals, broadcast campaigns, connected TV marketing.'},
+  {id:'experiences',icon:'🎢',name:'Experiences', dept:'Parks & Consumer Products',status:'soon', desc:'Park integrations, consumer products co-marketing, live entertainment.'},
+  {id:'claude101',icon:'🤖',name:'Claude 101',    dept:'AI Enablement',            status:'beta', desc:'AI adoption playbook, team use cases, prompt toolkit. Migration in progress.'},
+];
+document.getElementById('segments-grid').innerHTML=SEGMENTS.map(s=>`
+  <div class="seg-card${s.status==='live'?' live':''}" onclick="openNode('${s.id}')">
+    <div class="seg-icon">${s.icon}</div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+      <div class="seg-name">${s.name}</div>
+      <span class="seg-badge ${s.status==='live'?'badge-live':s.status==='beta'?'badge-beta':'badge-soon'}">${s.status==='live'?'LIVE':s.status==='beta'?'BETA':'COMING SOON'}</span>
+    </div>
+    <div class="seg-dept" style="font-size:11px;color:var(--muted);margin-bottom:6px">${s.dept}</div>
+    <div class="seg-desc">${s.desc}</div>
+  </div>`).join('');
+
+function scrollToBelow(){document.getElementById('below').scrollIntoView({behavior:'smooth'});}
+
+// INIT
+updateDataLog();updateStats();
+document.getElementById('qa-input').addEventListener('keydown',e=>{if(e.key==='Escape')closeQA();});
+</script>
+</body>
+</html>
