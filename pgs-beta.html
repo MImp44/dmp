@@ -247,6 +247,10 @@ td{padding:10px 14px;font-size:12px;color:var(--text);vertical-align:middle}
   <div class="nav-item" onclick="switchView('schedules')" id="nav-schedules">
     <span class="nav-icon">📅</span> Schedules
   </div>
+  <div class="nav-item" onclick="switchView('reports')" id="nav-reports">
+    <span class="nav-icon">📋</span> Report Outputs
+    <span class="nav-badge" id="badge-reports">1</span>
+  </div>
   <div class="nav-item" onclick="switchView('highlights')" id="nav-highlights">
     <span class="nav-icon">⭐</span> Campaign Highlights
   </div>
@@ -321,6 +325,7 @@ td{padding:10px 14px;font-size:12px;color:var(--text);vertical-align:middle}
         <div class="widget-title">Recent Activity <span style="font-weight:400;font-size:10px;color:var(--muted)">Last 48h</span></div>
         <div class="activity-item"><span class="act-dot" style="background:var(--green)"></span><div><div class="act-text">Screening request <strong>approved</strong> — Avengers: Doomsday · LA Premiere</div><div class="act-time">2 hours ago · J. Hamilton</div></div></div>
         <div class="activity-item"><span class="act-dot" style="background:var(--blue)"></span><div><div class="act-text">New press record added — <strong>Variety</strong> interview, Toy Story 5 · Global</div><div class="act-time">4 hours ago · M. Chen</div></div></div>
+        <div class="activity-item"><span class="act-dot" style="background:var(--green)"></span><div><div class="act-text">📋 Press junket report generated — <strong>Mandalorian & Grogu</strong> · May 13–16 · 5 talent · 11 press guests · <a href="https://mimp44.github.io/dmp/mando-grogu-press-report.html" target="_blank" style="color:var(--gold);text-decoration:none;font-weight:700">View Report ↗</a></div><div class="act-time">Just now · PGS 2.0</div></div></div>
         <div class="activity-item"><span class="act-dot" style="background:var(--purple)"></span><div><div class="act-text">Junket confirmed — <strong>Mandalorian & Grogu</strong> · London, Paris, Berlin</div><div class="act-time">Yesterday · T. Williams</div></div></div>
         <div class="activity-item"><span class="act-dot" style="background:var(--amber)"></span><div><div class="act-text">Screening request <strong>pending</strong> — Moana Live Action · NYC Museum</div><div class="act-time">Yesterday · R. Davis</div></div></div>
         <div class="activity-item"><span class="act-dot" style="background:var(--orange)"></span><div><div class="act-text">Campaign highlight posted — <strong>Doomsday</strong> global launch week summary</div><div class="act-time">2 days ago · Publicity Team</div></div></div>
@@ -404,6 +409,7 @@ td{padding:10px 14px;font-size:12px;color:var(--text);vertical-align:middle}
     <div class="page-header">
       <div><div class="page-title">Junket Planning</div><div class="page-sub">Multi-market junket coordination, talent scheduling, and logistics</div></div>
       <div class="page-actions">
+        <button class="btn btn-ghost btn-sm" onclick="switchView('reports')">📋 Report Outputs</button>
         <button class="btn btn-ghost btn-sm">📄 Generate Brief</button>
         <button class="btn btn-primary btn-sm" onclick="openModal('junkets')">+ Add Junket</button>
       </div>
@@ -449,6 +455,75 @@ td{padding:10px 14px;font-size:12px;color:var(--text);vertical-align:middle}
         <thead><tr><th>Title</th><th>Talent / Event</th><th>Type</th><th>Date</th><th>Markets</th><th>Status</th><th></th></tr></thead>
         <tbody id="tbody-schedules"></tbody>
       </table>
+    </div>
+  </div>
+
+  <!-- REPORT OUTPUTS -->
+  <div id="view-reports" class="hidden">
+    <div class="page-header">
+      <div><div class="page-title">Report Outputs</div><div class="page-sub">Generated press junket reports, hotel rooming lists, travel reports, and schedules</div></div>
+      <div class="page-actions">
+        <button class="btn btn-ghost btn-sm">⬇ Export All</button>
+        <button class="btn btn-primary btn-sm">+ Generate Report</button>
+      </div>
+    </div>
+    <div class="module-band" style="background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.15)">
+      <span class="band-icon">📋</span>
+      <div><div class="band-title" style="color:var(--c-sched)">Live Report Outputs</div>
+      <div class="band-desc">PGS 2.0 generates tabbed, print-ready HTML reports from your data — schedules, hotel rooming, travel, and interview grids in one view.</div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px" id="reports-grid">
+      <!-- Mando Report Card -->
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:.2s" onmouseover="this.style.borderColor='rgba(255,255,255,.18)'" onmouseout="this.style.borderColor='rgba(255,255,255,.07)'">
+        <div style="background:linear-gradient(135deg,#0a1628,#1a1035);padding:20px;position:relative">
+          <div style="font-size:9px;font-weight:800;letter-spacing:1.5px;color:var(--gold);text-transform:uppercase;margin-bottom:6px">Press Junket Report</div>
+          <div style="font-size:17px;font-weight:900;color:#fff;margin-bottom:3px">The Mandalorian &amp; Grogu</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.5)">May 13–16, 2026 · London WeHo · As of 5.1</div>
+          <div style="position:absolute;top:16px;right:16px;background:rgba(220,38,38,.2);color:#fca5a5;font-size:10px;font-weight:700;padding:3px 8px;border-radius:10px;border:1px solid rgba(220,38,38,.3)">TENTATIVE</div>
+        </div>
+        <div style="padding:16px">
+          <div style="display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap">
+            <div style="background:var(--surface2);border-radius:8px;padding:8px 12px;text-align:center;flex:1">
+              <div style="font-size:20px;font-weight:900;color:var(--gold)">5</div>
+              <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:1px">Talent</div>
+            </div>
+            <div style="background:var(--surface2);border-radius:8px;padding:8px 12px;text-align:center;flex:1">
+              <div style="font-size:20px;font-weight:900;color:var(--blue)">11</div>
+              <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:1px">Press Guests</div>
+            </div>
+            <div style="background:var(--surface2);border-radius:8px;padding:8px 12px;text-align:center;flex:1">
+              <div style="font-size:20px;font-weight:900;color:var(--purple)">40+</div>
+              <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:1px">Outlets</div>
+            </div>
+            <div style="background:var(--surface2);border-radius:8px;padding:8px 12px;text-align:center;flex:1">
+              <div style="font-size:20px;font-weight:900;color:var(--green)">2</div>
+              <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:1px">Days</div>
+            </div>
+          </div>
+          <div style="font-size:11px;color:var(--muted);margin-bottom:12px;line-height:1.6">
+            5-tab report: <strong style="color:var(--text)">Overview</strong> · <strong style="color:var(--text)">Thu May 14 Schedule</strong> · <strong style="color:var(--text)">Fri May 15 Schedule</strong> · <strong style="color:var(--text)">Hotel Rooming</strong> · <strong style="color:var(--text)">Travel</strong>
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px">
+            <span style="font-size:10px;background:rgba(167,139,250,.15);color:var(--purple);padding:2px 8px;border-radius:8px;font-weight:600">Jon Favreau</span>
+            <span style="font-size:10px;background:rgba(167,139,250,.15);color:var(--purple);padding:2px 8px;border-radius:8px;font-weight:600">Dave Filoni</span>
+            <span style="font-size:10px;background:rgba(167,139,250,.15);color:var(--purple);padding:2px 8px;border-radius:8px;font-weight:600">Pedro Pascal</span>
+            <span style="font-size:10px;background:rgba(167,139,250,.15);color:var(--purple);padding:2px 8px;border-radius:8px;font-weight:600">Jeremy Allen White</span>
+            <span style="font-size:10px;background:rgba(167,139,250,.15);color:var(--purple);padding:2px 8px;border-radius:8px;font-weight:600">Sigourney Weaver</span>
+          </div>
+          <div style="display:flex;gap:8px">
+            <a href="https://mimp44.github.io/dmp/mando-grogu-press-report.html" target="_blank" style="flex:1;background:var(--gold);color:#000;padding:9px 14px;border-radius:8px;font-size:12px;font-weight:700;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:6px;transition:.15s" onmouseover="this.style.background='#e8b800'" onmouseout="this.style.background='var(--gold)'">📋 Open Full Report ↗</a>
+            <button onclick="navigator.clipboard.writeText('https://mimp44.github.io/dmp/mando-grogu-press-report.html')" style="background:var(--surface2);border:1px solid var(--border);color:var(--muted);padding:9px 12px;border-radius:8px;cursor:pointer;font-size:11px;font-weight:600" title="Copy link">🔗</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Placeholder card for future reports -->
+      <div style="background:var(--surface);border:1px dashed rgba(255,255,255,.08);border-radius:14px;padding:32px 20px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;min-height:280px">
+        <div style="font-size:32px;margin-bottom:12px;opacity:.3">📄</div>
+        <div style="font-size:13px;font-weight:700;color:var(--muted);margin-bottom:6px">Next Report</div>
+        <div style="font-size:11px;color:var(--muted);opacity:.6;line-height:1.6;margin-bottom:14px">Generate a press junket report,<br>travel report, or hotel rooming list</div>
+        <button style="background:transparent;border:1px solid var(--border);color:var(--muted);padding:7px 14px;border-radius:7px;cursor:pointer;font-size:11px;font-weight:600">+ Generate Report</button>
+      </div>
     </div>
   </div>
 
@@ -664,8 +739,8 @@ const MODAL_CONFIGS={
 
 // ─── VIEW SWITCHING ────────────────────────────────────
 let currentView='dashboard';
-const VIEWS=['dashboard','screenings','press','junkets','schedules','highlights','calendar'];
-const LABELS={dashboard:'Dashboard',screenings:'Screening Requests',press:'Press',junkets:'Junket Planning',schedules:'Schedules & Reports',highlights:'Campaign Highlights',calendar:'Global Calendar'};
+const VIEWS=['dashboard','screenings','press','junkets','schedules','reports','highlights','calendar'];
+const LABELS={dashboard:'Dashboard',screenings:'Screening Requests',press:'Press',junkets:'Junket Planning',schedules:'Schedules & Reports',reports:'Report Outputs',highlights:'Campaign Highlights',calendar:'Global Calendar'};
 
 function switchView(v){
   VIEWS.forEach(x=>{
@@ -694,12 +769,12 @@ function renderTable(type){
   const tbodies={
     screenings:(d)=>`<td><strong>${d.title}</strong></td><td>${d.date}</td><td>${d.requestor}</td><td>${d.venue}</td><td>${d.type}</td><td>${d.territory}</td><td>${statusBadge(d.status)}</td><td style="color:var(--muted);max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${d.notes||'—'}</td>`,
     press:(d)=>`<td><strong>${d.title}</strong></td><td>${d.outlet}</td><td>${d.journalist}</td><td>${d.territory}</td><td>${d.type}</td><td>${d.date}</td><td>${statusBadge(d.status)}</td>`,
-    junkets:(d)=>`<td><strong>${d.title}</strong></td><td style="font-size:11px">${d.talent}</td><td style="font-size:11px">${d.market}</td><td>${d.date}</td><td>${d.format}</td><td>${d.outlets} outlets</td><td>${statusBadge(d.status)}</td>`,
+    junkets:(d)=>`<td><strong>${d.title}</strong>${d.title.includes('Mandalorian')?' <span style="font-size:9px;background:rgba(167,139,250,.2);color:#a78bfa;padding:1px 6px;border-radius:6px;font-weight:700;vertical-align:middle">REPORT READY</span>':''}</td><td style="font-size:11px">${d.talent}</td><td style="font-size:11px">${d.market}</td><td>${d.date}</td><td>${d.format}</td><td>${d.outlets} outlets</td><td>${statusBadge(d.status)}</td>`,
     schedules:(d)=>`<td><strong>${d.title}</strong></td><td>${d.talent}</td><td>${d.type}</td><td>${d.date}</td><td style="font-size:11px">${d.markets}</td><td>${statusBadge(d.status)}</td>`,
   };
   const tbody=document.getElementById('tbody-'+type);
   if(!tbody)return;
-  tbody.innerHTML=DATA[type].map(d=>`<tr>${tbodies[type](d)}<td><button class="row-action" onclick="cycleStatus('${type}',${d.id})">⟳ Status</button></td></tr>`).join('');
+  tbody.innerHTML=DATA[type].map(d=>`<tr>${tbodies[type](d)}<td style="display:flex;gap:6px;align-items:center">${type==='junkets'&&d.title.includes('Mandalorian')?`<a href="https://mimp44.github.io/dmp/mando-grogu-press-report.html" target="_blank" class="row-action" style="color:var(--gold);border-color:rgba(245,200,66,.3);text-decoration:none">📋 Report</a>`:''}<button class="row-action" onclick="cycleStatus('${type}',${d.id})">⟳ Status</button></td></tr>`).join('');
 }
 
 function cycleStatus(type,id){
