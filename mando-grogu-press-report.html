@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Mandalorian & Grogu — Press Junket Report · PGS 2.0</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --navy:#0a1628;--navy2:#132040;--gold:#F5C842;--teal:#00B5AD;
+  --text:#1a1a2e;--muted:#6b7280;--border:#e5e7eb;--bg:#f8f9fc;
+  --green:#059669;--amber:#d97706;--red:#dc2626;--blue:#2563eb;--purple:#7c3aed;
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:13px;min-height:100vh}
+
+/* TOP BAR */
+.topbar{background:var(--navy);padding:0;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.4)}
+.topbar-inner{display:flex;align-items:stretch;max-width:1400px;margin:0 auto}
+.tb-brand{display:flex;align-items:center;gap:10px;padding:14px 24px;border-right:1px solid rgba(255,255,255,.08)}
+.pgs-badge{background:var(--gold);color:#000;font-weight:900;font-size:10px;padding:3px 7px;border-radius:4px;letter-spacing:.5px}
+.tb-title{color:#fff;font-size:13px;font-weight:700}
+.tb-title span{color:var(--gold)}
+.tb-nav{display:flex;flex:1;overflow-x:auto}
+.tab-btn{padding:0 20px;color:rgba(255,255,255,.55);font-size:12px;font-weight:600;border:none;background:transparent;cursor:pointer;white-space:nowrap;border-bottom:3px solid transparent;height:52px;transition:.15s}
+.tab-btn:hover{color:rgba(255,255,255,.85)}
+.tab-btn.active{color:#fff;border-bottom-color:var(--gold)}
+.tb-actions{display:flex;align-items:center;gap:8px;padding:0 16px;border-left:1px solid rgba(255,255,255,.08)}
+.print-btn{background:var(--gold);color:#000;border:none;padding:7px 14px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:5px}
+.print-btn:hover{background:#e8b800}
+.draft-pill{background:rgba(220,38,38,.2);color:#fca5a5;font-size:10px;font-weight:700;padding:3px 8px;border-radius:10px;border:1px solid rgba(220,38,38,.3)}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 60%,#1a1035 100%);padding:36px 24px;border-bottom:1px solid rgba(255,255,255,.06)}
+.hero-inner{max-width:1400px;margin:0 auto;display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.hero-eyebrow{font-size:10px;font-weight:800;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:8px}
+.hero-title{font-size:28px;font-weight:900;color:#fff;line-height:1.15;margin-bottom:6px}
+.hero-title em{color:var(--gold);font-style:normal}
+.hero-sub{font-size:12px;color:rgba(255,255,255,.55)}
+.hero-meta{display:flex;gap:20px;flex-wrap:wrap}
+.hm-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:12px 18px;text-align:center}
+.hm-num{font-size:26px;font-weight:900;color:var(--gold);line-height:1}
+.hm-label{font-size:10px;color:rgba(255,255,255,.5);font-weight:600;margin-top:3px;text-transform:uppercase;letter-spacing:.5px}
+
+/* MAIN */
+.main{max-width:1400px;margin:0 auto;padding:24px}
+.section{display:none}
+.section.active{display:block}
+
+/* OVERVIEW */
+.talent-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin-bottom:28px}
+.talent-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px;border-top:3px solid var(--gold)}
+.tc-role{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:4px}
+.tc-name{font-size:15px;font-weight:800;color:var(--text);margin-bottom:6px}
+.tc-char{font-size:11px;color:var(--muted);font-style:italic;margin-bottom:10px}
+.tc-detail{font-size:10px;color:var(--muted);display:flex;flex-direction:column;gap:3px}
+.tc-detail strong{color:var(--text);font-size:11px}
+.staff-badge{display:inline-flex;align-items:center;gap:5px;background:#f3f4f6;border-radius:6px;padding:4px 8px;font-size:10px;color:var(--muted);margin-top:6px}
+
+.overview-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px}
+.ov-box{background:#fff;border:1px solid var(--border);border-radius:12px;padding:20px}
+.ov-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+
+/* SCHEDULE */
+.day-header{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 20px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
+.day-title{font-size:18px;font-weight:800}
+.day-meta{font-size:11px;color:var(--muted)}
+.talent-cols{display:grid;gap:16px;margin-bottom:20px}
+.talent-cols.cols-2{grid-template-columns:1fr 1fr}
+.talent-cols.cols-3{grid-template-columns:repeat(3,1fr)}
+.talent-cols.cols-5{grid-template-columns:repeat(5,1fr)}
+.talent-col{background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.col-head{padding:14px 16px;border-bottom:1px solid var(--border)}
+.col-name{font-size:13px;font-weight:800;color:var(--text)}
+.col-role{font-size:10px;color:var(--muted);margin-top:1px}
+.col-suite{font-size:10px;color:var(--blue);margin-top:3px;font-weight:600}
+.col-staff{font-size:10px;color:var(--muted);margin-top:2px}
+.col-body{padding:10px}
+.int-block{border-radius:8px;padding:8px 10px;margin-bottom:6px;border-left:3px solid}
+.int-block.type-press{background:#eff6ff;border-color:var(--blue)}
+.int-block.type-virtual{background:#f5f3ff;border-color:var(--purple)}
+.int-block.type-break{background:#f9fafb;border-color:#d1d5db}
+.int-block.type-transfer{background:#fff7ed;border-color:var(--amber)}
+.int-block.type-signing{background:#fef2f2;border-color:var(--red)}
+.int-block.type-group{background:#f0fdf4;border-color:var(--green)}
+.int-time{font-size:10px;font-weight:800;color:var(--muted);margin-bottom:3px}
+.int-journalist{font-size:11px;font-weight:700;color:var(--text)}
+.int-outlet{font-size:11px;font-weight:600;color:var(--blue);margin-bottom:2px}
+.int-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+.int-tag{font-size:9px;padding:1px 6px;border-radius:6px;font-weight:700}
+.tag-dur{background:#e0e7ff;color:#3730a3}
+.tag-inperson{background:#dcfce7;color:#166534}
+.tag-virtual{background:#f3e8ff;color:#6b21a8}
+.tag-concept{background:#fef9c3;color:#713f12}
+.tag-cast{background:#f1f5f9;color:#475569}
+.int-note{font-size:10px;color:var(--muted);margin-top:3px;font-style:italic}
+.break-label{font-size:11px;font-weight:700;color:var(--muted);text-align:center;padding:2px 0}
+
+/* HOTEL TABLE */
+.report-table-wrap{background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.report-table-head{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.rth-title{font-size:14px;font-weight:800}
+.rth-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.rth-badge{font-size:10px;background:#f3f4f6;border-radius:6px;padding:3px 9px;font-weight:600;color:var(--muted)}
+table{width:100%;border-collapse:collapse}
+thead th{padding:10px 16px;text-align:left;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);background:#f8f9fc;border-bottom:1px solid var(--border)}
+tbody tr{border-bottom:1px solid var(--border)}
+tbody tr:last-child{border:none}
+tbody tr:hover{background:#fafafa}
+td{padding:12px 16px;font-size:12px;vertical-align:top}
+.guest-name{font-weight:700;font-size:13px}
+.territory-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:8px;font-size:10px;font-weight:700}
+.terr-usa{background:#dbeafe;color:#1d4ed8}
+.terr-canada{background:#dcfce7;color:#15803d}
+.terr-brazil{background:#fef9c3;color:#a16207}
+.flag{font-size:12px}
+.special-note{font-size:11px;color:var(--amber);margin-top:4px;padding:4px 8px;background:#fffbeb;border-radius:5px;border-left:2px solid var(--amber)}
+.date-range{font-size:12px;font-weight:600}
+.nights{font-size:10px;color:var(--muted);margin-top:1px}
+.status-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:4px}
+
+/* TRAVEL TABLE */
+.flight-cell{display:flex;flex-direction:column;gap:4px}
+.flight-row{display:flex;align-items:flex-start;gap:6px}
+.flight-icon{font-size:12px;flex-shrink:0;margin-top:1px}
+.flight-detail{font-size:11px;line-height:1.5}
+.flight-airline{font-weight:600;color:var(--text)}
+.flight-route{color:var(--muted)}
+.flight-note{font-size:10px;color:var(--amber);background:#fffbeb;padding:3px 7px;border-radius:4px;margin-top:2px;border-left:2px solid var(--amber)}
+.contact-cell{font-size:11px}
+.contact-cell a{color:var(--blue);text-decoration:none}
+.contact-cell a:hover{text-decoration:underline}
+
+/* FOOTER */
+.report-footer{margin-top:32px;padding:20px;background:#fff;border:1px solid var(--border);border-radius:12px;display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--muted)}
+
+/* SECTION LABEL */
+.section-label{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.sl-icon{font-size:18px}
+.sl-title{font-size:18px;font-weight:800}
+.sl-sub{font-size:12px;color:var(--muted);margin-top:2px}
+
+/* PRINT */
+@media print{
+  .topbar,.print-btn{display:none!important}
+  .section{display:block!important}
+  .hero{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body{background:#fff}
+  .main{padding:0}
+}
+
+@media (max-width:900px){
+  .talent-cols.cols-5{grid-template-columns:repeat(2,1fr)}
+  .overview-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="tb-brand">
+      <span class="pgs-badge">PGS</span>
+      <span class="tb-title">2.0 <span>/ Report</span></span>
+    </div>
+    <div class="tb-nav">
+      <button class="tab-btn active" onclick="showTab('overview')">📋 Overview</button>
+      <button class="tab-btn" onclick="showTab('thu')">📅 Thu May 14</button>
+      <button class="tab-btn" onclick="showTab('fri')">📅 Fri May 15</button>
+      <button class="tab-btn" onclick="showTab('hotel')">🏨 Hotel Rooming</button>
+      <button class="tab-btn" onclick="showTab('travel')">✈️ Travel Report</button>
+    </div>
+    <div class="tb-actions">
+      <span class="draft-pill">TENTATIVE</span>
+      <button class="print-btn" onclick="window.print()">🖨 Print / PDF</button>
+    </div>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-eyebrow">Publicity Global System · Press Junket Report</div>
+      <div class="hero-title">The Mandalorian &amp; <em>Grogu</em></div>
+      <div class="hero-sub">Press Event · May 13–16, 2026 · London WeHo · As of May 1, 2026</div>
+    </div>
+    <div class="hero-meta">
+      <div class="hm-card"><div class="hm-num">5</div><div class="hm-label">Talent</div></div>
+      <div class="hm-card"><div class="hm-num">11</div><div class="hm-label">Press Guests</div></div>
+      <div class="hm-card"><div class="hm-num">40+</div><div class="hm-label">Outlets</div></div>
+      <div class="hm-card"><div class="hm-num">2</div><div class="hm-label">Interview Days</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- OVERVIEW -->
+  <div class="section active" id="section-overview">
+    <div class="section-label">
+      <span class="sl-icon">🎬</span>
+      <div><div class="sl-title">Event Overview</div><div class="sl-sub">Talent roster, staff assignments, and event logistics</div></div>
+    </div>
+    <div class="talent-grid">
+      <div class="talent-card">
+        <div class="tc-role">Director · Producer · Writer</div>
+        <div class="tc-name">Jon Favreau</div>
+        <div class="tc-char">Director | Producer / Co-writer</div>
+        <div class="tc-detail">
+          <span>📍 Suite 225 · JPI RM #1</span>
+          <span>📅 Thu May 14 + Fri May 15</span>
+        </div>
+        <div class="staff-badge">👤 Staff: Melissa Stone</div>
+      </div>
+      <div class="talent-card">
+        <div class="tc-role">Writer · Co-Creator</div>
+        <div class="tc-name">Dave Filoni</div>
+        <div class="tc-char">Co-Writer</div>
+        <div class="tc-detail">
+          <span>📍 Suite 225 · JPI RM #1 (Thu), RM #2 (Fri)</span>
+          <span>📅 Thu May 14 + Fri May 15</span>
+        </div>
+        <div class="staff-badge">👤 Staff: Tracy Cannobbio</div>
+      </div>
+      <div class="talent-card">
+        <div class="tc-role">Lead Actor</div>
+        <div class="tc-name">Pedro Pascal</div>
+        <div class="tc-char">'The Mandalorian'</div>
+        <div class="tc-detail">
+          <span>📍 Suite 226 · JPI RM #2</span>
+          <span>📅 Thu May 14 + Fri May 15</span>
+        </div>
+        <div class="staff-badge">👤 Staff: Taryn Thomas</div>
+      </div>
+      <div class="talent-card" style="border-top-color:#a78bfa">
+        <div class="tc-role">Supporting Actor</div>
+        <div class="tc-name">Jeremy Allen White</div>
+        <div class="tc-char">'Rotta the Hutt'</div>
+        <div class="tc-detail">
+          <span>📍 Suite 226 · JPI RM #2</span>
+          <span>📅 Fri May 15 (joins 2:15 PM)</span>
+        </div>
+        <div class="staff-badge">👤 Staff: Esther Yim</div>
+      </div>
+      <div class="talent-card" style="border-top-color:#22c55e">
+        <div class="tc-role">Supporting Actor</div>
+        <div class="tc-name">Sigourney Weaver</div>
+        <div class="tc-char">'Colonel Ward'</div>
+        <div class="tc-detail">
+          <span>📍 Suite 227 · JPI RM #3</span>
+          <span>📅 Fri May 15</span>
+        </div>
+        <div class="staff-badge">👤 Staff: Tomie Shaw</div>
+      </div>
+    </div>
+
+    <div class="overview-grid">
+      <div class="ov-box">
+        <div class="ov-title">Event Schedule Summary</div>
+        <table>
+          <thead><tr><th>Date</th><th>Activity</th><th>Talent</th></tr></thead>
+          <tbody>
+            <tr><td class="date-range">Tue 5/13</td><td>Press arrival, hotel check-in</td><td style="color:var(--muted)">Press guests</td></tr>
+            <tr><td class="date-range">Wed 5/14</td><td>Press junket — Day 1</td><td>Jon, Dave, Pedro</td></tr>
+            <tr><td class="date-range">Thu 5/15</td><td>Press junket — Day 2</td><td>Jon, Dave, Pedro, Jeremy, Sigourney</td></tr>
+            <tr><td class="date-range">Fri 5/16</td><td>Press departure</td><td style="color:var(--muted)">Press guests</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="ov-box">
+        <div class="ov-title">Press Guest Territories</div>
+        <table>
+          <thead><tr><th>Territory</th><th>Guests</th></tr></thead>
+          <tbody>
+            <tr><td><span class="territory-badge terr-usa">🇺🇸 USA</span></td><td>Canton, Killian, Mangum, Matheson, Parker, Tacher</td></tr>
+            <tr><td><span class="territory-badge terr-canada">🍁 Canada</span></td><td>Bustamante, Trinnear, Wall</td></tr>
+            <tr><td><span class="territory-badge terr-brazil">🇧🇷 Brazil</span></td><td>Guilherme, Pontual</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="ov-box" style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:20px">
+      <div class="ov-title">Interview Room Assignments</div>
+      <table>
+        <thead><tr><th>Room</th><th>Thu May 14</th><th>Fri May 15</th></tr></thead>
+        <tbody>
+          <tr><td><strong>JPI RM #1</strong></td><td>Jon Favreau &amp; Dave Filoni (solo → paired)</td><td>Jon Favreau · USA TODAY, WFLD-TV, StarWars.com</td></tr>
+          <tr><td><strong>JPI RM #2</strong></td><td>Pedro Pascal — Latin, Brazil, Canada press</td><td>Dave Filoni / Pedro Pascal / Jeremy Allen White</td></tr>
+          <tr><td><strong>JPI RM #3</strong></td><td style="color:var(--muted)">—</td><td>Sigourney Weaver</td></tr>
+          <tr><td><strong>Suite 224</strong></td><td>Jon Favreau (Vanity Fair 80-min feature)</td><td>Wired · EW · IMDb · Fandango (multi-cast)</td></tr>
+          <tr><td><strong>Suite 223</strong></td><td>Poster Signing (Jon, Dave)</td><td>Poster Signing (Jeremy, Sigourney, Pedro)</td></tr>
+          <tr><td><strong>Ballroom (1F)</strong></td><td style="color:var(--muted)">—</td><td>Entertainment Weekly (grouped — full cast)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- THURSDAY -->
+  <div class="section" id="section-thu">
+    <div class="section-label">
+      <span class="sl-icon">📅</span>
+      <div><div class="sl-title">Thursday, May 14 — Interview Schedule</div><div class="sl-sub">All times Pacific · JPI Rooms 1 &amp; 2 · London WeHo</div></div>
+    </div>
+    <div class="talent-cols cols-2">
+
+      <!-- JON + DAVE -->
+      <div class="talent-col">
+        <div class="col-head" style="background:#eff6ff">
+          <div class="col-name">Jon Favreau &amp; Dave Filoni</div>
+          <div class="col-role">Director | Producer / Co-Writer</div>
+          <div class="col-suite">📍 Suite 225 → Suite 224 → Suite 223 · JPI RM #1</div>
+          <div class="col-staff">Staff: Melissa Stone, Tracy Cannobbio</div>
+        </div>
+        <div class="col-body">
+          <div class="int-block type-transfer"><div class="int-time">8:50 AM</div><div class="int-outlet">Jon Favreau joins Suite 224</div></div>
+
+          <div class="int-block type-group">
+            <div class="int-time">9:00 AM</div>
+            <div class="int-journalist">TBD Journalist</div>
+            <div class="int-outlet">VANITY FAIR.COM · in-person</div>
+            <div class="int-meta"><span class="int-tag tag-dur">80 min</span><span class="int-tag tag-inperson">In-Person</span></div>
+            <div class="int-note">"The Definitive Interview with Jon Favreau"</div>
+          </div>
+
+          <div class="int-block type-break"><div class="int-time">10:20 AM</div><div class="break-label">☕ BREAK — Jon transfers to Suite 225</div></div>
+
+          <div class="int-block type-press">
+            <div class="int-time">10:30 AM</div>
+            <div class="int-journalist">TBD Journalist</div>
+            <div class="int-outlet">FORTNITE MANDO ISLAND COMMUNITY Q&amp;A · in-person</div>
+            <div class="int-meta"><span class="int-tag tag-dur">25 min</span><span class="int-tag tag-inperson">In-Person</span></div>
+          </div>
+
+          <div class="int-block type-press">
+            <div class="int-time">10:55 AM</div>
+            <div class="int-journalist">Rick Campanelli</div>
+            <div class="int-outlet">BREAKFAST TELEVISION TORONTO · Canada</div>
+            <div class="int-meta"><span class="int-tag tag-dur">4 min</span><span class="int-tag tag-inperson">In-Person</span></div>
+          </div>
+          <div class="int-block type-press">
+            <div class="int-time">11:00 AM</div>
+            <div class="int-journalist">Sonia Mangat</div>
+            <div class="int-outlet">CTV eTALK · Canada</div>
+            <div class="int-meta"><span class="int-tag tag-dur">4 min</span><span class="int-tag tag-inperson">In-Person</span></div>
+          </div>
+          <div class="int-block type-press">
+            <div class="int-time">11:05 AM</div>
+            <div class="int-journalist">Justin Lawrence</div>
+            <div class="int-outlet">GEEKCENTRIC · Canada</div>
+            <div class="int-meta"><span class="int-tag tag-dur">4 min</span><span class="int-tag tag-inperson">In-Person</span></div>
+          </div>
+
+          <div class="int-block type-break"><div class="int-time">11:10 AM</div><div class="break-label">🍽 LUNCH</div></div>
+
+          <div class="int-block type-transfer"><div class="int-time">12:05 PM</div><div class="int-outlet">Dave Filoni joins Jon — 1:1 paired interviews begin</div></div>
+
+          <div class="int-block type-press">
+            <div class="int-time">12:10 PM</div>
+            <div class="int-journalist">Chris Killian</div>
+            <div class="int-outlet">COMICBOOK.COM · in-person</div>
+            <div class="int-meta"><span class="int-tag tag-dur">7 min</span><span class="int-tag tag-inperson">In-Person</span></div>
+          </div>
+          <div class="int-block type-press">
+            <div class="int-time">12:18 PM</div>
+            <div class="int-journalist">Sean O'Connell</div>
+            <div class="int-outlet">COMICBOOKRESOURCES.COM · in-person</div>
+            <div class="int-meta"><span class="int-tag tag-dur">7 min</span><span class="int-tag tag-inperson">In-Person</span></div>
+          </div>
+          <div class="int-block type-press">
+            <div class="int-time">12:26 PM</div>
+            <div class="int-journalist">Lisa Cabello</div>
+            <div class="int-outlet">D23 DIGITAL SOCIAL · in-person</div>
+            <div class="int-meta"><span class="int-tag tag-dur">7 min</span><span class="int-tag tag-inperson">In-Person</span></div>
+          </div>
+          <div class="int-block type-press">
+            <div class="int-time">12:34 PM</div>
+            <div class="int-journalist">Alan Tacher</div>
+            <div class="int-outlet">DESPIERTA AMERICA (UNIVISION) · in-person</div>
+            <div class="int-meta"><span class="int-tag tag-dur">7 min</span><span class="int-tag tag-inperson">In-Person</span></div>
+          </div>
+          <div class="int-block type-press">
+            <div class="int-time">12:42 PM</div>
+            <div class="int-journalist">Andrew Salazar</div>
+            <div class="int-outlet">DISCUSSINGFILM.NET · in-person</div>
+            <div class="int-meta"><span class="int-tag tag-dur">7 min</span><span class="int-tag tag-inperson">In-Person</span></div>
+          </div>
+          <div class="int-block type-press">
+            <div class="int-time">12:50 PM</div>
+            <div class="int-journalist">Rob Keyes</div>
+            <div class="int-outlet">SCREENRANT.COM · in-person</div>
+            <div class="int-meta"><span class="int-tag tag-dur">7 min</span><span class="int-tag tag-inperson">In-Person</span></div>
+          </div>
+          <div class="int-block type-press">
+            <div class="int-time">12:58 PM</div>
+            <div class="int-journalist">Rubi Molina</div>
+            <div class="int-outlet">EN CASA CON TELEMUNDO · in-person</div>
+            <div class="int-meta"><span class="int-tag tag-dur">7 min</span><span class="int-tag tag-inperson">In-Person</span></div>
+          </div>
+          <div class="int-block type-press">
+            <div class="int-time">1:06 PM</div>
+            <div class="int-journalist">Maggie Lovitt</div>
+            <div class="int-outlet">COLLIDER.COM · in-person</div>
+            <div class="int-meta"><span class="int-tag tag-dur">15 min</span><span class="int-tag tag-inperson">In-Person</span></div>
+          </div>
+          <div class="int-block type-virtual">
+            <div class="int-time">1:32 PM</div>
+            <div class="int-journalist">SW Fansites Roundtable</div>
+            <div class="int-outlet">FANGIRLS GOING ROGUE · SKYTALKERS · COFFEE WITH KENOBI · JEDI NEWS · FANTHA TRACKS + more</div>
+            <div class="int-meta"><span class="int-tag tag-dur">20 min</span><span class="int-tag tag-virtual">Virtual</span></div>
+          </div>
+          <div class="int-block type-press">
+            <div class="int-time">1:53 PM</div>
+            <div class="int-journalist">Amanda Salas</div>
+            <div class="int-outlet">GOOD DAY LA · in-person</div>
+            <div class="int-meta"><span class="int-tag tag-dur">7 min</span><span class="int-tag tag-inperson">In-Person</span></div>
+          </div>
+          <div class="int-block type-press">
+            <div class="int-time">2:01 PM</div>
+            <div class="int-journalist">TBD</div>
+            <div class="int-outlet">KTLA-TV (CW) · in-person</div>
+            <div class="int-meta"><span class="int-tag tag-dur">7 min</span><span class="int-tag tag-inperson">In-Person</span></div>
+          </div>
+          <div class="int-block type-press">
+            <div class="int-time">2:08 PM</div>
+            <div class="int-journalist">KT Turner</div>
+            <div class="int-outlet">DISNEY GENERIC · in-person</div>
+            <div class="int-meta"><span class="int-tag tag-dur">7 min</span><span class="int-tag tag-inperson">In-Person</span></div>
+          </div>
+          <div class="int-block type-transfer"><div class="int-time">2:16 PM</div><div class="int-outlet">Dave Filoni — end of interviews. Jon continues solo.</div></div>
+          <div class="int-block type-press">
+            <div class="int-time">2:20 PM</div>
+            <div class="int-journalist">Kim Trinh</div>
+            <div class="int-outlet">LUCASFILM DIGITAL/SOCIAL · in-person</div>
+            <div class="int-meta"><span class="int-tag tag-dur">9 min</span><span class="int-tag tag-inperson">In-Person</span></div>
+          </div>
+          <div class="int-block type-press">
+            <div class="int-time">2:30 PM</div>
+            <div class="int-journalist">Jazz Tangcay</div>
+            <div class="int-outlet">VARIETY · in-person</div>
+            <div class="int-meta"><span class="int-tag tag-dur">19 min</span><span class="int-tag tag-inperson">In-Person</span></div>
+            <div class="int-note">Feature: Making the film — practical sets vs. volume</div>
+          </div>
+          <div class="int-block type-signing">
+            <div class="int-time">2:55 PM</div>
+            <div class="int-outlet">📝 POSTER SIGNING — Suite 223 (Jon &amp; Dave)</div>
+            <div class="int-meta"><span class="int-tag tag-dur">6 min</span></div>
+          </div>
+          <div class="int-block type-break"><div class="int-time">3:02 PM</div><div class="break-label">✅ END OF INTERVIEWS</div></div>
+        </div>
+      </div>
+
+      <!-- PEDRO -->
+      <div class="talent-col">
+        <div class="col-head" style="background:#fdf4ff">
+          <div class="col-name">Pedro Pascal</div>
+          <div class="col-role">'The Mandalorian'</div>
+          <div class="col-suite">📍 Suite 226 · JPI RM #2</div>
+          <div class="col-staff">Staff: Taryn Thomas</div>
+        </div>
+        <div class="col-body">
+          <div class="int-block type-transfer"><div class="int-time">11:50 AM</div><div class="int-outlet">Pedro Pascal joins Suite 227</div></div>
+          <div class="int-block type-group">
+            <div class="int-time">12:00 PM</div>
+            <div class="int-journalist">Mariam Balogun</div>
+            <div class="int-outlet">BUZZFEED · in-person</div>
+            <div class="int-meta"><span class="int-tag tag-dur">30 min</span><span class="int-tag tag-inperson">In-Person</span><span class="int-tag tag-concept">🐾 Puppies</span></div>
+          </div>
+          <div class="int-block type-transfer"><div class="int-time">12:30 PM</div><div class="int-outlet">Pedro transfers to Suite 226 — 1:1 interviews begin</div></div>
+          <div class="int-block type-virtual">
+            <div class="int-time">12:35 PM</div>
+            <div class="int-journalist">Federico Bal</div>
+            <div class="int-outlet">ARGENTINA · virtual · in Spanish</div>
+            <div class="int-meta"><span class="int-tag tag-dur">5 min</span><span class="int-tag tag-virtual">Virtual</span></div>
+          </div>
+          <div class="int-block type-virtual">
+            <div class="int-time">12:41 PM</div>
+            <div class="int-journalist">María Jesús Muñoz</div>
+            <div class="int-outlet">CANAL 13 · Chile · virtual · in Spanish</div>
+            <div class="int-meta"><span class="int-tag tag-dur">5 min</span><span class="int-tag tag-virtual">Virtual</span></div>
+          </div>
+          <div class="int-block type-virtual">
+            <div class="int-time">12:47 PM</div>
+            <div class="int-journalist">Susana Moscatel</div>
+            <div class="int-outlet">MILENIO NEWSPAPER · Mexico · virtual · in Spanish</div>
+            <div class="int-meta"><span class="int-tag tag-dur">8 min</span><span class="int-tag tag-virtual">Virtual</span></div>
+          </div>
+          <div class="int-block type-virtual">
+            <div class="int-time">12:56 PM</div>
+            <div class="int-journalist">Carlos Pérez</div>
+            <div class="int-outlet">VENGA LA ALEGRÍA · Mexico · virtual · in Spanish</div>
+            <div class="int-meta"><span class="int-tag tag-dur">8 min</span><span class="int-tag tag-virtual">Virtual</span></div>
+          </div>
+          <div class="int-block type-press">
+            <div class="int-time">1:05 PM</div>
+            <div class="int-journalist">Jorge Pontual</div>
+            <div class="int-outlet">FANTÁSTICO · Brazil · in-person</div>
+            <div class="int-meta"><span class="int-tag tag-dur">8 min</span><span class="int-tag tag-inperson">In-Person</span></div>
+          </div>
+          <div class="int-block type-press"><div class="int-time">1:14 PM</div><div class="int-journalist">Rick Campanelli</div><div class="int-outlet">BREAKFAST TELEVISION TORONTO · Canada</div><div class="int-meta"><span class="int-tag tag-dur">4 min</span><span class="int-tag tag-inperson">In-Person</span></div></div>
+          <div class="int-block type-press"><div class="int-time">1:19 PM</div><div class="int-journalist">Sonia Mangat</div><div class="int-outlet">CTV eTALK · Canada</div><div class="int-meta"><span class="int-tag tag-dur">4 min</span><span class="int-tag tag-inperson">In-Person</span></div></div>
+          <div class="int-block type-press"><div class="int-time">1:24 PM</div><div class="int-journalist">Justin Lawrence</div><div class="int-outlet">GEEKCENTRIC · Canada</div><div class="int-meta"><span class="int-tag tag-dur">4 min</span><span class="int-tag tag-inperson">In-Person</span></div></div>
+          <div class="int-block type-press"><div class="int-time">1:29 PM</div><div class="int-journalist">João Guilherme</div><div class="int-outlet">JOÃO GUILHERME · Brazil · in-person</div><div class="int-meta"><span class="int-tag tag-dur">8 min</span><span class="int-tag tag-inperson">In-Person</span></div></div>
+          <div class="int-block type-press"><div class="int-time">1:38 PM</div><div class="int-journalist">Juan Pablo Raba</div><div class="int-outlet">COLOMBIA · in-person · in Spanish</div><div class="int-meta"><span class="int-tag tag-dur">5 min</span><span class="int-tag tag-inperson">In-Person</span></div></div>
+          <div class="int-block type-press"><div class="int-time">1:44 PM</div><div class="int-journalist">Jacobo Eskenazi</div><div class="int-outlet">PERU · in-person · in Spanish</div><div class="int-meta"><span class="int-tag tag-dur">5 min</span><span class="int-tag tag-inperson">In-Person</span></div></div>
+          <div class="int-block type-break"><div class="int-time">1:50 PM</div><div class="break-label">☕ BREAK</div></div>
+          <div class="int-block type-press"><div class="int-time">2:00 PM</div><div class="int-journalist">Chris Killian</div><div class="int-outlet">COMICBOOK.COM · in-person</div><div class="int-meta"><span class="int-tag tag-dur">4 min</span><span class="int-tag tag-inperson">In-Person</span></div></div>
+          <div class="int-block type-press"><div class="int-time">2:05 PM</div><div class="int-journalist">Sean O'Connell</div><div class="int-outlet">COMICBOOKRESOURCES.COM · in-person</div><div class="int-meta"><span class="int-tag tag-dur">4 min</span><span class="int-tag tag-inperson">In-Person</span></div></div>
+          <div class="int-block type-press"><div class="int-time">2:10 PM</div><div class="int-journalist">Lisa Cabello</div><div class="int-outlet">D23 DIGITAL SOCIAL · in-person</div><div class="int-meta"><span class="int-tag tag-dur">4 min</span><span class="int-tag tag-inperson">In-Person</span></div></div>
+          <div class="int-block type-press"><div class="int-time">2:15 PM</div><div class="int-journalist">Alan Tacher</div><div class="int-outlet">DESPIERTA AMERICA (UNIVISION) · in-person</div><div class="int-meta"><span class="int-tag tag-dur">8 min</span><span class="int-tag tag-inperson">In-Person</span></div></div>
+          <div class="int-block type-press"><div class="int-time">2:24 PM</div><div class="int-journalist">Andrew Salazar</div><div class="int-outlet">DISCUSSINGFILM.NET · in-person</div><div class="int-meta"><span class="int-tag tag-dur">4 min</span><span class="int-tag tag-inperson">In-Person</span></div></div>
+          <div class="int-block type-press"><div class="int-time">2:29 PM</div><div class="int-journalist">Rubi Molina</div><div class="int-outlet">EN CASA CON TELEMUNDO · in-person</div><div class="int-meta"><span class="int-tag tag-dur">7 min</span><span class="int-tag tag-inperson">In-Person</span></div></div>
+          <div class="int-block type-press"><div class="int-time">2:37 PM</div><div class="int-journalist">Rob Keyes</div><div class="int-outlet">SCREENRANT.COM · in-person</div><div class="int-meta"><span class="int-tag tag-dur">4 min</span><span class="int-tag tag-inperson">In-Person</span></div></div>
+          <div class="int-block type-press"><div class="int-time">2:42 PM</div><div class="int-journalist">Amanda Salas</div><div class="int-outlet">GOOD DAY LA · in-person</div><div class="int-meta"><span class="int-tag tag-dur">4 min</span><span class="int-tag tag-inperson">In-Person</span></div></div>
+          <div class="int-block type-press"><div class="int-time">2:47 PM</div><div class="int-outlet">KTLA-TV (CW) · in-person</div><div class="int-meta"><span class="int-tag tag-dur">4 min</span><span class="int-tag tag-inperson">In-Person</span></div></div>
+          <div class="int-block type-press"><div class="int-time">2:52 PM</div><div class="int-journalist">Holly Battaglia</div><div class="int-outlet">DISNEY MUSIC LINERS · teleprompter</div><div class="int-meta"><span class="int-tag tag-dur">4 min</span></div></div>
+          <div class="int-block type-press"><div class="int-time">2:57 PM</div><div class="int-outlet">MANDALORIAN MERCS · in-person</div><div class="int-meta"><span class="int-tag tag-dur">5 min</span><span class="int-tag tag-inperson">In-Person</span></div></div>
+          <div class="int-block type-press"><div class="int-time">3:03 PM</div><div class="int-journalist">KT Turner</div><div class="int-outlet">DISNEY GENERIC · in-person</div><div class="int-meta"><span class="int-tag tag-dur">6 min</span><span class="int-tag tag-inperson">In-Person</span></div></div>
+          <div class="int-block type-break"><div class="int-time">3:10 PM</div><div class="break-label">✅ END OF INTERVIEWS</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FRIDAY -->
+  <div class="section" id="section-fri">
+    <div class="section-label">
+      <span class="sl-icon">📅</span>
+      <div><div class="sl-title">Friday, May 15 — Interview Schedule</div><div class="sl-sub">All times Pacific · 3 Interview Rooms · Full cast day</div></div>
+    </div>
+
+    <!-- Grouped sessions note -->
+    <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:14px 18px;margin-bottom:16px;font-size:12px;color:#166534">
+      <strong>📌 Grouped Sessions:</strong> Wired.com (1:00 PM · Suite 224 · Jon/Pedro/Sigourney) · Entertainment Weekly (1:30 PM · Ballroom · Full cast) · IMDb (2:00 PM · Suite 226 · Jon/Dave/Pedro/Sigourney) · Fandango (2:20 PM · Suite 226 · Full cast) · New Yorker (2:45 PM · Jon/Pedro/Jeremy/Sigourney)
+    </div>
+
+    <div class="talent-cols cols-5">
+      <!-- JON -->
+      <div class="talent-col">
+        <div class="col-head" style="background:#eff6ff">
+          <div class="col-name">Jon Favreau</div>
+          <div class="col-role">Director | Producer</div>
+          <div class="col-suite">📍 Suite 225 · RM #1</div>
+          <div class="col-staff">Staff: Melissa Stone</div>
+        </div>
+        <div class="col-body">
+          <div class="int-block type-transfer"><div class="int-time">12:50 PM</div><div class="int-outlet">Jon joins Suite 224</div></div>
+          <div class="int-block type-group"><div class="int-time">1:00 PM</div><div class="int-journalist">TBD</div><div class="int-outlet">WIRED.COM · Suite 224</div><div class="int-meta"><span class="int-tag tag-dur">25 min</span><span class="int-tag tag-concept">50 Most Googled Qs</span></div><div class="int-note">Cast: Jon, Pedro, Sigourney</div></div>
+          <div class="int-block type-transfer"><div class="int-time">1:25 PM</div><div class="int-outlet">→ Ballroom (1st Floor)</div></div>
+          <div class="int-block type-group"><div class="int-time">1:30 PM</div><div class="int-journalist">TBD</div><div class="int-outlet">ENTERTAINMENT WEEKLY · Ballroom</div><div class="int-meta"><span class="int-tag tag-dur">25 min</span><span class="int-tag tag-concept">Debunked Interview</span></div><div class="int-note">Cast: Jon, Dave, Pedro, Sigourney</div></div>
+          <div class="int-block type-transfer"><div class="int-time">1:55 PM</div><div class="int-outlet">→ Suite 226</div></div>
+          <div class="int-block type-group"><div class="int-time">2:00 PM</div><div class="int-journalist">Bret Federigan</div><div class="int-outlet">IMDB.COM · Suite 226</div><div class="int-meta"><span class="int-tag tag-dur">14 min</span><span class="int-tag tag-concept">Fan Questions</span></div></div>
+          <div class="int-block type-group"><div class="int-time">2:20 PM</div><div class="int-journalist">Nick Dürnhöfer</div><div class="int-outlet">FANDANGO.COM · Suite 226</div><div class="int-meta"><span class="int-tag tag-dur">14 min</span><span class="int-tag tag-concept">Know Your Co-star</span></div></div>
+          <div class="int-block type-break"><div class="int-time">2:35 PM</div><div class="break-label">☕ BREAK → Suite 224</div></div>
+          <div class="int-block type-group"><div class="int-time">2:45 PM</div><div class="int-journalist">TBD</div><div class="int-outlet">THE NEW YORKER · Suite 224</div><div class="int-meta"><span class="int-tag tag-dur">19 min</span><span class="int-tag tag-concept">Little Bag, Big Qs</span></div></div>
+          <div class="int-block type-transfer"><div class="int-time">3:05 PM</div><div class="int-outlet">Jon → Suite 225 (paired w/ Dave)</div></div>
+          <div class="int-block type-press"><div class="int-time">3:10 PM</div><div class="int-journalist">Brian Truitt</div><div class="int-outlet">USA TODAY · virtual</div><div class="int-meta"><span class="int-tag tag-dur">14 min</span><span class="int-tag tag-virtual">Virtual</span></div></div>
+          <div class="int-block type-press"><div class="int-time">3:55 PM</div><div class="int-journalist">Jake Hamilton</div><div class="int-outlet">WFLD-TV (FOX) Chicago · EXTRA</div><div class="int-meta"><span class="int-tag tag-dur">4 min</span><span class="int-tag tag-inperson">In-Person</span></div></div>
+          <div class="int-block type-press"><div class="int-time">4:00 PM</div><div class="int-journalist">Kristin Baver</div><div class="int-outlet">STARWARS.COM</div><div class="int-meta"><span class="int-tag tag-dur">5 min</span><span class="int-tag tag-inperson">In-Person</span></div></div>
+          <div class="int-block type-press"><div class="int-time">4:06 PM</div><div class="int-journalist">Trey Mangum</div><div class="int-outlet">BLAVITY TV</div><div class="int-meta"><span class="int-tag tag-dur">5 min</span><span class="int-tag tag-inperson">In-Person</span></div></div>
+          <div class="int-block type-press"><div class="int-time">4:12 PM</div><div class="int-journalist">George Pennacchi</div><div class="int-outlet">KABC-TV</div><div class="int-meta"><span class="int-tag tag-dur">4 min</span><span class="int-tag tag-inperson">In-Person</span></div></div>
+          <div class="int-block type-press"><div class="int-time">4:17 PM</div><div class="int-journalist">Jason Matheson</div><div class="int-outlet">KMSP-TV (FOX) Minneapolis</div><div class="int-meta"><span class="int-tag tag-dur">4 min</span><span class="int-tag tag-inperson">In-Person</span></div></div>
+          <div class="int-block type-press"><div class="int-time">4:22 PM</div><div class="int-journalist">Zach Johnson</div><div class="int-outlet">TWDC.COM</div><div class="int-meta"><span class="int-tag tag-dur">8 min</span><span class="int-tag tag-inperson">In-Person</span></div></div>
+          <div class="int-block type-press"><div class="int-time">4:31 PM</div><div class="int-journalist">Jim Vejvoda</div><div class="int-outlet">IGN.COM</div><div class="int-meta"><span class="int-tag tag-dur">29 min</span><span class="int-tag tag-inperson">In-Person</span><span class="int-tag tag-concept">Best Shots + Fortnite</span></div></div>
+          <div class="int-block type-break"><div class="int-time">5:01 PM</div><div class="break-label">✅ END OF INTERVIEWS</div></div>
+        </div>
+      </div>
+
+      <!-- DAVE -->
+      <div class="talent-col">
+        <div class="col-head" style="background:#eff6ff">
+          <div class="col-name">Dave Filoni</div>
+          <div class="col-role">Co-Writer</div>
+          <div class="col-suite">📍 Suite 225 · RM #1/#2</div>
+          <div class="col-staff">Staff: Tracy Cannobbio</div>
+        </div>
+        <div class="col-body">
+          <div class="int-block type-transfer"><div class="int-time">1:25 PM</div><div class="int-outlet">Dave → Ballroom (1st Floor)</div></div>
+          <div class="int-block type-group"><div class="int-time">1:30 PM</div><div class="int-journalist">TBD</div><div class="int-outlet">ENTERTAINMENT WEEKLY · Ballroom</div><div class="int-meta"><span class="int-tag tag-dur">25 min</span><span class="int-tag tag-concept">Debunked Interview</span></div></div>
+          <div class="int-block type-transfer"><div class="int-time">1:55 PM</div><div class="int-outlet">→ Suite 226</div></div>
+          <div class="int-block type-group"><div class="int-time">2:00 PM</div><div class="int-journalist">Bret Federigan</div><div class="int-outlet">IMDB.COM · Fan Questions</div><div class="int-meta"><span class="int-tag tag-dur">14 min</span></div></div>
+          <div class="int-block type-group"><div class="int-time">2:20 PM</div><div class="int-journalist">Nick Dürnhöfer</div><div class="int-outlet">FANDANGO.COM · Know Your Co-star</div><div class="int-meta"><span class="int-tag tag-dur">14 min</span></div></div>
+          <div class="int-block type-break"><div class="int-time">2:35 PM</div><div class="break-label">☕ BREAK → Suite 225 (solo)</div></div>
+          <div class="int-block type-press"><div class="int-time">2:45 PM</div><div class="int-journalist">Devon Rodriguez</div><div class="int-outlet">LUCASFILM DIGITAL · sketch + interview</div><div class="int-meta"><span class="int-tag tag-dur">14 min</span><span class="int-tag tag-inperson">In-Person</span></div></div>
+          <div class="int-block type-transfer"><div class="int-time">3:05 PM</div><div class="int-outlet">Jon joins Dave — paired interviews</div></div>
+          <div class="int-block type-press"><div class="int-time">3:10 PM</div><div class="int-journalist">Brian Truitt</div><div class="int-outlet">USA TODAY · virtual</div><div class="int-meta"><span class="int-tag tag-dur">14 min</span><span class="int-tag tag-virtual">Virtual</span></div></div>
+          <div class="int-block type-break"><div class="int-time">3:25 PM</div><div class="break-label">✅ DAVE END OF INTERVIEWS · Jon on lunch</div></div>
+        </div>
+      </div>
+
+      <!-- PEDRO -->
+      <div class="talent-col">
+        <div class="col-head" style="background:#fdf4ff">
+          <div class="col-name">Pedro Pascal</div>
+          <div class="col-role">'The Mandalorian'</div>
+          <div class="col-suite">📍 Suite 226 · RM #2</div>
+          <div class="col-staff">Staff: Taryn Thomas</div>
+        </div>
+        <div class="col-body">
+          <div class="int-block type-transfer"><div class="int-time">12:50 PM</div><div class="int-outlet">Pedro joins Suite 224</div></div>
+          <div class="int-block type-group"><div class="int-time">1:00 PM</div><div class="int-journalist">TBD</div><div class="int-outlet">WIRED.COM · Suite 224</div><div class="int-meta"><span class="int-tag tag-dur">25 min</span><span class="int-tag tag-concept">50 Most Googled Qs</span></div></div>
+          <div class="int-block type-transfer"><div class="int-time">1:25 PM</div><div class="int-outlet">→ Ballroom</div></div>
+          <div class="int-block type-group"><div class="int-time">1:30 PM</div><div class="int-journalist">TBD</div><div class="int-outlet">ENTERTAINMENT WEEKLY · Ballroom</div><div class="int-meta"><span class="int-tag tag-dur">25 min</span><span class="int-tag tag-concept">Debunked Interview</span></div></div>
+          <div class="int-block type-transfer"><div class="int-time">1:55 PM</div><div class="int-outlet">→ Suite 226</div></div>
+          <div class="int-block type-group"><div class="int-time">2:00 PM</div><div class="int-journalist">Bret Federigan</div><div class="int-outlet">IMDB.COM · Fan Questions</div><div class="int-meta"><span class="int-tag tag-dur">14 min</span></div></div>
+          <div class="int-block type-group"><div class="int-time">2:20 PM</div><div class="int-journalist">Nick Dürnhöfer</div><div class="int-outlet">FANDANGO.COM · Know Your Co-star</div><div class="int-meta"><span class="int-tag tag-dur">14 min</span></div></div>
+          <div class="int-block type-break"><div class="int-time">2:35 PM</div><div class="break-label">☕ BREAK → Suite 224</div></div>
+          <div class="int-block type-group"><div class="int-time">2:45 PM</div><div class="int-journalist">TBD</div><div class="int-outlet">THE NEW YORKER · Little Bag, Big Qs</div><div class="int-meta"><span class="int-tag tag-dur">19 min</span></div></div>
+          <div class="int-block type-transfer"><div class="int-time">3:05 PM</div><div class="int-outlet">Pedro → Suite 226 (paired w/ Jeremy)</div></div>
+          <div class="int-block type-press"><div class="int-time">3:10 PM</div><div class="int-journalist">TBD</div><div class="int-outlet">PEOPLE · Truth or Dare</div><div class="int-meta"><span class="int-tag tag-dur">14 min</span><span class="int-tag tag-inperson">In-Person</span></div></div>
+          <div class="int-block type-press"><div class="int-time">3:25 PM</div><div class="int-journalist">Kristin Baver</div><div class="int-outlet">STARWARS.COM</div><div class="int-meta"><span class="int-tag tag-dur">5 min</span><span class="int-tag tag-inperson">In-Person</span></div></div>
+          <div class="int-block type-press"><div class="int-time">3:31 PM</div><div class="int-journalist">Brian Truitt</div><div class="int-outlet">USA TODAY · virtual</div><div class="int-meta"><span class="int-tag tag-dur">10 min</span><span class="int-tag tag-virtual">Virtual</span></div></div>
+          <div class="int-block type-break"><div class="int-time">3:42 PM</div><div class="break-label">🍽 LUNCH · Jeremy solo generic Qs</div></div>
+          <div class="int-block type-press"><div class="int-time">4:17 PM</div><div class="int-journalist">Nischelle Turner</div><div class="int-outlet">ENTERTAINMENT TONIGHT</div><div class="int-meta"><span class="int-tag tag-dur">6 min</span><span class="int-tag tag-inperson">In-Person</span></div></div>
+          <div class="int-block type-press"><div class="int-time">4:24 PM</div><div class="int-journalist">Jake Hamilton</div><div class="int-outlet">WFLD-TV (FOX) Chicago · EXTRA</div><div class="int-meta"><span class="int-tag tag-dur">6 min</span><span class="int-tag tag-inperson">In-Person</span></div></div>
+          <div class="int-block type-press"><div class="int-time">4:31 PM</div><div class="int-journalist">TBD</div><div class="int-outlet">ACCESS HOLLYWOOD</div><div class="int-meta"><span class="int-tag tag-dur">6 min</span><span class="int-tag tag-inperson">In-Person</span></div></div>
+          <div class="int-block type-press"><div class="int-time">4:38 PM</div><div class="int-journalist">Trey Mangum</div><div class="int-outlet">BLAVITY TV</div><div class="int-meta"><span class="int-tag tag-dur">4 min</span><span class="int-tag tag-inperson">In-Person</span></div></div>
+          <div class="int-block type-press"><div class="int-time">4:43 PM</div><div class="int-journalist">George Pennacchi</div><div class="int-outlet">KABC-TV</div><div class="int-meta"><span class="int-tag tag-dur">4 min</span><span class="int-tag tag-inperson">In-Person</span></div></div>
+          <div class="int-block type-press"><div class="int-time">4:48 PM</div><div class="int-journalist">Jason Matheson</div><div class="int-outlet">KMSP-TV (FOX) Minneapolis</div><div class="int-meta"><span class="int-tag tag-dur">4 min</span><span class="int-tag tag-inperson">In-Person</span></div></div>
+          <div class="int-block type-press"><div class="int-time">4:53 PM</div><div class="int-journalist">Zach Johnson</div><div class="int-outlet">TWDC.COM</div><div class="int-meta"><span class="int-tag tag-dur">4 min</span><span class="int-tag tag-inperson">In-Person</span></div></div>
+          <div class="int-block type-press"><div class="int-time">4:58 PM</div><div class="int-journalist">Jennifer Lang</div><div class="int-outlet">IMAX.COM</div><div class="int-meta"><span class="int-tag tag-dur">5 min</span><span class="int-tag tag-inperson">In-Person</span></div></div>
+          <div class="int-block type-press"><div class="int-time">5:04 PM</div><div class="int-journalist">Daniela Salazar</div><div class="int-outlet">MITU · in-person</div><div class="int-meta"><span class="int-tag tag-dur">4 min</span><span class="int-tag tag-inperson">In-Person</span></div></div>
+          <div class="int-block type-signing"><div class="int-time">5:09 PM</div><div class="int-outlet">📝 POSTER SIGNING — Suite 223</div><div class="int-meta"><span class="int-tag tag-dur">6 min</span></div></div>
+          <div class="int-block type-break"><div class="int-time">5:19 PM</div><div class="break-label">✅ END OF INTERVIEWS</div></div>
+        </div>
+      </div>
+
+      <!-- JEREMY -->
+      <div class="talent-col">
+        <div class="col-head" style="background:#fff7ed">
+          <div class="col-name">Jeremy Allen White</div>
+          <div class="col-role">'Rotta the Hutt'</div>
+          <div class="col-suite">📍 Suite 226 · RM #2</div>
+          <div class="col-staff">Staff: Esther Yim</div>
+        </div>
+        <div class="col-body">
+          <div class="int-block type-transfer"><div class="int-time">2:15 PM</div><div class="int-outlet">Jeremy joins Suite 226</div></div>
+          <div class="int-block type-group"><div class="int-time">2:20 PM</div><div class="int-journalist">Nick Dürnhöfer</div><div class="int-outlet">FANDANGO.COM · Know Your Co-star</div><div class="int-meta"><span class="int-tag tag-dur">14 min</span></div></div>
+          <div class="int-block type-break"><div class="int-time">2:35 PM</div><div class="break-label">☕ BREAK → Suite 224</div></div>
+          <div class="int-block type-group"><div class="int-time">2:45 PM</div><div class="int-journalist">TBD</div><div class="int-outlet">THE NEW YORKER · Little Bag, Big Qs</div><div class="int-meta"><span class="int-tag tag-dur">19 min</span></div></div>
+          <div class="int-block type-transfer"><div class="int-time">3:05 PM</div><div class="int-outlet">Jeremy → Suite 226 (paired w/ Pedro)</div></div>
+          <div class="int-block type-press"><div class="int-time">3:10 PM</div><div class="int-journalist">TBD</div><div class="int-outlet">PEOPLE · Truth or Dare</div><div class="int-meta"><span class="int-tag tag-dur">14 min</span><span class="int-tag tag-inperson">In-Person</span></div></div>
+          <div class="int-block type-press"><div class="int-time">3:25 PM</div><div class="int-journalist">Kristin Baver</div><div class="int-outlet">STARWARS.COM</div><div class="int-meta"><span class="int-tag tag-dur">5 min</span><span class="int-tag tag-inperson">In-Person</span></div></div>
+          <div class="int-block type-press"><div class="int-time">3:31 PM</div><div class="int-journalist">Brian Truitt</div><div class="int-outlet">USA TODAY · virtual</div><div class="int-meta"><span class="int-tag tag-dur">10 min</span><span class="int-tag tag-virtual">Virtual</span></div></div>
+          <div class="int-block type-break"><div class="int-time">3:42 PM</div><div class="break-label">🎤 Jeremy solo generic Qs while Pedro on lunch</div></div>
+          <div class="int-block type-press"><div class="int-time">3:47 PM</div><div class="int-journalist">KT Turner</div><div class="int-outlet">DISNEY GENERIC · in-person</div><div class="int-meta"><span class="int-tag tag-dur">6 min</span><span class="int-tag tag-inperson">In-Person</span></div></div>
+          <div class="int-block type-signing"><div class="int-time">3:49 PM</div><div class="int-outlet">→ Suite 223 for Poster Signing</div></div>
+          <div class="int-block type-signing"><div class="int-time">3:54 PM</div><div class="int-outlet">📝 POSTER SIGNING (7 min)</div></div>
+          <div class="int-block type-break"><div class="int-time">4:02 PM</div><div class="break-label">✅ END OF INTERVIEWS</div></div>
+        </div>
+      </div>
+
+      <!-- SIGOURNEY -->
+      <div class="talent-col">
+        <div class="col-head" style="background:#f0fdf4">
+          <div class="col-name">Sigourney Weaver</div>
+          <div class="col-role">'Colonel Ward'</div>
+          <div class="col-suite">📍 Suite 227 · RM #3</div>
+          <div class="col-staff">Staff: Tomie Shaw</div>
+        </div>
+        <div class="col-body">
+          <div class="int-block type-transfer"><div class="int-time">12:50 PM</div><div class="int-outlet">Sigourney joins Suite 224</div></div>
+          <div class="int-block type-group"><div class="int-time">1:00 PM</div><div class="int-journalist">TBD</div><div class="int-outlet">WIRED.COM · Suite 224</div><div class="int-meta"><span class="int-tag tag-dur">25 min</span><span class="int-tag tag-concept">50 Most Googled Qs</span></div></div>
+          <div class="int-block type-transfer"><div class="int-time">1:25 PM</div><div class="int-outlet">→ Ballroom</div></div>
+          <div class="int-block type-group"><div class="int-time">1:30 PM</div><div class="int-journalist">TBD</div><div class="int-outlet">ENTERTAINMENT WEEKLY · Ballroom</div><div class="int-meta"><span class="int-tag tag-dur">25 min</span><span class="int-tag tag-concept">Debunked Interview</span></div></div>
+          <div class="int-block type-transfer"><div class="int-time">1:55 PM</div><div class="int-outlet">→ Suite 226</div></div>
+          <div class="int-block type-group"><div class="int-time">2:00 PM</div><div class="int-journalist">Bret Federigan</div><div class="int-outlet">IMDB.COM · Fan Questions</div><div class="int-meta"><span class="int-tag tag-dur">14 min</span></div></div>
+          <div class="int-block type-group"><div class="int-time">2:20 PM</div><div class="int-journalist">Nick Dürnhöfer</div><div class="int-outlet">FANDANGO.COM · Know Your Co-star</div><div class="int-meta"><span class="int-tag tag-dur">14 min</span></div></div>
+          <div class="int-block type-break"><div class="int-time">2:35 PM</div><div class="break-label">☕ BREAK → Suite 224</div></div>
+          <div class="int-block type-group"><div class="int-time">2:45 PM</div><div class="int-journalist">TBD</div><div class="int-outlet">THE NEW YORKER · Little Bag, Big Qs</div><div class="int-meta"><span class="int-tag tag-dur">19 min</span></div></div>
+          <div class="int-block type-transfer"><div class="int-time">3:05 PM</div><div class="int-outlet">→ Suite 227 (solo 1:1s)</div></div>
+          <div class="int-block type-press"><div class="int-time">3:10 PM</div><div class="int-journalist">Kristin Baver</div><div class="int-outlet">STARWARS.COM</div><div class="int-meta"><span class="int-tag tag-dur">5 min</span><span class="int-tag tag-inperson">In-Person</span></div></div>
+          <div class="int-block type-press"><div class="int-time">3:16 PM</div><div class="int-journalist">Yoshifumi Hosoya</div><div class="int-outlet">JAPAN GENERIC · virtual</div><div class="int-meta"><span class="int-tag tag-dur">9 min</span><span class="int-tag tag-virtual">Virtual</span></div></div>
+          <div class="int-block type-press"><div class="int-time">3:26 PM</div><div class="int-journalist">James Wigney</div><div class="int-outlet">NEWS LTD NEWSPAPERS · Australia · virtual</div><div class="int-meta"><span class="int-tag tag-dur">9 min</span><span class="int-tag tag-virtual">Virtual</span></div></div>
+          <div class="int-block type-break"><div class="int-time">3:36 PM</div><div class="break-label">🍽 LUNCH</div></div>
+          <div class="int-block type-press"><div class="int-time">4:06 PM</div><div class="int-journalist">Nischelle Turner</div><div class="int-outlet">ENTERTAINMENT TONIGHT</div><div class="int-meta"><span class="int-tag tag-dur">6 min</span><span class="int-tag tag-inperson">In-Person</span></div></div>
+          <div class="int-block type-press"><div class="int-time">4:13 PM</div><div class="int-journalist">TBD</div><div class="int-outlet">ACCESS HOLLYWOOD</div><div class="int-meta"><span class="int-tag tag-dur">6 min</span><span class="int-tag tag-inperson">In-Person</span></div></div>
+          <div class="int-block type-press"><div class="int-time">4:20 PM</div><div class="int-journalist">Jake Hamilton</div><div class="int-outlet">WFLD-TV (FOX) Chicago · EXTRA</div><div class="int-meta"><span class="int-tag tag-dur">6 min</span><span class="int-tag tag-inperson">In-Person</span></div></div>
+          <div class="int-block type-press"><div class="int-time">4:27 PM</div><div class="int-journalist">Trey Mangum</div><div class="int-outlet">BLAVITY TV</div><div class="int-meta"><span class="int-tag tag-dur">5 min</span><span class="int-tag tag-inperson">In-Person</span></div></div>
+          <div class="int-block type-press"><div class="int-time">4:33 PM</div><div class="int-journalist">George Pennacchi</div><div class="int-outlet">KABC-TV</div><div class="int-meta"><span class="int-tag tag-dur">5 min</span><span class="int-tag tag-inperson">In-Person</span></div></div>
+          <div class="int-block type-press"><div class="int-time">4:39 PM</div><div class="int-journalist">Jason Matheson</div><div class="int-outlet">KMSP-TV (FOX) Minneapolis</div><div class="int-meta"><span class="int-tag tag-dur">5 min</span><span class="int-tag tag-inperson">In-Person</span></div></div>
+          <div class="int-block type-press"><div class="int-time">4:45 PM</div><div class="int-journalist">Jennifer Lang</div><div class="int-outlet">IMAX.COM</div><div class="int-meta"><span class="int-tag tag-dur">5 min</span><span class="int-tag tag-inperson">In-Person</span></div></div>
+          <div class="int-block type-press"><div class="int-time">4:51 PM</div><div class="int-journalist">KT Turner</div><div class="int-outlet">DISNEY GENERIC</div><div class="int-meta"><span class="int-tag tag-dur">6 min</span><span class="int-tag tag-inperson">In-Person</span></div></div>
+          <div class="int-block type-press"><div class="int-time">4:58 PM</div><div class="int-journalist">Daniela Salazar</div><div class="int-outlet">MITU · in-person</div><div class="int-meta"><span class="int-tag tag-dur">4 min</span><span class="int-tag tag-inperson">In-Person</span></div></div>
+          <div class="int-block type-signing"><div class="int-time">5:03 PM</div><div class="int-outlet">→ Suite 223 · Poster Signing (7 min)</div></div>
+          <div class="int-block type-break"><div class="int-time">5:13 PM</div><div class="break-label">✅ END OF INTERVIEWS</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOTEL -->
+  <div class="section" id="section-hotel">
+    <div class="section-label">
+      <span class="sl-icon">🏨</span>
+      <div><div class="sl-title">Hotel Rooming List — Press (International)</div><div class="sl-sub">Tentative · by Last Name · as of May 1, 2026</div></div>
+    </div>
+    <div class="report-table-wrap">
+      <div class="report-table-head">
+        <div><div class="rth-title">Press Rooming List</div><div class="rth-sub">London WeHo · May 12–17, 2026</div></div>
+        <span class="rth-badge">11 guests</span>
+      </div>
+      <table>
+        <thead>
+          <tr><th>#</th><th>Guest</th><th>Territory</th><th>Check-In</th><th>Check-Out</th><th>Nights</th><th>Special Requests / Notes</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="color:var(--muted);font-weight:700">01</td>
+            <td><div class="guest-name">Carlos Bustamante</div></td>
+            <td><span class="territory-badge terr-canada">🍁 Canada</span></td>
+            <td class="date-range">May 13</td><td class="date-range">May 15</td><td>2</td>
+            <td style="color:var(--muted)">—</td>
+          </tr>
+          <tr>
+            <td style="color:var(--muted);font-weight:700">02</td>
+            <td><div class="guest-name">David Canton</div><div style="font-size:10px;color:var(--muted)">Producer — Despierta America</div></td>
+            <td><span class="territory-badge terr-usa">🇺🇸 USA</span></td>
+            <td class="date-range">May 13</td><td class="date-range">May 14</td><td>1</td>
+            <td><div class="special-note">⚠ Requesting late checkout if possible · Placeholder entry</div></td>
+          </tr>
+          <tr>
+            <td style="color:var(--muted);font-weight:700">03</td>
+            <td><div class="guest-name">João Guilherme</div><div style="font-size:10px;color:var(--muted)">+ Mariana Lago De Godoy (Manager)</div></td>
+            <td><span class="territory-badge terr-brazil">🇧🇷 Brazil</span></td>
+            <td class="date-range">May 13 <span style="font-size:10px;color:var(--muted)">11:30 AM</span></td><td class="date-range">May 15 <span style="font-size:10px;color:var(--muted)">10:00 AM</span></td><td>2</td>
+            <td><div class="special-note">⚠ 2 single rooms required (João + manager) · Early arrival May 13 — do not release room prior to arrival · Arriving early May 12 (pre-book)</div></td>
+          </tr>
+          <tr>
+            <td style="color:var(--muted);font-weight:700">04</td>
+            <td><div class="guest-name">Chris Killian</div></td>
+            <td><span class="territory-badge terr-usa">🇺🇸 USA</span></td>
+            <td class="date-range">May 13</td><td class="date-range">May 14</td><td>1</td>
+            <td style="color:var(--muted)">—</td>
+          </tr>
+          <tr>
+            <td style="color:var(--muted);font-weight:700">05</td>
+            <td><div class="guest-name">Trey Mangum</div></td>
+            <td><span class="territory-badge terr-usa">🇺🇸 USA</span></td>
+            <td class="date-range">May 14</td><td class="date-range">May 15</td><td>1</td>
+            <td style="color:var(--muted)">—</td>
+          </tr>
+          <tr>
+            <td style="color:var(--muted);font-weight:700">06</td>
+            <td><div class="guest-name">Jason Matheson</div></td>
+            <td><span class="territory-badge terr-usa">🇺🇸 USA</span></td>
+            <td class="date-range">May 14</td><td class="date-range">May 16</td><td>2</td>
+            <td><div class="special-note">⚠ Disney to cover both nights of hotel</div></td>
+          </tr>
+          <tr>
+            <td style="color:var(--muted);font-weight:700">07</td>
+            <td><div class="guest-name">Jamie Parker</div></td>
+            <td><span class="territory-badge terr-usa">🇺🇸 USA</span></td>
+            <td class="date-range">May 13</td><td class="date-range">May 14</td><td>1</td>
+            <td style="color:var(--muted)">—</td>
+          </tr>
+          <tr>
+            <td style="color:var(--muted);font-weight:700">08</td>
+            <td><div class="guest-name">Jorge Pontual</div></td>
+            <td><span class="territory-badge terr-brazil">🇧🇷 Brazil</span></td>
+            <td class="date-range">May 12</td><td class="date-range">May 17</td><td>5</td>
+            <td style="color:var(--muted)">Extended stay</td>
+          </tr>
+          <tr>
+            <td style="color:var(--muted);font-weight:700">09</td>
+            <td><div class="guest-name">Alan Tacher</div></td>
+            <td><span class="territory-badge terr-usa">🇺🇸 USA</span></td>
+            <td class="date-range">May 13</td><td class="date-range">May 14</td><td>1</td>
+            <td><div class="special-note">⚠ Requesting late checkout if available</div></td>
+          </tr>
+          <tr>
+            <td style="color:var(--muted);font-weight:700">10</td>
+            <td><div class="guest-name">Liz Trinnear</div></td>
+            <td><span class="territory-badge terr-canada">🍁 Canada</span></td>
+            <td class="date-range">May 13</td><td class="date-range">May 15</td><td>2</td>
+            <td style="color:var(--muted)">—</td>
+          </tr>
+          <tr>
+            <td style="color:var(--muted);font-weight:700">11</td>
+            <td><div class="guest-name">Susie Wall</div></td>
+            <td><span class="territory-badge terr-canada">🍁 Canada</span></td>
+            <td class="date-range">May 12</td><td class="date-range">May 14</td><td>2</td>
+            <td style="color:var(--muted)">—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TRAVEL -->
+  <div class="section" id="section-travel">
+    <div class="section-label">
+      <span class="sl-icon">✈️</span>
+      <div><div class="sl-title">Travel Information Report — Requests</div><div class="sl-sub">Domestic Press · May 14, 2026 · All times local</div></div>
+    </div>
+    <div class="report-table-wrap">
+      <div class="report-table-head">
+        <div><div class="rth-title">Press Travel — Arrival &amp; Departure</div><div class="rth-sub">8 guests · Coordinated via Disney Publicity</div></div>
+        <span class="rth-badge">8 guests</span>
+      </div>
+      <table>
+        <thead>
+          <tr><th>#</th><th>Guest / Market</th><th>Arrival Flight</th><th>Departure Flight</th><th>Contact</th><th>Disney POC</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="color:var(--muted);font-weight:700">01</td>
+            <td><div class="guest-name">Carlos Bustamante</div><div style="font-size:10px;color:var(--muted)">Toronto · Canada</div></td>
+            <td><div class="flight-cell">
+              <div class="flight-row"><span class="flight-icon">🛬</span><div class="flight-detail"><div class="flight-airline">JetBlue B6 0623</div><div class="flight-route">May 13 · JFK → LAX · Arr 1:28 PM</div></div></div>
+              <div class="flight-note">⚠ Team Canada to book flights</div>
+            </div></td>
+            <td><div class="flight-cell">
+              <div class="flight-row"><span class="flight-icon">🛫</span><div class="flight-detail"><div class="flight-airline">Air Canada AC 0794</div><div class="flight-route">May 14 · LAX → YYZ · Dep 10:35 PM</div></div></div>
+              <div class="flight-note">⚠ Team Canada to book flights</div>
+            </div></td>
+            <td class="contact-cell">📱 1-905-330-5889</td>
+            <td class="contact-cell"><a href="mailto:katya.kwiatkowski@disney.com">K. Kwiatkowski</a></td>
+          </tr>
+          <tr>
+            <td style="color:var(--muted);font-weight:700">02</td>
+            <td><div class="guest-name">David Canton</div><div style="font-size:10px;color:var(--muted)">Los Angeles · USA · Producer</div></td>
+            <td><div class="flight-cell">
+              <div class="flight-row"><span class="flight-icon">🛬</span><div class="flight-detail"><div class="flight-airline">American 2143</div><div class="flight-route">May 13 · MIA → LAX · Arr 10:00 AM</div></div></div>
+              <div class="flight-note">Placeholder entry — Despierta America producer</div>
+            </div></td>
+            <td><div class="flight-cell">
+              <div class="flight-row"><span class="flight-icon">🛫</span><div class="flight-detail"><div class="flight-airline">American 340</div><div class="flight-route">May 14 · LAX → MIA · Dep 9:41 PM</div></div></div>
+            </div></td>
+            <td class="contact-cell">📱 786-553-9047</td>
+            <td class="contact-cell"><a href="mailto:brielle.smith@disney.com">B. Smith</a></td>
+          </tr>
+          <tr>
+            <td style="color:var(--muted);font-weight:700">03</td>
+            <td><div class="guest-name">Chris Killian</div><div style="font-size:10px;color:var(--muted)">Los Angeles · USA</div></td>
+            <td><div class="flight-cell">
+              <div class="flight-row"><span class="flight-icon">🛬</span><div class="flight-detail"><div class="flight-airline">Delta 1507 → 898</div><div class="flight-route">May 13 · CHA → ATL → LAX · Arr 9:55 AM</div></div></div>
+            </div></td>
+            <td><div class="flight-cell">
+              <div class="flight-row"><span class="flight-icon">🛫</span><div class="flight-detail"><div class="flight-airline">Delta 783 → 5309</div><div class="flight-route">May 14 · LAX → ATL → CHA · Dep 9:45 PM</div></div></div>
+            </div></td>
+            <td class="contact-cell">📱 (931) 209-0725</td>
+            <td class="contact-cell"><a href="mailto:katie.bisbee@disney.com">K. Bisbee</a></td>
+          </tr>
+          <tr>
+            <td style="color:var(--muted);font-weight:700">04</td>
+            <td><div class="guest-name">Trey Mangum</div><div style="font-size:10px;color:var(--muted)">Los Angeles · USA</div></td>
+            <td><div class="flight-cell">
+              <div class="flight-row"><span class="flight-icon">🛬</span><div class="flight-detail"><div class="flight-airline">Delta 773</div><div class="flight-route">May 14 · JFK → LAX · Arr 12:05 PM</div></div></div>
+              <div class="flight-note">TSA Precheck: TT12J3HB7</div>
+            </div></td>
+            <td><div class="flight-cell">
+              <div class="flight-row"><span class="flight-icon">🛫</span><div class="flight-detail"><div class="flight-airline">Delta 960 → 5097</div><div class="flight-route">May 15 · LAX → JFK → RDU · Dep 9:45 PM</div></div></div>
+              <div class="flight-note">⚠ Return destination (RDU) differs from origin (JFK) · TSA Precheck: TT12J3HB7</div>
+            </div></td>
+            <td class="contact-cell">📱 336-504-2209</td>
+            <td class="contact-cell"><a href="mailto:brielle.smith@disney.com">B. Smith</a></td>
+          </tr>
+          <tr>
+            <td style="color:var(--muted);font-weight:700">05</td>
+            <td><div class="guest-name">Jason Matheson</div><div style="font-size:10px;color:var(--muted)">Minneapolis/St. Paul · USA</div></td>
+            <td><div class="flight-cell">
+              <div class="flight-row"><span class="flight-icon">🛬</span><div class="flight-detail"><div class="flight-airline">Delta 2974</div><div class="flight-route">May 14 · MSP → LAX · Arr 3:00 PM</div></div></div>
+            </div></td>
+            <td><div class="flight-cell">
+              <div class="flight-row"><span class="flight-icon">🛫</span><div class="flight-detail"><div class="flight-airline">Delta 799</div><div class="flight-route">May 16 · LAX → MSP · Dep 8:25 AM</div></div></div>
+            </div></td>
+            <td class="contact-cell">📱 612-229-5230</td>
+            <td class="contact-cell"><a href="mailto:emily.steidl@disney.com">E. Steidl</a></td>
+          </tr>
+          <tr>
+            <td style="color:var(--muted);font-weight:700">06</td>
+            <td><div class="guest-name">Jamie Parker</div><div style="font-size:10px;color:var(--muted)">Los Angeles · USA</div></td>
+            <td><div class="flight-cell">
+              <div class="flight-row"><span class="flight-icon">🛬</span><div class="flight-detail"><div class="flight-airline">Air Canada 439 → 785</div><div class="flight-route">May 13 · YOW → YYZ → LAX · Arr 10:55 AM</div></div></div>
+            </div></td>
+            <td><div class="flight-cell">
+              <div class="flight-row"><span class="flight-icon">🛫</span><div class="flight-detail"><div class="flight-airline">Air Canada 780 → 8001</div><div class="flight-route">May 14 · LAX → YUL → YOW · Dep 10:30 PM</div></div></div>
+            </div></td>
+            <td class="contact-cell">📱 519-703-0525</td>
+            <td class="contact-cell"><a href="mailto:katie.bisbee@disney.com">K. Bisbee</a></td>
+          </tr>
+          <tr>
+            <td style="color:var(--muted);font-weight:700">07</td>
+            <td><div class="guest-name">Alan Tacher</div><div style="font-size:10px;color:var(--muted)">Los Angeles · USA</div></td>
+            <td><div class="flight-cell">
+              <div class="flight-row"><span class="flight-icon">🛬</span><div class="flight-detail"><div class="flight-airline">American 2143</div><div class="flight-route">May 13 · MIA → LAX · Arr 10:00 AM</div></div></div>
+              <div class="flight-note">Business class</div>
+            </div></td>
+            <td><div class="flight-cell">
+              <div class="flight-row"><span class="flight-icon">🛫</span><div class="flight-detail"><div class="flight-airline">American 340</div><div class="flight-route">May 14 · LAX → MIA · Dep 9:41 PM</div></div></div>
+              <div class="flight-note">Business class</div>
+            </div></td>
+            <td class="contact-cell">📱 305-333-8191</td>
+            <td class="contact-cell"><a href="mailto:brielle.smith@disney.com">B. Smith</a></td>
+          </tr>
+          <tr>
+            <td style="color:var(--muted);font-weight:700">08</td>
+            <td><div class="guest-name">Susie Wall</div><div style="font-size:10px;color:var(--muted)">Toronto · Canada</div></td>
+            <td><div class="flight-cell">
+              <div class="flight-row"><span class="flight-icon">🏠</span><div class="flight-detail"><div class="flight-route">Already in LA — no arriving flight required</div></div></div>
+              <div class="flight-note">⚠ Team Canada to book return</div>
+            </div></td>
+            <td><div class="flight-cell">
+              <div class="flight-row"><span class="flight-icon">🛫</span><div class="flight-detail"><div class="flight-airline">Air Canada AC 557</div><div class="flight-route">May 18 · LAX → YVR (Vancouver) · Dep 2:35 PM</div></div></div>
+              <div class="flight-note">⚠ Note: departing to YVR (Vancouver), not Toronto · Team Canada to book</div>
+            </div></td>
+            <td class="contact-cell">📱 TBD</td>
+            <td class="contact-cell"><a href="mailto:katya.kwiatkowski@disney.com">K. Kwiatkowski</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="report-footer">
+    <span>📋 Generated by PGS 2.0 · Walt Disney Studios Publicity · <strong>TENTATIVE — As of May 1, 2026</strong></span>
+    <span>The Mandalorian &amp; Grogu · Press Junket · May 13–16, 2026 · London WeHo</span>
+  </div>
+</div>
+
+<script>
+function showTab(id){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('section-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>
