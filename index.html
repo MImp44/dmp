@@ -977,17 +977,19 @@ function exportCalendarPDF(){
 
   const colsHTML=FQ_DEFS.map(fq=>{
     const evts=MARKETING_CALENDAR.filter(e=>fq.fqs.includes(e.fq));
-    const tps=evts.filter(e=>(e.type==='Tentpole'||e.type==='Campaign')&&(e.tier==='1'||e.tier==='2')&&e.type!=='Seasonal/Cultural').sort((a,b)=>a.start.localeCompare(b.start)).slice(0,7);
+    const tps=evts.filter(e=>e.type!=='Seasonal/Cultural'&&e.type!=='Sports'&&e.type!=='Streaming'&&(e.tier==='1'||e.tier==='2')).sort((a,b)=>a.start.localeCompare(b.start)).slice(0,8);
     const prems=(FQ_PREMIERES[fq.id]||[]).slice(0,6);
-    const ao=evts.filter(e=>(e.type==='Sports'||(e.type==='Campaign'&&e.tier!=='1')||(e.type==='Streaming'&&e.tier==='2'))).slice(0,3);
+    const ao=evts.filter(e=>e.type==='Sports'||e.type==='Streaming').slice(0,4);
     const cult=evts.filter(e=>e.type==='Seasonal/Cultural').map(e=>nm(e.moment)).filter(Boolean).slice(0,5);
     const comp=showCompetitive?COMPETITIVE_RELEASES.filter(c=>fq.fqs.includes(c.fq)||(fq.fqs.length>1&&fq.fqs[1]===c.fq)).slice(0,5):[];
     const tpH=tps.length?'<div class="sl">Tentpoles &amp; Platforms</div>'+tps.map(e=>{const c=sc(e.segment);return '<div class="card" style="border-left-color:'+c+'"><div class="cn">'+nm(e.moment)+'</div><div class="cm"><span class="cd">'+fmtPD(e.start)+'</span>'+(e.tier?'<span class="t'+e.tier+'">T'+e.tier+'</span>':'')+'</div></div>';}).join(''):'';
     const premH=prems.length?'<div class="sl">Premieres &amp; TV</div><ul class="pl">'+prems.map(p=>'<li class="pi"><span class="pn">'+p.name+'</span><span class="pd">'+p.date+'</span></li>').join('')+'</ul>':'';
     const aoH=ao.length?'<div class="sl">Always-On &amp; Sports</div><div class="pills">'+ao.map(e=>'<span class="pill" style="background:'+sc(e.segment)+'15;color:'+sc(e.segment)+';border:1px solid '+sc(e.segment)+'30">'+nm(e.moment)+'</span>').join('')+'</div>':'';
     const cultH=cult.length?'<div class="sl">Cultural</div><div class="cult">'+cult.join(' &middot; ')+'</div>':'';
+    const huluPDF=(HULU_SLATE[fq.id]||[]).slice(0,10);
+    const huluH=huluPDF.length?'<div class="sl" style="color:#1CE783">Hulu Originals</div><ul class="pl">'+huluPDF.map(h=>'<li class="pi"><span class="pn" style="color:#1CE783">'+h.t+'</span><span class="pd">'+h.d+'</span></li>').join('')+'</ul>':'';
     const compH=comp.length?'<div class="sl comp-lbl">Competitive</div>'+comp.map(c=>'<div class="ci"><span class="ct">'+c.title+'</span><span class="cs">'+c.studio+'</span></div>').join(''):'';
-    return '<div class="col"><div class="ch"><div class="cl">'+fq.label+'</div><div class="cr2">'+fq.range+'</div><div class="ct2'+(fq.hot?' hot':'')+' ">'+fq.theme+'</div></div><div class="cb">'+tpH+premH+aoH+cultH+compH+'</div></div>';
+    return '<div class="col"><div class="ch"><div class="cl">'+fq.label+'</div><div class="cr2">'+fq.range+'</div><div class="ct2'+(fq.hot?' hot':'')+' ">'+fq.theme+'</div></div><div class="cb">'+tpH+premH+aoH+cultH+huluH+compH+'</div></div>';
   }).join('');
 
   const pdfHTML='<!DOCTYPE html><html><head><meta charset="utf-8"><title>Global Disney Marketing Calendar</title>'
@@ -1038,6 +1040,7 @@ function exportCalendarPDF(){
   +'.foot{display:flex;justify-content:space-between;margin-top:2px;padding-top:2px;border-top:1px solid #ddd;font-size:4pt;color:#aaa;flex-shrink:0}'
   +'.pbtn{position:fixed;bottom:14px;right:14px;background:#002875;color:#fff;border:none;border-radius:8px;padding:8px 18px;font-size:10pt;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.2);font-family:inherit}'
   +'@media print{.pbtn{display:none}#wrap{transform:scale(var(--s,1));transform-origin:top left}}'
+  +'.hulu-sl{font-size:4pt;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:#1CE783;margin:3px 0 2px}'
   +'</style></head><body>'
   +'<div id="wrap">'
   +'<div class="hdr"><div>'
