@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DMO — Disney Marketing Operations · The Walt Disney Company</title>
+<style>
+:root{
+ --bg:#06060E;--surface:#10101A;--surface2:#14141F;--border:#1E1E2C;--gold:#C8A84B;--gold-l:rgba(200,168,75,.14);
+ --text:#F0EFE8;--muted:#8A8A96;--subtle:#3A3A54;
+ --studios:#E2A33A;--tv:#2BB89A;--espn:#F0584F;--exp:#5BBF5B;--cp:#D45A9E;--ent:#6B8BE0;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:radial-gradient(120% 80% at 50% 38%, #0c0c1e 0%, #06060E 60%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100vh}
+#stars{position:fixed;inset:0;z-index:0;pointer-events:none}
+header{position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:14px 24px;background:rgba(6,6,14,.78);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo .badge{background:var(--gold);color:#1a1300;font-weight:700;font-size:13px;padding:4px 9px;border-radius:7px;letter-spacing:.04em;box-shadow:0 0 18px rgba(200,168,75,.35)}
+.logo .name{font-size:14px;font-weight:600;color:var(--text)}
+.logo .name span{opacity:.45;font-weight:400}
+.tools{display:flex;align-items:flex-end;gap:5px}
+.tbtn{display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:1px solid transparent;border-radius:10px;padding:6px 10px;cursor:pointer;text-decoration:none;color:var(--muted);transition:all .15s;font-family:inherit;min-width:60px}
+.tbtn:hover{color:var(--text);border-color:var(--border);background:var(--surface);transform:translateY(-1px)}
+.tbtn svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tbtn .lbl{font-size:9.5px;letter-spacing:.03em;white-space:nowrap}
+.tbtn.gold{color:var(--gold)}
+.tdiv{width:1px;height:30px;background:var(--border);margin:0 4px}
+.hero{position:relative;z-index:10;text-align:center;padding:42px 24px 4px}
+.eyebrow{color:rgba(200,168,75,.7);font-size:12px;letter-spacing:.24em;text-transform:uppercase;font-weight:600;margin-bottom:12px;animation:fade .9s ease both}
+.h1{font-size:42px;font-weight:600;letter-spacing:.4px;line-height:1.05;animation:fade 1s .1s ease both}
+.h1 span{color:var(--gold)}
+.hsub{color:var(--muted);font-size:15px;margin-top:12px;animation:fade 1s .2s ease both}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.qa{position:relative;z-index:10;max-width:620px;margin:24px auto 0;padding:0 24px;animation:fade 1s .3s ease both}
+.qa-wrap{display:flex;align-items:center;gap:10px;background:rgba(16,16,26,.7);border:1px solid var(--border);border-radius:30px;padding:6px 6px 6px 18px;transition:border-color .2s,box-shadow .2s}
+.qa-wrap:focus-within{border-color:rgba(200,168,75,.5);box-shadow:0 0 24px rgba(200,168,75,.12)}
+.qa-wrap input{flex:1;background:none;border:none;outline:none;color:var(--text);font-size:14px;font-family:inherit}
+.qa-wrap input::placeholder{color:var(--subtle)}
+.qa-send{background:var(--gold);border:none;color:#1a1300;width:34px;height:34px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .15s}
+.qa-send:hover{transform:scale(1.08)}
+.chips{display:flex;flex-wrap:wrap;justify-content:center;gap:7px;max-width:620px;margin:12px auto 0;padding:0 24px}
+.chip{background:var(--gold-l);border:1px solid rgba(200,168,75,.24);color:var(--gold);border-radius:14px;padding:4px 12px;font-size:11px;cursor:pointer;font-family:inherit;transition:all .15s}
+.chip:hover{background:rgba(200,168,75,.24);transform:translateY(-1px)}
+#qa-ans{max-width:620px;margin:14px auto 0;padding:0 24px}
+#qa-box{background:rgba(16,16,26,.8);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:10px;padding:14px 16px;font-size:13.5px;line-height:1.55;display:none}
+.cwrap{position:relative;z-index:10;max-width:1000px;margin:6px auto 0;padding:0 16px}
+#con{width:100%;height:auto;display:block;overflow:visible}
+.node{cursor:pointer}
+.node text{pointer-events:none}
+.nlbl{font-size:13px;font-weight:600;letter-spacing:.02em}
+.nsub{font-size:9px;text-transform:uppercase;letter-spacing:.1em}
+.scrollhint{text-align:center;color:var(--subtle);font-size:11px;letter-spacing:.18em;text-transform:uppercase;margin:2px 0 26px;position:relative;z-index:10}
+.legend{position:relative;z-index:10;display:flex;flex-wrap:wrap;justify-content:center;gap:14px;margin:0 auto 32px;font-size:11px;color:var(--muted)}
+.legend span{display:flex;align-items:center;gap:6px}
+.legend i{width:9px;height:9px;border-radius:50%;display:inline-block}
+.ov{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.62);backdrop-filter:blur(6px);padding:20px}
+.ov.on{display:flex}
+.modal{background:var(--surface);border:1px solid rgba(200,168,75,.22);border-radius:16px;width:440px;max-width:100%;max-height:84vh;overflow:auto;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.mhead{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--surface)}
+.mhead .mt{font-size:14px;font-weight:600}
+.mx{background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;line-height:1}
+.mbody{padding:14px 16px}
+.tool{display:flex;align-items:center;gap:12px;padding:12px;border:1px solid var(--border);border-radius:10px;text-decoration:none;background:#0C0C18;margin-bottom:8px;transition:all .15s}
+.tool:hover{border-color:var(--gold);transform:translateX(2px)}
+.tool .ic{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.tool .tt{font-size:13px;font-weight:600;color:var(--text)}
+.tool .td{font-size:11px;color:var(--muted);margin-top:2px}
+.tool .ar{margin-left:auto;color:var(--gold)}
+.calq{margin-bottom:14px}
+.calq h4{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+.calrow{display:flex;align-items:center;gap:9px;font-size:13px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.cdot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.calrow .ct{flex:1}
+.calrow .cb{font-size:9px;font-weight:700;color:var(--gold);border:1px solid rgba(200,168,75,.3);background:var(--gold-l);border-radius:4px;padding:1px 5px}
+textarea{width:100%;min-height:90px;background:#0C0C18;border:1px solid var(--border);border-radius:10px;color:var(--text);padding:11px;font-family:inherit;font-size:13px;resize:vertical;outline:none}
+textarea:focus{border-color:rgba(200,168,75,.4)}
+.pbtn{background:var(--gold);color:#1a1300;border:none;border-radius:8px;padding:9px 16px;font-weight:600;font-size:13px;cursor:pointer;font-family:inherit;margin-top:10px}
+footer{position:relative;z-index:10;text-align:center;color:var(--subtle);font-size:11px;padding:6px 24px 30px}
+</style></head>
+<body>
+<canvas id="stars"></canvas>
+
+<header>
+  <a class="logo" href="index.html"><span class="badge">DMO</span><span class="name">Disney Marketing Operations <span>· The Walt Disney Company</span></span></a>
+  <nav class="tools">
+    <button class="tbtn gold" onclick="openModal('m-add')" title="Add marketing data"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg><span class="lbl">Add data</span></button>
+    <span class="tdiv"></span>
+    <a class="tbtn" href="https://mimp44.github.io/claude101/claude101-demo.html" target="_blank" rel="noopener" title="Claude 101 — AI enablement"><svg viewBox="0 0 24 24"><path d="M12 3l2.2 5.2L20 9l-4 3.4L17 18l-5-2.8L7 18l1-5.6L4 9l5.8-.8z"/></svg><span class="lbl">Claude 101</span></a>
+    <button class="tbtn" onclick="openModal('m-cal')" title="Marketing calendar"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg><span class="lbl">Calendar</span></button>
+    <a class="tbtn" href="dmo-dashboard.html" title="Executive overview"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg><span class="lbl">Executive view</span></a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="eyebrow">The Walt Disney Company</div>
+  <div class="h1">Disney Marketing <span>Operations</span></div>
+  <div class="hsub">One intelligence. Six segments. Every title.</div>
+</section>
+
+<div class="qa">
+  <div class="qa-wrap">
+    <input id="qa-in" type="text" placeholder="Ask anything — release dates, tentpoles, segments, strategy…" onkeydown="if(event.key==='Enter')ask()"/>
+    <button class="qa-send" onclick="ask()" aria-label="Ask"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#1a1300" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
+  </div>
+  <div class="chips" id="chips"></div>
+  <div id="qa-ans"><div id="qa-box"></div></div>
+</div>
+
+<div class="cwrap"><svg id="con" viewBox="0 0 1000 600" role="img" aria-label="DMO segment constellation"></svg></div>
+<div class="scrollhint">Six segments · color = segment · click a node</div>
+<div class="legend" id="legend"></div>
+<footer>Disney Marketing Operations Hub · Prototype / working demo · structured on the Global Marketing operating model</footer>
+
+<div class="ov" id="m-add"><div class="modal"><div class="mhead"><span class="mt">Add marketing data</span><button class="mx" onclick="closeModal('m-add')">&#x2715;</button></div><div class="mbody"><div style="font-size:12px;color:var(--muted);margin-bottom:10px">A date, a campaign highlight, a contact, or any note. (Demo — records locally.)</div><textarea id="add-in" placeholder="e.g. 'Mandalorian opening weekend tracking +12% vs. comp'"></textarea><button class="pbtn" onclick="saveAdd()">Save to DMO</button><span id="add-ok" style="font-size:12px;color:var(--exp);margin-left:10px"></span></div></div></div>
+<div class="ov" id="m-cal"><div class="modal"><div class="mhead"><span class="mt">Marketing Calendar — Tier 1 / 2</span><button class="mx" onclick="closeModal('m-cal')">&#x2715;</button></div><div class="mbody" id="cal-body"></div></div></div>
+<div class="ov" id="m-seg"><div class="modal"><div class="mhead"><span class="mt" id="seg-title">Segment</span><button class="mx" onclick="closeModal('m-seg')">&#x2715;</button></div><div class="mbody" id="seg-body"></div></div></div>
+
+<script>
+const SEG=[
+ {key:"studios",name:"Studios",color:"#E2A33A",lead:"Martha Morrison",ang:-90,live:true},
+ {key:"tv",name:"Television & Streaming",color:"#2BB89A",lead:"Shannon Ryan",ang:-30,live:false},
+ {key:"espn",name:"ESPN",color:"#F0584F",lead:"Tina Thornton",ang:30,live:false},
+ {key:"exp",name:"Experiences",color:"#5BBF5B",lead:"Scott Hudgins",ang:90,live:false},
+ {key:"cp",name:"Consumer Products",color:"#D45A9E",lead:"Ron Faris",ang:150,live:false},
+ {key:"ent",name:"Enterprise / Cross-Company",color:"#6B8BE0",lead:"Joanna Balikian",ang:210,live:false},
+];
+const STUDIOS_TOOLS=[
+ {ic:"📋",bg:"rgba(200,168,75,.12)",t:"PGS 2.0 — Publicity Global System",d:"Press, junkets, schedules, competitive intel",href:"https://mimp44.github.io/pgs-demo/"},
+ {ic:"🎯",bg:"rgba(61,123,204,.12)",t:"Strategy",d:"Campaign strategy, briefs, timeline planning",href:"https://mimp44.github.io/strategy-demo/strategy-v2.html"},
+ {ic:"🎬",bg:"rgba(200,168,75,.12)",t:"Creative Director",d:"Concepting, copywriting, trailer briefs",href:"https://mimp44.github.io/cd-demo/creative-director.html"},
+ {ic:"📱",bg:"rgba(61,123,204,.12)",t:"Digital & Creators",d:"Creator & influencer partnerships",href:"studios-creators.html"},
+];
+const CAL=[
+ {fq:"FY26 Q3 (Apr–Jun ’26)",items:[["Moana (Live-Action)","studios","T1"],["The Devil Wears Prada 2","studios","T2"],["NBA Playoffs","espn","T2"]]},
+ {fq:"FY26 Q4 (Jul–Sep ’26)",items:[["Summer of Disney — Brand Platform","ent","T1"],["NFL — Fall Live TV","espn","T2"],["San Diego Comic-Con","ent","T2"],["D+/Hulu Late Summer Promo","tv","T2"]]},
+ {fq:"FY27 Q1 (Oct–Dec ’26)",items:[["Avengers: Doomsday","studios","T1"],["Disney Holiday Brand Platform","ent","T1"],["Huluween","tv","T2"],["CP — Holiday Key Month","cp","T2"]]},
+ {fq:"FY27 Q2 (Jan–Mar ’27)",items:[["The Mandalorian & Grogu","studios","T1"],["Super Bowl LXI Surround","espn","T1"],["Toy Story 5","studios","T1"],["Oscars (ABC Telecast)","tv","T2"],["Gatto","studios","T2"]]},
+ {fq:"FY27 Q3+",items:[["FIFA World Cup 26","espn","—"],["Star Wars: A New Hope 50th","studios","T1"],["'The Land' Launch","tv","T1"]]},
+];
+const QA=[
+ {k:["q4","fall","holiday","oct","nov","dec"],a:"<b>FY27 Q1 (Oct–Dec ’26)</b> is a gravity center: Avengers: Doomsday (Studios, T1), the Disney Holiday Brand Platform (Enterprise, T1), plus Huluween and CP holiday beats."},
+ {k:["tier 1","tentpole","tentpoles"],a:"<b>Tier 1 tentpoles:</b> Mandalorian & Grogu, Avengers: Doomsday, Toy Story 5, Moana LA, Star Wars: A New Hope 50th (Studios); Super Bowl Surround (ESPN); 'The Land' (TV & Streaming); Summer of Disney & Holiday platforms (Enterprise)."},
+ {k:["doomsday","avengers"],a:"<b>Avengers: Doomsday</b> — Studios (Marvel), Tier 1, FY27 Q1. Owner: Martha Morrison."},
+ {k:["espn","sport","nfl","nba","world cup","soccer"],a:"<b>ESPN moments:</b> FIFA World Cup 26, NFL & NBA live-TV windows, league partnerships & EDTC. Owner: Tina Thornton."},
+ {k:["gemini"],a:"<b>Project Gemini</b> — a cross-company marketing launch (Enterprise). Details confidential. Owner: Joanna Balikian."},
+ {k:["creator","influencer","digital"],a:"<b>Digital & Creators</b> lives under Studios — creator/influencer partnerships across the slate."},
+];
+const CX=500,CY=312,RX=300,RY=176;
+
+/* starfield with depth + drift */
+(function(){const c=document.getElementById('stars'),x=c.getContext('2d');let w,h,st=[],mx=0,my=0;
+function rs(){w=c.width=innerWidth;h=c.height=innerHeight;st=Array.from({length:150},()=>{const d=Math.random();return{x:Math.random()*w,y:Math.random()*h,r:d*1.8+.3,o:Math.random()*.5+.1,s:(Math.random()*.015+.003),dep:d*1.4+.2,vx:(Math.random()-.5)*.04};});}
+addEventListener('mousemove',e=>{mx=(e.clientX/innerWidth-.5);my=(e.clientY/innerHeight-.5);});
+function draw(){x.clearRect(0,0,w,h);st.forEach(p=>{p.o+=p.s;if(p.o>.7||p.o<.08)p.s*=-1;p.x+=p.vx;if(p.x<0)p.x=w;if(p.x>w)p.x=0;const ox=mx*p.dep*14,oy=my*p.dep*14;x.beginPath();x.arc(p.x+ox,p.y+oy,p.r,0,7);x.fillStyle='rgba(224,223,216,'+p.o+')';if(p.r>1.4){x.shadowBlur=8;x.shadowColor='rgba(200,168,75,.5)';}else x.shadowBlur=0;x.fill();});x.shadowBlur=0;requestAnimationFrame(draw);}
+addEventListener('resize',rs);rs();draw();})();
+
+/* constellation */
+const con=document.getElementById('con');
+con.innerHTML=`<defs>
+ <radialGradient id="hubglow" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="rgba(200,168,75,.22)"/><stop offset="100%" stop-color="rgba(200,168,75,0)"/></radialGradient>
+ <filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+<circle cx="${CX}" cy="${CY}" r="260" fill="url(#hubglow)"/>
+<g id="links"></g><g id="pulses"></g>
+<g id="hub">
+ <circle id="hubpulse" cx="${CX}" cy="${CY}" r="56" fill="none" stroke="rgba(200,168,75,.35)" stroke-width="1.5"/>
+ <circle cx="${CX}" cy="${CY}" r="50" fill="#14142a" stroke="#C8A84B" stroke-width="2" filter="url(#glow)"/>
+ <text x="${CX}" y="${CY-2}" text-anchor="middle" font-size="20" font-weight="700" fill="#C8A84B">DMO</text>
+ <text x="${CX}" y="${CY+15}" text-anchor="middle" font-size="9" fill="#8A8A96">marketing ops</text>
+</g>
+<g id="nodes"></g>`;
+const linksG=con.querySelector('#links'),pulsesG=con.querySelector('#pulses'),nodesG=con.querySelector('#nodes');
+const N=SEG.map((s,i)=>{
+ const a=s.ang*Math.PI/180, bx=CX+Math.cos(a)*RX, by=CY+Math.sin(a)*RY;
+ const line=document.createElementNS('http://www.w3.org/2000/svg','line');
+ line.setAttribute('x1',CX);line.setAttribute('y1',CY);line.setAttribute('stroke',s.color);line.setAttribute('stroke-width','1.5');line.setAttribute('stroke-dasharray','3 7');line.setAttribute('opacity','.5');linksG.appendChild(line);
+ const pulse=document.createElementNS('http://www.w3.org/2000/svg','circle');
+ pulse.setAttribute('r','3.4');pulse.setAttribute('fill',s.color);pulse.setAttribute('filter','url(#glow)');pulsesG.appendChild(pulse);
+ const g=document.createElementNS('http://www.w3.org/2000/svg','g');g.setAttribute('class','node');g.style.cursor='pointer';g.style.opacity='0';g.style.transition='opacity .6s ease';g.addEventListener('click',()=>nodeClick(s.key));
+ const halo=document.createElementNS('http://www.w3.org/2000/svg','circle');halo.setAttribute('r','40');halo.setAttribute('fill',s.color);halo.setAttribute('opacity','.13');halo.setAttribute('filter','url(#glow)');
+ const ring=document.createElementNS('http://www.w3.org/2000/svg','circle');ring.setAttribute('r','38');ring.setAttribute('fill',s.color+'1f');ring.setAttribute('stroke',s.color);ring.setAttribute('stroke-width','2.5');ring.style.transition='r .18s ease';
+ const core=document.createElementNS('http://www.w3.org/2000/svg','circle');core.setAttribute('r','5');core.setAttribute('fill',s.color);
+ const below=by>CY;const lbl=document.createElementNS('http://www.w3.org/2000/svg','text');lbl.setAttribute('class','nlbl');lbl.setAttribute('text-anchor','middle');lbl.setAttribute('fill',s.color);lbl.setAttribute('y',below?60:-58);lbl.textContent=s.name;
+ const sub=document.createElementNS('http://www.w3.org/2000/svg','text');sub.setAttribute('class','nsub');sub.setAttribute('text-anchor','middle');sub.setAttribute('fill',s.live?s.color:'#8A8A96');sub.setAttribute('y',below?75:-43);sub.textContent=s.live?'live':'soon';
+ g.append(halo,ring,core,lbl,sub);nodesG.appendChild(g);
+ g.addEventListener('mouseenter',()=>{ring.setAttribute('r','44');ring.setAttribute('stroke-width','3');halo.setAttribute('opacity','.28');});
+ g.addEventListener('mouseleave',()=>{ring.setAttribute('r','38');ring.setAttribute('stroke-width','2.5');halo.setAttribute('opacity','.13');});
+ setTimeout(()=>g.style.opacity='1',250+i*110);
+ return {s,bx,by,line,pulse,g,ring,phase:Math.random()*6.28,spd:.18+Math.random()*.12,rad:7+Math.random()*5,pp:Math.random()};
+});
+let mxF=0,myF=0;
+document.querySelector('.cwrap').addEventListener('mousemove',e=>{const r=e.currentTarget.getBoundingClientRect();mxF=((e.clientX-r.left)/r.width-.5);myF=((e.clientY-r.top)/r.height-.5);});
+document.querySelector('.cwrap').addEventListener('mouseleave',()=>{mxF=0;myF=0;});
+let T=0;
+function tick(){T+=0.016;
+ const px=mxF*22,py=myF*22;
+ N.forEach(n=>{
+  const ox=Math.cos(T*n.spd+n.phase)*n.rad, oy=Math.sin(T*n.spd*1.3+n.phase)*n.rad*.8;
+  const lx=n.bx+ox+px, ly=n.by+oy+py;
+  n.g.setAttribute('transform',`translate(${lx},${ly})`);
+  n.line.setAttribute('x2',lx);n.line.setAttribute('y2',ly);
+  const f=(T*0.22+n.pp)%1;
+  n.pulse.setAttribute('cx',CX+(lx-CX)*f);n.pulse.setAttribute('cy',CY+(ly-CY)*f);
+  n.pulse.setAttribute('opacity',(Math.sin(f*Math.PI)).toFixed(2));
+ });
+ const hp=con.querySelector('#hubpulse');const hr=56+Math.sin(T*1.4)*5;hp.setAttribute('r',hr);hp.setAttribute('opacity',(.4-(hr-56)/26).toFixed(2));
+ requestAnimationFrame(tick);
+}
+tick();
+
+document.getElementById('legend').innerHTML=SEG.map(s=>`<span><i style="background:${s.color}"></i>${s.name}</span>`).join('');
+document.getElementById('chips').innerHTML=["What's in Q4 2026?","Show Tier 1 tentpoles","When does Doomsday open?","ESPN sports moments","What's Project Gemini?"].map(q=>`<span class="chip" onclick="qaChip(this)">${q}</span>`).join('');
+function openModal(id){document.getElementById(id).classList.add('on');}
+function closeModal(id){document.getElementById(id).classList.remove('on');}
+document.querySelectorAll('.ov').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('on');}));
+function nodeClick(k){const s=SEG.find(x=>x.key===k);document.getElementById('seg-title').textContent=s.name;let b='';
+ if(k==='studios'){b=STUDIOS_TOOLS.map(t=>`<a class="tool" href="${t.href}" ${t.href.startsWith('http')?'target="_blank" rel="noopener"':''}><div class="ic" style="background:${t.bg}">${t.ic}</div><div><div class="tt">${t.t}</div><div class="td">${t.d}</div></div><span class="ar">→</span></a>`).join('');}
+ else{b=`<div style="font-size:13px;color:var(--muted);line-height:1.6"><div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><span style="width:10px;height:10px;border-radius:50%;background:${s.color};display:inline-block"></span><b style="color:var(--text)">${s.name}</b></div>Segment lead: <b style="color:var(--text)">${s.lead}</b>.<br>Tools onboarding as this segment joins the OS. Calendar moments and campaigns are already tracked in the data spine — see the Executive view.</div>`;}
+ document.getElementById('seg-body').innerHTML=b;openModal('m-seg');}
+document.getElementById('cal-body').innerHTML=CAL.map(q=>`<div class="calq"><h4>${q.fq}</h4>${q.items.map(([n,seg,t])=>{const c=SEG.find(s=>s.key===seg).color;return `<div class="calrow"><span class="cdot" style="background:${c}"></span><span class="ct">${n}</span><span class="cb">${t}</span></div>`;}).join('')}</div>`).join('');
+function ask(){const v=document.getElementById('qa-in').value.toLowerCase().trim();const box=document.getElementById('qa-box');if(!v){box.style.display='none';return;}const hit=QA.find(o=>o.k.some(k=>v.includes(k)));box.innerHTML=hit?hit.a:"Try a suggestion below, open the <b>Calendar</b>, or jump to the <b>Executive view</b> for the full campaign portfolio.";box.style.display='block';}
+function qaChip(el){document.getElementById('qa-in').value=el.textContent;ask();}
+function saveAdd(){const ok=document.getElementById('add-ok');ok.textContent='Saved (demo).';setTimeout(()=>{ok.textContent='';closeModal('m-add');document.getElementById('add-in').value='';},900);}
+</script>
+</body></html>
