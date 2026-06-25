@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DMO — Disney Marketing Operations · The Walt Disney Company</title>
+<style>
+:root{
+ --bg:#06060E;--surface:#10101A;--surface2:#14141F;--border:#1E1E2C;--border2:#262638;--gold:#C8A84B;--gold-l:rgba(200,168,75,.14);
+ --text:#F0EFE8;--muted:#8A8A96;--subtle:#3A3A54;
+ --studios:#E2A33A;--tv:#2BB89A;--espn:#F0584F;--exp:#5BBF5B;--cp:#D45A9E;--ent:#6B8BE0;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:radial-gradient(120% 80% at 50% 38%, #0c0c1e 0%, #06060E 60%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100vh}
+#stars{position:fixed;inset:0;z-index:0;pointer-events:none}
+header{position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:14px 24px;background:rgba(6,6,14,.78);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo .badge{background:var(--gold);color:#1a1300;font-weight:700;font-size:13px;padding:4px 9px;border-radius:7px;letter-spacing:.04em;box-shadow:0 0 18px rgba(200,168,75,.35)}
+.logo .name{font-size:14px;font-weight:600;color:var(--text)}
+.logo .name span{opacity:.45;font-weight:400}
+.tools{display:flex;align-items:flex-end;gap:5px}
+.tbtn{display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:1px solid transparent;border-radius:10px;padding:6px 10px;cursor:pointer;text-decoration:none;color:var(--muted);transition:all .15s;font-family:inherit;min-width:60px}
+.tbtn:hover{color:var(--text);border-color:var(--border);background:var(--surface);transform:translateY(-1px)}
+.tbtn svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tbtn .lbl{font-size:9.5px;letter-spacing:.03em;white-space:nowrap}
+.tbtn.gold{color:var(--gold)}
+.tdiv{width:1px;height:30px;background:var(--border);margin:0 4px}
+.hero{position:relative;z-index:10;text-align:center;padding:42px 24px 4px}
+.eyebrow{color:rgba(200,168,75,.7);font-size:12px;letter-spacing:.24em;text-transform:uppercase;font-weight:600;margin-bottom:12px;animation:fade .9s ease both}
+.h1{font-size:42px;font-weight:600;letter-spacing:.4px;line-height:1.05;animation:fade 1s .1s ease both}
+.h1 span{color:var(--gold)}
+.hsub{color:var(--muted);font-size:15px;margin-top:12px;animation:fade 1s .2s ease both}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.qa{position:relative;z-index:10;max-width:620px;margin:24px auto 0;padding:0 24px;animation:fade 1s .3s ease both}
+.qa-wrap{display:flex;align-items:center;gap:10px;background:rgba(16,16,26,.7);border:1px solid var(--border);border-radius:30px;padding:6px 6px 6px 18px;transition:border-color .2s,box-shadow .2s}
+.qa-wrap:focus-within{border-color:rgba(200,168,75,.5);box-shadow:0 0 24px rgba(200,168,75,.12)}
+.qa-wrap input{flex:1;background:none;border:none;outline:none;color:var(--text);font-size:14px;font-family:inherit}
+.qa-wrap input::placeholder{color:var(--subtle)}
+.qa-send{background:var(--gold);border:none;color:#1a1300;width:34px;height:34px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .15s}
+.qa-send:hover{transform:scale(1.08)}
+.chips{display:flex;flex-wrap:wrap;justify-content:center;gap:7px;max-width:620px;margin:12px auto 0;padding:0 24px}
+.chip{background:var(--gold-l);border:1px solid rgba(200,168,75,.24);color:var(--gold);border-radius:14px;padding:4px 12px;font-size:11px;cursor:pointer;font-family:inherit;transition:all .15s}
+.chip:hover{background:rgba(200,168,75,.24);transform:translateY(-1px)}
+#qa-ans{max-width:620px;margin:14px auto 0;padding:0 24px}
+#qa-box{background:rgba(16,16,26,.8);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:10px;padding:14px 16px;font-size:13.5px;line-height:1.55;display:none}
+.cwrap{position:relative;z-index:10;max-width:1000px;margin:6px auto 0;padding:0 16px}
+#con{width:100%;height:auto;display:block;overflow:visible}
+.node{cursor:pointer}
+.node text{pointer-events:none}
+.nlbl{font-size:13px;font-weight:600;letter-spacing:.02em}
+.nsub{font-size:9px;text-transform:uppercase;letter-spacing:.1em}
+.scrollhint{text-align:center;color:var(--subtle);font-size:11px;letter-spacing:.18em;text-transform:uppercase;margin:2px 0 26px;position:relative;z-index:10}
+.legend{position:relative;z-index:10;display:flex;flex-wrap:wrap;justify-content:center;gap:14px;margin:0 auto 32px;font-size:11px;color:var(--muted)}
+.legend span{display:flex;align-items:center;gap:6px}
+.legend i{width:9px;height:9px;border-radius:50%;display:inline-block}
+.ov{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.62);backdrop-filter:blur(6px);padding:20px}
+.ov.on{display:flex}
+.modal{background:var(--surface);border:1px solid rgba(200,168,75,.22);border-radius:16px;width:440px;max-width:100%;max-height:84vh;overflow:auto;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.mhead{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--surface)}
+.mhead .mt{font-size:14px;font-weight:600}
+.mx{background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;line-height:1}
+.mbody{padding:14px 16px}
+.tool{display:flex;align-items:center;gap:12px;padding:12px;border:1px solid var(--border);border-radius:10px;text-decoration:none;background:#0C0C18;margin-bottom:8px;transition:all .15s}
+.tool:hover{border-color:var(--gold);transform:translateX(2px)}
+.tool .ic{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.tool .tt{font-size:13px;font-weight:600;color:var(--text)}
+.tool .td{font-size:11px;color:var(--muted);margin-top:2px}
+.tool .ar{margin-left:auto;color:var(--gold)}
+.calq{margin-bottom:14px}
+.calq h4{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+.calrow{display:flex;align-items:center;gap:9px;font-size:13px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.cdot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.calrow .ct{flex:1}
+.calrow .cb{font-size:9px;font-weight:700;color:var(--gold);border:1px solid rgba(200,168,75,.3);background:var(--gold-l);border-radius:4px;padding:1px 5px}
+textarea{width:100%;min-height:90px;background:#0C0C18;border:1px solid var(--border);border-radius:10px;color:var(--text);padding:11px;font-family:inherit;font-size:13px;resize:vertical;outline:none}
+textarea:focus{border-color:rgba(200,168,75,.4)}
+.pbtn{background:var(--gold);color:#1a1300;border:none;border-radius:8px;padding:9px 16px;font-weight:600;font-size:13px;cursor:pointer;font-family:inherit;margin-top:10px}
+footer{position:relative;z-index:10;text-align:center;color:var(--subtle);font-size:11px;padding:6px 24px 30px}
+
+/* ===== restored calendar ===== */
+.cr-overlay{position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:500;display:none;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto}
+.cr-overlay.open{display:flex}
+.cr-modal-wide{background:var(--surface);border:1px solid var(--border2);border-radius:14px;width:min(1440px,calc(100vw - 40px));overflow:hidden;flex-shrink:0}
+.cr-hdr{background:var(--surface2);padding:16px 24px;display:flex;align-items:flex-start;justify-content:space-between;border-bottom:1px solid var(--border);gap:16px}
+.cr-hdr-left{flex:1}
+.cr-title{font-size:17px;font-weight:700;color:var(--text);letter-spacing:-.3px}
+.cr-subtitle{font-size:11px;color:var(--gold);margin-top:3px}
+.cr-meta{font-size:9px;color:var(--muted);margin-top:4px;line-height:1.6}
+.cr-hdr-right{display:flex;align-items:center;gap:8px;flex-shrink:0;padding-top:2px}
+.cr-close{background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;line-height:1;padding:2px 6px}
+.cr-legend{padding:8px 24px;border-bottom:1px solid var(--border);display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.cr-legend-item{display:flex;align-items:center;gap:5px;font-size:9px;color:var(--muted)}
+.cr-legend-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.cr-fq-grid{display:grid;grid-template-columns:repeat(6,1fr);border-top:1px solid var(--border)}
+.fq-col{border-right:1px solid var(--border);min-width:0}
+.fq-col:last-child{border-right:none}
+.fq-col-header{padding:10px 12px 8px;border-bottom:1px solid var(--border);background:var(--surface2)}
+.fq-col-label{font-size:11px;font-weight:700;color:var(--text)}
+.fq-col-range{font-size:9px;color:var(--muted);margin-top:1px}
+.fq-col-theme{font-size:9px;color:var(--muted);margin-top:4px;line-height:1.35;font-style:italic}
+.fq-col-theme.hot{color:#E04040;font-weight:600}
+.fq-col-body{padding:10px 11px}
+.fq-section-lbl{font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--subtle);margin:10px 0 5px}
+.fq-section-lbl:first-child{margin-top:0}
+.tp-card{border-left:3px solid #555;padding:5px 7px;margin-bottom:4px;background:var(--surface2);border-radius:0 4px 4px 0}
+.tp-name{font-size:10px;font-weight:600;color:var(--text);line-height:1.3}
+.tp-meta{display:flex;align-items:center;gap:5px;margin-top:3px}
+.tp-date{font-size:9px;color:var(--muted)}
+.tp-tier{font-size:8px;font-weight:700;padding:1px 5px;border-radius:3px}
+.tp-t1{background:rgba(200,168,75,.15);color:var(--gold)}
+.tp-t2{background:rgba(59,130,246,.12);color:#60a5fa}
+.prem-list{margin:0;padding:0;list-style:none}
+.prem-item{display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid rgba(255,255,255,.04);line-height:1.4}
+.prem-item:last-child{border:none}
+.prem-name{font-size:9px;color:var(--text);flex:1}
+.prem-date{font-size:8px;color:var(--muted);white-space:nowrap;margin-left:5px}
+.pills{display:flex;flex-wrap:wrap;gap:3px}
+.pill{font-size:8px;padding:2px 6px;border-radius:8px;font-weight:600;white-space:nowrap;line-height:1.4}
+.cultural-txt{font-size:8px;color:var(--muted);line-height:1.9}
+.cr-foot{padding:10px 24px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:space-between;align-items:center;background:var(--surface2);flex-wrap:wrap}
+.cr-disc{font-size:9px;color:var(--subtle);max-width:700px;line-height:1.6}
+.cr-stat{font-size:10px;color:var(--muted)}
+
+
+.comp-toggle-btn{background:var(--surface2);border:1px solid var(--border2);color:var(--muted);border-radius:6px;padding:5px 12px;font-size:10px;font-weight:600;cursor:pointer;font-family:inherit;letter-spacing:.3px;transition:all .15s}
+.comp-toggle-btn.on{background:rgba(200,168,75,.1);border-color:rgba(200,168,75,.35);color:var(--gold)}
+.comp-section{margin-top:6px;padding-top:5px;border-top:1px dashed var(--border)}
+.comp-item{display:flex;justify-content:space-between;align-items:baseline;padding:1px 0;font-size:8px;line-height:1.4;border-bottom:1px solid rgba(255,255,255,.03)}
+.comp-item:last-child{border:none}
+.comp-title{color:var(--muted);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.comp-studio{font-size:7px;color:var(--subtle);white-space:nowrap;margin-left:4px;font-weight:600}
+
+/* HULU ORIGINALS SECTION */
+.hulu-section{margin-top:6px;padding-top:5px;border-top:1px dashed rgba(28,231,131,.35)}
+</style></head>
+<body>
+<canvas id="stars"></canvas>
+
+<header>
+  <a class="logo" href="index.html"><span class="badge">DMO</span><span class="name">Disney Marketing Operations <span>· The Walt Disney Company</span></span></a>
+  <nav class="tools">
+    <button class="tbtn gold" onclick="openModal('m-add')" title="Add marketing data"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg><span class="lbl">Add data</span></button>
+    <span class="tdiv"></span>
+    <a class="tbtn" href="https://mimp44.github.io/claude101/claude101-demo.html" target="_blank" rel="noopener" title="Claude 101 — AI enablement"><svg viewBox="0 0 24 24"><path d="M12 3l2.2 5.2L20 9l-4 3.4L17 18l-5-2.8L7 18l1-5.6L4 9l5.8-.8z"/></svg><span class="lbl">Claude 101</span></a>
+    <button class="tbtn" onclick="openCalendarReport()" title="Marketing calendar"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg><span class="lbl">Calendar</span></button>
+    <a class="tbtn" href="dmo-dashboard.html" title="Executive overview"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg><span class="lbl">Executive view</span></a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="eyebrow">The Walt Disney Company</div>
+  <div class="h1">Disney Marketing <span>Operations</span></div>
+  <div class="hsub">One intelligence. Six segments. Every title.</div>
+</section>
+
+<div class="qa">
+  <div class="qa-wrap">
+    <input id="qa-in" type="text" placeholder="Ask anything — release dates, tentpoles, segments, strategy…" onkeydown="if(event.key==='Enter')ask()"/>
+    <button class="qa-send" onclick="ask()" aria-label="Ask"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#1a1300" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
+  </div>
+  <div class="chips" id="chips"></div>
+  <div id="qa-ans"><div id="qa-box"></div></div>
+</div>
+
+<div class="cwrap"><svg id="con" viewBox="0 0 1000 600" role="img" aria-label="DMO segment constellation"></svg></div>
+<div class="scrollhint">Six segments · color = segment · click a node</div>
+<div class="legend" id="legend"></div>
+<footer>Disney Marketing Operations Hub · Prototype / working demo · structured on the Global Marketing operating model</footer>
+
+<div class="ov" id="m-add"><div class="modal"><div class="mhead"><span class="mt">Add marketing data</span><button class="mx" onclick="closeModal('m-add')">&#x2715;</button></div><div class="mbody"><div style="font-size:12px;color:var(--muted);margin-bottom:10px">A date, a campaign highlight, a contact, or any note. (Demo — records locally.)</div><textarea id="add-in" placeholder="e.g. 'Mandalorian opening weekend tracking +12% vs. comp'"></textarea><button class="pbtn" onclick="saveAdd()">Save to DMO</button><span id="add-ok" style="font-size:12px;color:var(--exp);margin-left:10px"></span></div></div></div>
+<div class="cr-overlay" id="cr-overlay">
+  <div class="cr-modal-wide">
+    <div class="cr-hdr">
+      <div class="cr-hdr-left">
+        <div class="cr-title">Global Disney Marketing Calendar</div>
+        <div class="cr-subtitle">One-view executive summary &middot; June 2026 &ndash; December 2027 &middot; Prepared for CMO &amp; Marketing Leadership</div>
+        <div class="cr-meta">Fall &rsquo;26 &amp; Feb &rsquo;27 are the gravity centers &nbsp;|&nbsp; cards = tentpoles &nbsp;|&nbsp; pills = always-on/sports &nbsp;|&nbsp; color = segment &nbsp;|&nbsp; * = per Living Document, confirm date</div>
+      </div>
+      <div class="cr-hdr-right">
+        <button onclick="exportCalendarCSV()" class="hdr-btn" style="font-size:11px;padding:6px 12px">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>CSV
+        </button>
+        <button onclick="exportCalendarPDF()" class="hdr-btn gold" style="font-size:11px;padding:6px 12px">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>PDF
+        </button>
+        <button class="cr-close" onclick="closeCalendarReport()">&#x2715;</button>
+      </div>
+    </div>
+    <div class="cr-legend">
+      <span style="font-size:9px;font-weight:600;color:var(--muted);margin-right:2px">Segment:</span>
+      <span class="cr-legend-item"><span class="cr-legend-dot" style="background:#E87722"></span>Studios / Theatrical</span>
+      <span class="cr-legend-item"><span class="cr-legend-dot" style="background:#003087"></span>Brand / CSR</span>
+      <span class="cr-legend-item"><span class="cr-legend-dot" style="background:#6B3FA0"></span>Disney+ / Hulu / TV</span>
+      <span class="cr-legend-item"><span class="cr-legend-dot" style="background:#006341"></span>ESPN / Sports</span>
+      <span class="cr-legend-item"><span class="cr-legend-dot" style="background:#007A6E"></span>Experiences / CP</span>
+      <span class="cr-legend-item"><span class="cr-legend-dot" style="background:#B8860B"></span>Cross-Company</span>
+      <span class="cr-legend-item"><span class="cr-legend-dot" style="background:#1CE783"></span>Hulu Originals</span>
+      <span style="margin-left:8px;font-size:9px;color:var(--subtle)">Tier 1 = enterprise tentpole &nbsp;&middot;&nbsp; Tier 2 = major release</span>
+    </div>
+    <div class="cr-fq-grid" id="cr-fq-grid"></div>
+    <div class="cr-foot">
+      <div class="cr-disc">Tier 1 = enterprise tentpole &middot; Tier 2 = major release / industry event &middot; premieres &amp; seasonal/cultural shown untiered. Dec &rsquo;26 shows Avengers: Doomsday &mdash; confirm final position. Premiere-level detail covers FY27 (Oct &rsquo;26&ndash;Sep &rsquo;27) per source; FY28 Q1 pending inputs.</div>
+      <button id="comp-toggle-btn" class="comp-toggle-btn" onclick="toggleCompetitive()" title="Show/hide competitive releases">🎬 Competitive</button>
+<div class="ov" id="m-seg"><div class="modal"><div class="mhead"><span class="mt" id="seg-title">Segment</span><button class="mx" onclick="closeModal('m-seg')">&#x2715;</button></div><div class="mbody" id="seg-body"></div></div></div>
+
+<script>
+const SEG=[
+ {key:"studios",name:"Studios",color:"#E2A33A",lead:"Martha Morrison",ang:-90,live:true},
+ {key:"tv",name:"Television & Streaming",color:"#2BB89A",lead:"Shannon Ryan",ang:-30,live:false},
+ {key:"espn",name:"ESPN",color:"#F0584F",lead:"Tina Thornton",ang:30,live:false},
+ {key:"exp",name:"Experiences",color:"#5BBF5B",lead:"Scott Hudgins",ang:90,live:false},
+ {key:"cp",name:"Consumer Products",color:"#D45A9E",lead:"Ron Faris",ang:150,live:false},
+ {key:"ent",name:"Enterprise / Cross-Company",color:"#6B8BE0",lead:"Joanna Balikian",ang:210,live:false},
+];
+const STUDIOS_TOOLS=[
+ {ic:"📋",bg:"rgba(200,168,75,.12)",t:"PGS 2.0 — Publicity Global System",d:"Press, junkets, schedules, competitive intel",href:"https://mimp44.github.io/pgs-demo/"},
+ {ic:"🎯",bg:"rgba(61,123,204,.12)",t:"Strategy",d:"Campaign strategy, briefs, timeline planning",href:"https://mimp44.github.io/strategy-demo/strategy-v2.html"},
+ {ic:"🎬",bg:"rgba(200,168,75,.12)",t:"Creative Director",d:"Concepting, copywriting, trailer briefs",href:"https://mimp44.github.io/cd-demo/creative-director.html"},
+ {ic:"📱",bg:"rgba(61,123,204,.12)",t:"Digital & Creators",d:"Creator & influencer partnerships",href:"studios-creators.html"},
+];
+const QA=[
+ {k:["q4","fall","holiday","oct","nov","dec"],a:"<b>FY27 Q1 (Oct–Dec ’26)</b> is a gravity center: Avengers: Doomsday (Studios, T1), the Disney Holiday Brand Platform (Enterprise, T1), plus Huluween and CP holiday beats."},
+ {k:["tier 1","tentpole","tentpoles"],a:"<b>Tier 1 tentpoles:</b> Mandalorian & Grogu, Avengers: Doomsday, Toy Story 5, Moana LA, Star Wars: A New Hope 50th (Studios); Super Bowl Surround (ESPN); 'The Land' (TV & Streaming); Summer of Disney & Holiday platforms (Enterprise)."},
+ {k:["doomsday","avengers"],a:"<b>Avengers: Doomsday</b> — Studios (Marvel), Tier 1, FY27 Q1. Owner: Martha Morrison."},
+ {k:["espn","sport","nfl","nba","world cup","soccer"],a:"<b>ESPN moments:</b> FIFA World Cup 26, NFL & NBA live-TV windows, league partnerships & EDTC. Owner: Tina Thornton."},
+ {k:["gemini"],a:"<b>Project Gemini</b> — a cross-company marketing launch (Enterprise). Details confidential. Owner: Joanna Balikian."},
+ {k:["creator","influencer","digital"],a:"<b>Digital & Creators</b> lives under Studios — creator/influencer partnerships across the slate."},
+];
+const CX=500,CY=312,RX=300,RY=176;
+
+/* starfield with depth + drift */
+(function(){const c=document.getElementById('stars'),x=c.getContext('2d');let w,h,st=[],mx=0,my=0;
+function rs(){w=c.width=innerWidth;h=c.height=innerHeight;st=Array.from({length:150},()=>{const d=Math.random();return{x:Math.random()*w,y:Math.random()*h,r:d*1.8+.3,o:Math.random()*.5+.1,s:(Math.random()*.015+.003),dep:d*1.4+.2,vx:(Math.random()-.5)*.04};});}
+addEventListener('mousemove',e=>{mx=(e.clientX/innerWidth-.5);my=(e.clientY/innerHeight-.5);});
+function draw(){x.clearRect(0,0,w,h);st.forEach(p=>{p.o+=p.s;if(p.o>.7||p.o<.08)p.s*=-1;p.x+=p.vx;if(p.x<0)p.x=w;if(p.x>w)p.x=0;const ox=mx*p.dep*14,oy=my*p.dep*14;x.beginPath();x.arc(p.x+ox,p.y+oy,p.r,0,7);x.fillStyle='rgba(224,223,216,'+p.o+')';if(p.r>1.4){x.shadowBlur=8;x.shadowColor='rgba(200,168,75,.5)';}else x.shadowBlur=0;x.fill();});x.shadowBlur=0;requestAnimationFrame(draw);}
+addEventListener('resize',rs);rs();draw();})();
+
+/* constellation */
+const con=document.getElementById('con');
+con.innerHTML=`<defs>
+ <radialGradient id="hubglow" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="rgba(200,168,75,.22)"/><stop offset="100%" stop-color="rgba(200,168,75,0)"/></radialGradient>
+ <filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+<circle cx="${CX}" cy="${CY}" r="260" fill="url(#hubglow)"/>
+<g id="links"></g><g id="pulses"></g>
+<g id="hub">
+ <circle id="hubpulse" cx="${CX}" cy="${CY}" r="56" fill="none" stroke="rgba(200,168,75,.35)" stroke-width="1.5"/>
+ <circle cx="${CX}" cy="${CY}" r="50" fill="#14142a" stroke="#C8A84B" stroke-width="2" filter="url(#glow)"/>
+ <text x="${CX}" y="${CY-2}" text-anchor="middle" font-size="20" font-weight="700" fill="#C8A84B">DMO</text>
+ <text x="${CX}" y="${CY+15}" text-anchor="middle" font-size="9" fill="#8A8A96">marketing ops</text>
+</g>
+<g id="nodes"></g>`;
+const linksG=con.querySelector('#links'),pulsesG=con.querySelector('#pulses'),nodesG=con.querySelector('#nodes');
+const N=SEG.map((s,i)=>{
+ const a=s.ang*Math.PI/180, bx=CX+Math.cos(a)*RX, by=CY+Math.sin(a)*RY;
+ const line=document.createElementNS('http://www.w3.org/2000/svg','line');
+ line.setAttribute('x1',CX);line.setAttribute('y1',CY);line.setAttribute('stroke',s.color);line.setAttribute('stroke-width','1.5');line.setAttribute('stroke-dasharray','3 7');line.setAttribute('opacity','.5');linksG.appendChild(line);
+ const pulse=document.createElementNS('http://www.w3.org/2000/svg','circle');
+ pulse.setAttribute('r','3.4');pulse.setAttribute('fill',s.color);pulse.setAttribute('filter','url(#glow)');pulsesG.appendChild(pulse);
+ const g=document.createElementNS('http://www.w3.org/2000/svg','g');g.setAttribute('class','node');g.style.cursor='pointer';g.style.opacity='0';g.style.transition='opacity .6s ease';
+ const hit=document.createElementNS('http://www.w3.org/2000/svg','circle');hit.setAttribute('r','52');hit.setAttribute('fill','#000');hit.setAttribute('opacity','0');hit.setAttribute('pointer-events','all');
+ const halo=document.createElementNS('http://www.w3.org/2000/svg','circle');halo.setAttribute('r','40');halo.setAttribute('fill',s.color);halo.setAttribute('opacity','.13');halo.setAttribute('filter','url(#glow)');
+ const ring=document.createElementNS('http://www.w3.org/2000/svg','circle');ring.setAttribute('r','38');ring.setAttribute('fill',s.color+'1f');ring.setAttribute('stroke',s.color);ring.setAttribute('stroke-width','2.5');ring.style.transition='r .18s ease';
+ const core=document.createElementNS('http://www.w3.org/2000/svg','circle');core.setAttribute('r','5');core.setAttribute('fill',s.color);
+ const below=by>CY;const lbl=document.createElementNS('http://www.w3.org/2000/svg','text');lbl.setAttribute('class','nlbl');lbl.setAttribute('text-anchor','middle');lbl.setAttribute('fill',s.color);lbl.setAttribute('y',below?60:-58);lbl.textContent=s.name;
+ const sub=document.createElementNS('http://www.w3.org/2000/svg','text');sub.setAttribute('class','nsub');sub.setAttribute('text-anchor','middle');sub.setAttribute('fill',s.live?s.color:'#8A8A96');sub.setAttribute('y',below?75:-43);sub.textContent=s.live?'live':'soon';
+ g.append(hit,halo,ring,core,lbl,sub);nodesG.appendChild(g);
+ const node={s,bx,by,line,pulse,g,ring,hov:false,phase:Math.random()*6.28,spd:.18+Math.random()*.12,rad:7+Math.random()*5,pp:Math.random()};
+ g.setAttribute('data-key',s.key);
+ g.addEventListener('mouseenter',()=>{node.hov=true;ring.setAttribute('r','44');ring.setAttribute('stroke-width','3');halo.setAttribute('opacity','.28');});
+ g.addEventListener('mouseleave',()=>{node.hov=false;ring.setAttribute('r','38');ring.setAttribute('stroke-width','2.5');halo.setAttribute('opacity','.13');});
+ setTimeout(()=>g.style.opacity='1',250+i*110);
+ return node;
+});
+con.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest('.node');if(t)nodeClick(t.getAttribute('data-key'));});
+con.style.cursor='default';
+let mxF=0,myF=0;
+document.querySelector('.cwrap').addEventListener('mousemove',e=>{const r=e.currentTarget.getBoundingClientRect();mxF=((e.clientX-r.left)/r.width-.5);myF=((e.clientY-r.top)/r.height-.5);});
+document.querySelector('.cwrap').addEventListener('mouseleave',()=>{mxF=0;myF=0;});
+let T=0;
+function tick(){T+=0.016;
+ const px=mxF*22,py=myF*22;
+ N.forEach(n=>{
+  let lx,ly;
+  if(n.hov){lx=(n.hx!==undefined?n.hx:n.bx);ly=(n.hy!==undefined?n.hy:n.by);}
+  else{const ox=Math.cos(T*n.spd+n.phase)*n.rad, oy=Math.sin(T*n.spd*1.3+n.phase)*n.rad*.8;lx=n.bx+ox+px;ly=n.by+oy+py;n.hx=lx;n.hy=ly;}
+  n.g.setAttribute('transform',`translate(${lx},${ly})`);
+  n.line.setAttribute('x2',lx);n.line.setAttribute('y2',ly);
+  const f=(T*0.22+n.pp)%1;
+  n.pulse.setAttribute('cx',CX+(lx-CX)*f);n.pulse.setAttribute('cy',CY+(ly-CY)*f);
+  n.pulse.setAttribute('opacity',(Math.sin(f*Math.PI)).toFixed(2));
+ });
+ const hp=con.querySelector('#hubpulse');const hr=56+Math.sin(T*1.4)*5;hp.setAttribute('r',hr);hp.setAttribute('opacity',(.4-(hr-56)/26).toFixed(2));
+ requestAnimationFrame(tick);
+}
+tick();
+
+document.getElementById('legend').innerHTML=SEG.map(s=>`<span><i style="background:${s.color}"></i>${s.name}</span>`).join('');
+document.getElementById('chips').innerHTML=["What's in Q4 2026?","Show Tier 1 tentpoles","When does Doomsday open?","ESPN sports moments","What's Project Gemini?"].map(q=>`<span class="chip" onclick="qaChip(this)">${q}</span>`).join('');
+function openModal(id){document.getElementById(id).classList.add('on');}
+function closeModal(id){document.getElementById(id).classList.remove('on');}
+document.querySelectorAll('.ov').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('on');}));
+function nodeClick(k){const s=SEG.find(x=>x.key===k);document.getElementById('seg-title').textContent=s.name;let b='';
+ if(k==='studios'){b=STUDIOS_TOOLS.map(t=>`<a class="tool" href="${t.href}" ${t.href.startsWith('http')?'target="_blank" rel="noopener"':''}><div class="ic" style="background:${t.bg}">${t.ic}</div><div><div class="tt">${t.t}</div><div class="td">${t.d}</div></div><span class="ar">→</span></a>`).join('');}
+ else{b=`<div style="font-size:13px;color:var(--muted);line-height:1.6"><div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><span style="width:10px;height:10px;border-radius:50%;background:${s.color};display:inline-block"></span><b style="color:var(--text)">${s.name}</b></div>Segment lead: <b style="color:var(--text)">${s.lead}</b>.<br>Tools onboarding as this segment joins the OS. Calendar moments and campaigns are already tracked in the data spine — see the Executive view.</div>`;}
+ document.getElementById('seg-body').innerHTML=b;openModal('m-seg');}
+function ask(){const v=document.getElementById('qa-in').value.toLowerCase().trim();const box=document.getElementById('qa-box');if(!v){box.style.display='none';return;}const hit=QA.find(o=>o.k.some(k=>v.includes(k)));box.innerHTML=hit?hit.a:"Try a suggestion below, open the <b>Calendar</b>, or jump to the <b>Executive view</b> for the full campaign portfolio.";box.style.display='block';}
+function qaChip(el){document.getElementById('qa-in').value=el.textContent;ask();}
+function saveAdd(){const ok=document.getElementById('add-ok');ok.textContent='Saved (demo).';setTimeout(()=>{ok.textContent='';closeModal('m-add');document.getElementById('add-in').value='';},900);}
+
+/* ===== restored calendar engine ===== */
+const MARKETING_CALENDAR=[{"start": "2026-04-18", "end": "2026-06-21", "moment": "NBA Playoffs - Spring Live TV", "segment": "ESPN / ABC", "region": "US", "type": "Sports", "tier": "2", "fq": "FY26 Q3", "quarter": "CY2026 Q2", "notes": ""},{"start": "2026-05-01", "end": "", "moment": "The Devil Wears Prada 2 (Theatrical)", "segment": "Studios", "region": "Global", "type": "Tentpole", "tier": "2", "fq": "FY26 Q3", "quarter": "CY2026 Q2", "notes": ""},{"start": "2026-05-20", "end": "", "moment": "National Streaming Day", "segment": "Disney+ / Hulu", "region": "US", "type": "Streaming", "tier": "3", "fq": "FY26 Q3", "quarter": "CY2026 Q2", "notes": "Annual"},{"start": "2026-05-22", "end": "", "moment": "The Mandalorian & Grogu (Theatrical)", "segment": "Studios / Lucasfilm", "region": "Global", "type": "Tentpole", "tier": "1", "fq": "FY26 Q3", "quarter": "CY2026 Q2", "notes": "Cross-company synergy tentpole; CP + Parks tie-ins"},{"start": "2026-06-01", "end": "2026-06-30", "moment": "Pride Month", "segment": "Brand / Cultural", "region": "US/Global", "type": "Seasonal/Cultural", "tier": "", "fq": "FY26 Q3", "quarter": "CY2026 Q2", "notes": "Cultural/seasonal observance - intentionally untiered (leverage opportunity, not an owned Disney tentpole)"},{"start": "2026-06-01", "end": "2027-05-31", "moment": "Emmys FYC Window", "segment": "Disney+ / Hulu", "region": "US", "type": "Awards", "tier": "3", "fq": "FY26 Q3", "quarter": "CY2026 Q2", "notes": "Emmy submission deadline 5/31"},{"start": "2026-06-01", "end": "2026-08-31", "moment": "Hulu Animayhem - Summer Campaign", "segment": "Disney+ / Hulu", "region": "US", "type": "Streaming", "tier": "2", "fq": "FY26 Q3", "quarter": "CY2026 Q2", "notes": ""},{"start": "2026-06-01", "end": "2026-09-30", "moment": "Get Real - Unscripted / Reality Campaign", "segment": "Disney+ / Hulu", "region": "US", "type": "Streaming", "tier": "2", "fq": "FY26 Q3", "quarter": "CY2026 Q2", "notes": ""},{"start": "2026-06-01", "end": "2026-09-30", "moment": "Hotstar Migration", "segment": "Disney+ / Hulu", "region": "APAC", "type": "Streaming", "tier": "2", "fq": "FY26 Q3", "quarter": "CY2026 Q2", "notes": "APAC platform migration"},{"start": "2026-06-01", "end": "2026-08-31", "moment": "Summer of Disney - Brand Platform (2026)", "segment": "Brand Marketing", "region": "Global", "type": "Brand Platform", "tier": "1", "fq": "FY26 Q3", "quarter": "CY2026 Q2", "notes": "Enterprise summer brand platform"},{"start": "2026-06-11", "end": "2026-07-19", "moment": "FIFA World Cup 26", "segment": "ESPN", "region": "Global", "type": "Sports", "tier": "1", "fq": "FY26 Q3", "quarter": "CY2026 Q2", "notes": "US/Can/Mex host; major ESPN tentpole"},{"start": "2026-06-19", "end": "", "moment": "Juneteenth", "segment": "Brand / Cultural", "region": "US/Global", "type": "Seasonal/Cultural", "tier": "", "fq": "FY26 Q3", "quarter": "CY2026 Q2", "notes": "Cultural/seasonal observance - intentionally untiered (leverage opportunity, not an owned Disney tentpole)"},{"start": "2026-06-19", "end": "", "moment": "Toy Story 5 (Theatrical)", "segment": "Studios / Pixar", "region": "Global", "type": "Tentpole", "tier": "1", "fq": "FY26 Q3", "quarter": "CY2026 Q2", "notes": "Summer of Disney anchor"},{"start": "2026-07-01", "end": "", "moment": "Canada Day", "segment": "Brand / Cultural", "region": "Canada", "type": "Seasonal/Cultural", "tier": "", "fq": "FY26 Q4", "quarter": "CY2026 Q3", "notes": "Cultural/seasonal observance - intentionally untiered (leverage opportunity, not an owned Disney tentpole)"},{"start": "2026-07-01", "end": "2026-09-30", "moment": "Verts (Vertical Video) Expansion", "segment": "Disney+ / Hulu", "region": "Global", "type": "Streaming", "tier": "2", "fq": "FY26 Q4", "quarter": "CY2026 Q3", "notes": "Q3 timing TBD per deck"},{"start": "2026-07-01", "end": "2026-07-31", "moment": "Consumer Products - Key Month (Summer)", "segment": "Disney Consumer Products", "region": "Global", "type": "Consumer Products", "tier": "2", "fq": "FY26 Q4", "quarter": "CY2026 Q3", "notes": ""},{"start": "2026-07-04", "end": "", "moment": "4th of July", "segment": "Brand / Cultural", "region": "US", "type": "Seasonal/Cultural", "tier": "", "fq": "FY26 Q4", "quarter": "CY2026 Q3", "notes": "Cultural/seasonal observance - intentionally untiered (leverage opportunity, not an owned Disney tentpole)"},{"start": "2026-07-10", "end": "", "moment": "Moana (Live-Action, Theatrical)", "segment": "Studios", "region": "Global", "type": "Tentpole", "tier": "1", "fq": "FY26 Q4", "quarter": "CY2026 Q3", "notes": "Summer tentpole; Parks/DCP tie-ins"},{"start": "2026-07-14", "end": "", "moment": "Bastille Day", "segment": "Brand / Cultural", "region": "France", "type": "Seasonal/Cultural", "tier": "", "fq": "FY26 Q4", "quarter": "CY2026 Q3", "notes": "Cultural/seasonal observance - intentionally untiered (leverage opportunity, not an owned Disney tentpole)"},{"start": "2026-07-23", "end": "2026-07-26", "moment": "San Diego Comic-Con", "segment": "Cross-Company", "region": "US", "type": "Fan Event", "tier": "2", "fq": "FY26 Q4", "quarter": "CY2026 Q3", "notes": "Dates approx"},{"start": "2026-08-01", "end": "", "moment": "Spider-Man Day", "segment": "Brand / Cultural", "region": "US/Global", "type": "Seasonal/Cultural", "tier": "", "fq": "FY26 Q4", "quarter": "CY2026 Q3", "notes": "Cultural/seasonal observance - intentionally untiered (leverage opportunity, not an owned Disney tentpole)"},{"start": "2026-08-01", "end": "", "moment": "Princess Week", "segment": "Brand / Cultural", "region": "US/Global", "type": "Seasonal/Cultural", "tier": "", "fq": "FY26 Q4", "quarter": "CY2026 Q3", "notes": "Cultural/seasonal observance - intentionally untiered (leverage opportunity, not an owned Disney tentpole)"},{"start": "2026-08-01", "end": "2026-09-30", "moment": "Hulu & Disney+ Late Summer / Fall Promo", "segment": "Disney+ / Hulu", "region": "US", "type": "Streaming", "tier": "2", "fq": "FY26 Q4", "quarter": "CY2026 Q3", "notes": ""},{"start": "2026-08-07", "end": "", "moment": "Super Troopers 3 (Theatrical)", "segment": "Studios", "region": "US", "type": "Tentpole", "tier": "3", "fq": "FY26 Q4", "quarter": "CY2026 Q3", "notes": ""},{"start": "2026-08-15", "end": "2026-09-07", "moment": "Back to School", "segment": "Brand / Cultural", "region": "US/Global", "type": "Seasonal/Cultural", "tier": "", "fq": "FY26 Q4", "quarter": "CY2026 Q3", "notes": "Cultural/seasonal observance - intentionally untiered (leverage opportunity, not an owned Disney tentpole)"},{"start": "2026-09-07", "end": "", "moment": "Labor Day", "segment": "Brand / Cultural", "region": "US", "type": "Seasonal/Cultural", "tier": "", "fq": "FY26 Q4", "quarter": "CY2026 Q3", "notes": "Cultural/seasonal observance - intentionally untiered (leverage opportunity, not an owned Disney tentpole)"},{"start": "2026-09-10", "end": "2027-01-31", "moment": "NFL - Fall Live TV", "segment": "ESPN / ABC", "region": "US", "type": "Sports", "tier": "2", "fq": "FY26 Q4", "quarter": "CY2026 Q3", "notes": ""},{"start": "2026-09-15", "end": "2026-10-15", "moment": "Hispanic Heritage Month", "segment": "Brand / Cultural", "region": "US/Global", "type": "Seasonal/Cultural", "tier": "", "fq": "FY26 Q4", "quarter": "CY2026 Q3", "notes": "Cultural/seasonal observance - intentionally untiered (leverage opportunity, not an owned Disney tentpole)"},{"start": "2026-09-15", "end": "", "moment": "Disney+ / Hulu Price Increase - Notification", "segment": "Disney+ / Hulu", "region": "Global", "type": "Streaming", "tier": "2", "fq": "FY26 Q4", "quarter": "CY2026 Q3", "notes": "ASSUMPTION: notification precedes increase"},{"start": "2026-09-21", "end": "", "moment": "Mid-Autumn Festival", "segment": "Brand / Cultural", "region": "APAC", "type": "Seasonal/Cultural", "tier": "", "fq": "FY26 Q4", "quarter": "CY2026 Q3", "notes": "Cultural/seasonal observance - intentionally untiered (leverage opportunity, not an owned Disney tentpole)"},{"start": "2026-09-25", "end": "", "moment": "Avengers: Endgame Re-Release", "segment": "Studios / Marvel", "region": "Global", "type": "Tentpole", "tier": "2", "fq": "FY26 Q4", "quarter": "CY2026 Q3", "notes": "Doomsday lead-in"},{"start": "2026-10-01", "end": "2026-10-31", "moment": "Huluween", "segment": "Disney+ / Hulu", "region": "US", "type": "Streaming", "tier": "2", "fq": "FY27 Q1", "quarter": "CY2026 Q4", "notes": ""},{"start": "2026-10-01", "end": "2027-09-30", "moment": "Parks & DSE Visitation Drivers", "segment": "Disney Experiences", "region": "Global", "type": "Experiences", "tier": "2", "fq": "FY27 Q1", "quarter": "CY2026 Q4", "notes": "FY27 ongoing"},{"start": "2026-10-08", "end": "2026-10-11", "moment": "New York Comic-Con", "segment": "Cross-Company", "region": "US", "type": "Fan Event", "tier": "3", "fq": "FY27 Q1", "quarter": "CY2026 Q4", "notes": "Dates approx"},{"start": "2026-10-15", "end": "", "moment": "Disney+ / Hulu Price Increase - Effective", "segment": "Disney+ / Hulu", "region": "Global", "type": "Streaming", "tier": "2", "fq": "FY27 Q1", "quarter": "CY2026 Q4", "notes": ""},{"start": "2026-10-16", "end": "", "moment": "Whalefall (Theatrical)", "segment": "Studios", "region": "US", "type": "Tentpole", "tier": "3", "fq": "FY27 Q1", "quarter": "CY2026 Q4", "notes": ""},{"start": "2026-10-31", "end": "", "moment": "Halloween", "segment": "Brand / Cultural", "region": "US/Global", "type": "Seasonal/Cultural", "tier": "", "fq": "FY27 Q1", "quarter": "CY2026 Q4", "notes": "Cultural/seasonal observance - intentionally untiered (leverage opportunity, not an owned Disney tentpole)"},{"start": "2026-11-01", "end": "", "moment": "Diwali", "segment": "Brand / Cultural", "region": "US/Global", "type": "Seasonal/Cultural", "tier": "", "fq": "FY27 Q1", "quarter": "CY2026 Q4", "notes": "Cultural/seasonal observance - intentionally untiered (leverage opportunity, not an owned Disney tentpole)"},{"start": "2026-11-01", "end": "", "moment": "APAC Launch Anniversary", "segment": "Disney+ / Hulu", "region": "APAC", "type": "Streaming", "tier": "3", "fq": "FY27 Q1", "quarter": "CY2026 Q4", "notes": ""},{"start": "2026-11-01", "end": "2026-12-31", "moment": "Guilds FYC Window", "segment": "Disney+ / Hulu", "region": "US", "type": "Awards", "tier": "3", "fq": "FY27 Q1", "quarter": "CY2026 Q4", "notes": "Guilds deadline 12/31"},{"start": "2026-11-01", "end": "2026-11-30", "moment": "Consumer Products - Key Month (Holiday)", "segment": "Disney Consumer Products", "region": "Global", "type": "Consumer Products", "tier": "2", "fq": "FY27 Q1", "quarter": "CY2026 Q4", "notes": ""},{"start": "2026-11-01", "end": "2026-12-31", "moment": "Disney Holiday Brand Platform (2026)", "segment": "Brand Marketing", "region": "Global", "type": "Brand Platform", "tier": "1", "fq": "FY27 Q1", "quarter": "CY2026 Q4", "notes": ""},{"start": "2026-11-06", "end": "", "moment": "Wild Horse Nine (Theatrical)", "segment": "Studios", "region": "US", "type": "Tentpole", "tier": "3", "fq": "FY27 Q1", "quarter": "CY2026 Q4", "notes": ""},{"start": "2026-11-18", "end": "", "moment": "Mickey's Birthday", "segment": "Brand / Cultural", "region": "US/Global", "type": "Seasonal/Cultural", "tier": "", "fq": "FY27 Q1", "quarter": "CY2026 Q4", "notes": "Cultural/seasonal observance - intentionally untiered (leverage opportunity, not an owned Disney tentpole)"},{"start": "2026-11-26", "end": "", "moment": "Thanksgiving", "segment": "Brand / Cultural", "region": "US", "type": "Seasonal/Cultural", "tier": "", "fq": "FY27 Q1", "quarter": "CY2026 Q4", "notes": "Cultural/seasonal observance - intentionally untiered (leverage opportunity, not an owned Disney tentpole)"},{"start": "2026-11-27", "end": "", "moment": "Black Friday", "segment": "Brand / Cultural", "region": "US", "type": "Seasonal/Cultural", "tier": "", "fq": "FY27 Q1", "quarter": "CY2026 Q4", "notes": "Cultural/seasonal observance - intentionally untiered (leverage opportunity, not an owned Disney tentpole)"},{"start": "2026-11-27", "end": "", "moment": "Hulu Black Friday Offer (2026)", "segment": "Disney+ / Hulu", "region": "US", "type": "Streaming", "tier": "2", "fq": "FY27 Q1", "quarter": "CY2026 Q4", "notes": ""},{"start": "2026-12-18", "end": "", "moment": "Avengers: Doomsday (Theatrical)", "segment": "Studios / Marvel", "region": "Global", "type": "Tentpole", "tier": "1", "fq": "FY27 Q1", "quarter": "CY2026 Q4", "notes": "Flagged 'DOOMSDAY' cross-company priority in BOD deck"},{"start": "2026-12-25", "end": "", "moment": "Christmas", "segment": "Brand / Cultural", "region": "US/Global", "type": "Seasonal/Cultural", "tier": "", "fq": "FY27 Q1", "quarter": "CY2026 Q4", "notes": "Cultural/seasonal observance - intentionally untiered (leverage opportunity, not an owned Disney tentpole)"},{"start": "2026-12-31", "end": "", "moment": "New Year's Eve", "segment": "Brand / Cultural", "region": "US/Global", "type": "Seasonal/Cultural", "tier": "", "fq": "FY27 Q1", "quarter": "CY2026 Q4", "notes": "Cultural/seasonal observance - intentionally untiered (leverage opportunity, not an owned Disney tentpole)"},{"start": "2027-01-01", "end": "", "moment": "New Year", "segment": "Brand / Cultural", "region": "US/Global", "type": "Seasonal/Cultural", "tier": "", "fq": "FY27 Q2", "quarter": "CY2027 Q1", "notes": "Cultural/seasonal observance - intentionally untiered (leverage opportunity, not an owned Disney tentpole)"},{"start": "2027-01-01", "end": "2027-03-31", "moment": "Drama Campaign", "segment": "Disney+ / Hulu", "region": "US", "type": "Streaming", "tier": "2", "fq": "FY27 Q2", "quarter": "CY2027 Q1", "notes": "FY27 Q2"},{"start": "2027-01-01", "end": "2027-03-31", "moment": "Throwback Campaign", "segment": "Disney+ / Hulu", "region": "US", "type": "Streaming", "tier": "2", "fq": "FY27 Q2", "quarter": "CY2027 Q1", "notes": "Disney+ / Hulu library tie-in"},{"start": "2027-01-01", "end": "2027-12-31", "moment": "Zombies 5 / Descendants: Hidden Heroes", "segment": "Disney Branded TV", "region": "US", "type": "Tentpole", "tier": "2", "fq": "FY27 Q2", "quarter": "CY2027 Q1", "notes": "Gen Alpha & young family tie-in (timing TBD)"},{"start": "2027-01-01", "end": "2027-09-30", "moment": "League Partnerships (NFL, NBA, NHL, WWE) & EDTC", "segment": "ESPN / DTC", "region": "US", "type": "Sports", "tier": "2", "fq": "FY27 Q2", "quarter": "CY2027 Q1", "notes": "FY27 cross-company synergy"},{"start": "2027-01-01", "end": "2027-12-31", "moment": "Mexico & Las Vegas - Brand / Experiences", "segment": "Disney Experiences", "region": "LATAM / US", "type": "Experiences", "tier": "2", "fq": "FY27 Q2", "quarter": "CY2027 Q1", "notes": "FY27 priority"},{"start": "2027-01-10", "end": "", "moment": "Golden Globes", "segment": "Disney+ / Hulu", "region": "US", "type": "Awards", "tier": "3", "fq": "FY27 Q2", "quarter": "CY2027 Q1", "notes": "Date approx"},{"start": "2027-02-01", "end": "2027-02-28", "moment": "Black History Month", "segment": "Brand / Cultural", "region": "US/Global", "type": "Seasonal/Cultural", "tier": "", "fq": "FY27 Q2", "quarter": "CY2027 Q1", "notes": "Cultural/seasonal observance - intentionally untiered (leverage opportunity, not an owned Disney tentpole)"},{"start": "2027-02-01", "end": "", "moment": "Grammys", "segment": "Disney+ / Hulu / ABC", "region": "US", "type": "Awards", "tier": "3", "fq": "FY27 Q2", "quarter": "CY2027 Q1", "notes": "Date approx"},{"start": "2027-02-01", "end": "2027-02-28", "moment": "Fortnite Integration", "segment": "Games / Cross-Company", "region": "Global", "type": "Consumer Products", "tier": "2", "fq": "FY27 Q2", "quarter": "CY2027 Q1", "notes": "FY27 priority; timing approx"},{"start": "2027-02-01", "end": "2027-02-28", "moment": "'The Land' Marketing Launch", "segment": "Disney Experiences", "region": "Global", "type": "Experiences", "tier": "1", "fq": "FY27 Q2", "quarter": "CY2027 Q1", "notes": "New park land launch; Feb 2027 per BOD deck"},{"start": "2027-02-01", "end": "2027-02-28", "moment": "Project Gemini - Marketing Launch", "segment": "Cross-Company", "region": "Global", "type": "Brand Platform", "tier": "1", "fq": "FY27 Q2", "quarter": "CY2027 Q1", "notes": "ASSUMPTION: confidential initiative; Feb 2027 per BOD deck"},{"start": "2027-02-05", "end": "", "moment": "Ice Age: Boiling Point (Theatrical)", "segment": "Studios / 20th", "region": "Global", "type": "Tentpole", "tier": "2", "fq": "FY27 Q2", "quarter": "CY2027 Q1", "notes": ""},{"start": "2027-02-14", "end": "", "moment": "Valentine's Day", "segment": "Brand / Cultural", "region": "US/Global", "type": "Seasonal/Cultural", "tier": "", "fq": "FY27 Q2", "quarter": "CY2027 Q1", "notes": "Cultural/seasonal observance - intentionally untiered (leverage opportunity, not an owned Disney tentpole)"},{"start": "2027-02-14", "end": "", "moment": "Super Bowl LXI Surround", "segment": "Brand / ESPN", "region": "US", "type": "Sports", "tier": "1", "fq": "FY27 Q2", "quarter": "CY2027 Q1", "notes": "ASSUMPTION: SB LXI ~mid-Feb 2027 - CONFIRM exact date; full-funnel surround"},{"start": "2027-02-17", "end": "", "moment": "Lunar New Year", "segment": "Brand / Cultural", "region": "US/Global", "type": "Seasonal/Cultural", "tier": "", "fq": "FY27 Q2", "quarter": "CY2027 Q1", "notes": "Cultural/seasonal observance - intentionally untiered (leverage opportunity, not an owned Disney tentpole)"},{"start": "2027-02-19", "end": "", "moment": "Star Wars: A New Hope 50th Anniversary Re-Release", "segment": "Studios / Lucasfilm", "region": "Global", "type": "Tentpole", "tier": "1", "fq": "FY27 Q2", "quarter": "CY2027 Q1", "notes": "50th anniversary of original 1977 release"},{"start": "2027-03-01", "end": "2027-03-31", "moment": "Women's History Month", "segment": "Brand / Cultural", "region": "US/Global", "type": "Seasonal/Cultural", "tier": "", "fq": "FY27 Q2", "quarter": "CY2027 Q1", "notes": "Cultural/seasonal observance - intentionally untiered (leverage opportunity, not an owned Disney tentpole)"},{"start": "2027-03-05", "end": "", "moment": "Gatto (Theatrical)", "segment": "Studios / Pixar", "region": "Global", "type": "Tentpole", "tier": "2", "fq": "FY27 Q2", "quarter": "CY2027 Q1", "notes": "Pixar original; major Studios release (not enterprise cross-company)"},{"start": "2027-03-07", "end": "", "moment": "Oscars (ABC Telecast)", "segment": "ABC / Studios", "region": "US", "type": "Awards", "tier": "2", "fq": "FY27 Q2", "quarter": "CY2027 Q1", "notes": "Date approx"},{"start": "2027-03-17", "end": "", "moment": "St. Patrick's Day", "segment": "Brand / Cultural", "region": "US/Global", "type": "Seasonal/Cultural", "tier": "", "fq": "FY27 Q2", "quarter": "CY2027 Q1", "notes": "Cultural/seasonal observance - intentionally untiered (leverage opportunity, not an owned Disney tentpole)"},{"start": "2027-03-28", "end": "", "moment": "Easter", "segment": "Brand / Cultural", "region": "US/Global", "type": "Seasonal/Cultural", "tier": "", "fq": "FY27 Q2", "quarter": "CY2027 Q1", "notes": "Cultural/seasonal observance - intentionally untiered (leverage opportunity, not an owned Disney tentpole)"},{"start": "2027-04-01", "end": "2027-04-04", "moment": "Star Wars Celebration", "segment": "Lucasfilm / Experiences", "region": "Global", "type": "Fan Event", "tier": "1", "fq": "FY27 Q3", "quarter": "CY2027 Q2", "notes": "Cross-company 'Celebrations' priority"},{"start": "2027-04-17", "end": "2027-06-20", "moment": "NBA Playoffs - Spring Live TV (2027)", "segment": "ESPN / ABC", "region": "US", "type": "Sports", "tier": "2", "fq": "FY27 Q3", "quarter": "CY2027 Q2", "notes": ""},{"start": "2027-04-22", "end": "", "moment": "Earth Day", "segment": "Brand / Cultural", "region": "US/Global", "type": "Seasonal/Cultural", "tier": "", "fq": "FY27 Q3", "quarter": "CY2027 Q2", "notes": "Cultural/seasonal observance - intentionally untiered (leverage opportunity, not an owned Disney tentpole)"},{"start": "2027-05-01", "end": "2027-05-31", "moment": "AAPI Heritage Month", "segment": "Brand / Cultural", "region": "US/Global", "type": "Seasonal/Cultural", "tier": "", "fq": "FY27 Q3", "quarter": "CY2027 Q2", "notes": "Cultural/seasonal observance - intentionally untiered (leverage opportunity, not an owned Disney tentpole)"},{"start": "2027-05-04", "end": "", "moment": "May the 4th (Star Wars Day)", "segment": "Brand / Cultural", "region": "Global", "type": "Seasonal/Cultural", "tier": "", "fq": "FY27 Q3", "quarter": "CY2027 Q2", "notes": "Cultural/seasonal observance - intentionally untiered (leverage opportunity, not an owned Disney tentpole)"},{"start": "2027-05-20", "end": "", "moment": "National Streaming Day (2027)", "segment": "Disney+ / Hulu", "region": "US", "type": "Streaming", "tier": "3", "fq": "FY27 Q3", "quarter": "CY2027 Q2", "notes": "Annual"},{"start": "2027-05-31", "end": "", "moment": "Memorial Day", "segment": "Brand / Cultural", "region": "US", "type": "Seasonal/Cultural", "tier": "", "fq": "FY27 Q3", "quarter": "CY2027 Q2", "notes": "Cultural/seasonal observance - intentionally untiered (leverage opportunity, not an owned Disney tentpole)"},{"start": "2027-06-01", "end": "2027-06-30", "moment": "Pride Month", "segment": "Brand / Cultural", "region": "US/Global", "type": "Seasonal/Cultural", "tier": "", "fq": "FY27 Q3", "quarter": "CY2027 Q2", "notes": "Cultural/seasonal observance - intentionally untiered (leverage opportunity, not an owned Disney tentpole)"},{"start": "2027-06-01", "end": "2027-08-31", "moment": "Summer of Disney - Brand Platform (2027)", "segment": "Brand Marketing", "region": "Global", "type": "Brand Platform", "tier": "1", "fq": "FY27 Q3", "quarter": "CY2027 Q2", "notes": "FY27 cross-company priority"},{"start": "2027-06-19", "end": "", "moment": "Juneteenth", "segment": "Brand / Cultural", "region": "US/Global", "type": "Seasonal/Cultural", "tier": "", "fq": "FY27 Q3", "quarter": "CY2027 Q2", "notes": "Cultural/seasonal observance - intentionally untiered (leverage opportunity, not an owned Disney tentpole)"},{"start": "2027-07-01", "end": "", "moment": "Canada Day", "segment": "Brand / Cultural", "region": "Canada", "type": "Seasonal/Cultural", "tier": "", "fq": "FY27 Q4", "quarter": "CY2027 Q3", "notes": "Cultural/seasonal observance - intentionally untiered (leverage opportunity, not an owned Disney tentpole)"},{"start": "2027-07-04", "end": "", "moment": "4th of July", "segment": "Brand / Cultural", "region": "US", "type": "Seasonal/Cultural", "tier": "", "fq": "FY27 Q4", "quarter": "CY2027 Q3", "notes": "Cultural/seasonal observance - intentionally untiered (leverage opportunity, not an owned Disney tentpole)"},{"start": "2027-07-14", "end": "", "moment": "Bastille Day", "segment": "Brand / Cultural", "region": "France", "type": "Seasonal/Cultural", "tier": "", "fq": "FY27 Q4", "quarter": "CY2027 Q3", "notes": "Cultural/seasonal observance - intentionally untiered (leverage opportunity, not an owned Disney tentpole)"},{"start": "2027-07-22", "end": "2027-07-25", "moment": "San Diego Comic-Con (2027)", "segment": "Cross-Company", "region": "US", "type": "Fan Event", "tier": "2", "fq": "FY27 Q4", "quarter": "CY2027 Q3", "notes": "Dates approx"},{"start": "2027-08-01", "end": "", "moment": "Spider-Man Day", "segment": "Brand / Cultural", "region": "US/Global", "type": "Seasonal/Cultural", "tier": "", "fq": "FY27 Q4", "quarter": "CY2027 Q3", "notes": "Cultural/seasonal observance - intentionally untiered (leverage opportunity, not an owned Disney tentpole)"},{"start": "2027-08-01", "end": "", "moment": "Princess Week", "segment": "Brand / Cultural", "region": "US/Global", "type": "Seasonal/Cultural", "tier": "", "fq": "FY27 Q4", "quarter": "CY2027 Q3", "notes": "Cultural/seasonal observance - intentionally untiered (leverage opportunity, not an owned Disney tentpole)"},{"start": "2027-08-15", "end": "2027-09-07", "moment": "Back to School", "segment": "Brand / Cultural", "region": "US/Global", "type": "Seasonal/Cultural", "tier": "", "fq": "FY27 Q4", "quarter": "CY2027 Q3", "notes": "Cultural/seasonal observance - intentionally untiered (leverage opportunity, not an owned Disney tentpole)"},{"start": "2027-09-07", "end": "", "moment": "Labor Day", "segment": "Brand / Cultural", "region": "US", "type": "Seasonal/Cultural", "tier": "", "fq": "FY27 Q4", "quarter": "CY2027 Q3", "notes": "Cultural/seasonal observance - intentionally untiered (leverage opportunity, not an owned Disney tentpole)"},{"start": "2027-09-09", "end": "2027-12-31", "moment": "NFL - Fall Live TV (2027)", "segment": "ESPN / ABC", "region": "US", "type": "Sports", "tier": "2", "fq": "FY27 Q4", "quarter": "CY2027 Q3", "notes": ""},{"start": "2027-09-15", "end": "2027-10-15", "moment": "Hispanic Heritage Month", "segment": "Brand / Cultural", "region": "US/Global", "type": "Seasonal/Cultural", "tier": "", "fq": "FY27 Q4", "quarter": "CY2027 Q3", "notes": "Cultural/seasonal observance - intentionally untiered (leverage opportunity, not an owned Disney tentpole)"},{"start": "2027-09-21", "end": "", "moment": "Mid-Autumn Festival", "segment": "Brand / Cultural", "region": "APAC", "type": "Seasonal/Cultural", "tier": "", "fq": "FY27 Q4", "quarter": "CY2027 Q3", "notes": "Cultural/seasonal observance - intentionally untiered (leverage opportunity, not an owned Disney tentpole)"},{"start": "2027-10-01", "end": "2027-10-31", "moment": "Halloween & Seasonal Product", "segment": "Disney Consumer Products", "region": "Global", "type": "Consumer Products", "tier": "2", "fq": "FY28 Q1", "quarter": "CY2027 Q4", "notes": "FY27 cross-company priority"},{"start": "2027-10-31", "end": "", "moment": "Halloween", "segment": "Brand / Cultural", "region": "US/Global", "type": "Seasonal/Cultural", "tier": "", "fq": "FY28 Q1", "quarter": "CY2027 Q4", "notes": "Cultural/seasonal observance - intentionally untiered (leverage opportunity, not an owned Disney tentpole)"},{"start": "2027-11-01", "end": "", "moment": "Diwali", "segment": "Brand / Cultural", "region": "US/Global", "type": "Seasonal/Cultural", "tier": "", "fq": "FY28 Q1", "quarter": "CY2027 Q4", "notes": "Cultural/seasonal observance - intentionally untiered (leverage opportunity, not an owned Disney tentpole)"},{"start": "2027-11-01", "end": "2027-12-31", "moment": "Disney Holiday Brand Platform (2027)", "segment": "Brand Marketing", "region": "Global", "type": "Brand Platform", "tier": "1", "fq": "FY28 Q1", "quarter": "CY2027 Q4", "notes": "FY27 cross-company priority"},{"start": "2027-11-18", "end": "", "moment": "Mickey's Birthday", "segment": "Brand / Cultural", "region": "US/Global", "type": "Seasonal/Cultural", "tier": "", "fq": "FY28 Q1", "quarter": "CY2027 Q4", "notes": "Cultural/seasonal observance - intentionally untiered (leverage opportunity, not an owned Disney tentpole)"},{"start": "2027-11-26", "end": "", "moment": "Thanksgiving", "segment": "Brand / Cultural", "region": "US", "type": "Seasonal/Cultural", "tier": "", "fq": "FY28 Q1", "quarter": "CY2027 Q4", "notes": "Cultural/seasonal observance - intentionally untiered (leverage opportunity, not an owned Disney tentpole)"},{"start": "2027-11-26", "end": "", "moment": "Hulu Black Friday Offer (2027)", "segment": "Disney+ / Hulu", "region": "US", "type": "Streaming", "tier": "2", "fq": "FY28 Q1", "quarter": "CY2027 Q4", "notes": ""},{"start": "2027-11-27", "end": "", "moment": "Black Friday", "segment": "Brand / Cultural", "region": "US", "type": "Seasonal/Cultural", "tier": "", "fq": "FY28 Q1", "quarter": "CY2027 Q4", "notes": "Cultural/seasonal observance - intentionally untiered (leverage opportunity, not an owned Disney tentpole)"},{"start": "2027-12-25", "end": "", "moment": "Christmas", "segment": "Brand / Cultural", "region": "US/Global", "type": "Seasonal/Cultural", "tier": "", "fq": "FY28 Q1", "quarter": "CY2027 Q4", "notes": "Cultural/seasonal observance - intentionally untiered (leverage opportunity, not an owned Disney tentpole)"},{"start": "2027-12-31", "end": "", "moment": "New Year's Eve", "segment": "Brand / Cultural", "region": "US/Global", "type": "Seasonal/Cultural", "tier": "", "fq": "FY28 Q1", "quarter": "CY2027 Q4", "notes": "Cultural/seasonal observance - intentionally untiered (leverage opportunity, not an owned Disney tentpole)"}];
+const COMPETITIVE_RELEASES=[{"title":"I Was A Stranger","studio":"Angel","date":"1/1","year":"2026","fq":"FY26 Q2","genre":"D"},{"title":"Dead Man\'S Wire","studio":"ROW1","date":"1/1","year":"2026","fq":"FY26 Q2","genre":"S"},{"title":"Goat (2026)","studio":"Sony","date":"1/1","year":"2026","fq":"FY26 Q2","genre":"ANI"},{"title":"Wuthering Heights (2026)","studio":"Warner Bros.","date":"1/1","year":"2026","fq":"FY26 Q2","genre":"R"},{"title":"Cold Storage","studio":"GOLDWYN","date":"1/1","year":"2026","fq":"FY26 Q2","genre":"C"},{"title":"Good Luck, Have Fun, Don\'T Die","studio":"BRIARCLIFF2","date":"1/1","year":"2026","fq":"FY26 Q2","genre":"C"},{"title":"In The Money (1958)","studio":"Ind.","date":"1/1","year":"2026","fq":"FY26 Q2","genre":"FAM"},{"title":"Reminders Of Him","studio":"Universal","date":"1/1","year":"2026","fq":"FY26 Q2","genre":"R"},{"title":"Undertone","studio":"A24","date":"1/1","year":"2026","fq":"FY26 Q2","genre":"H"},{"title":"Tmnt Ii: The Secret Of The Ooze 35Th Anniversary","studio":"Fathom","date":"1/1","year":"2026","fq":"FY26 Q2","genre":"C"},{"title":"You, Me & Tuscany","studio":"Universal","date":"1/1","year":"2026","fq":"FY26 Q2","genre":"RC"},{"title":"Dacoit: A Love Story","studio":"CINEGALAXY1","date":"1/1","year":"2026","fq":"FY26 Q2","genre":"A"},{"title":"Return To Silent Hill","studio":"ICONIC1","date":"1/19","year":"2026","fq":"FY26 Q2","genre":"SE"},{"title":"Scream 7","studio":"Paramount","date":"1/19","year":"2026","fq":"FY26 Q2","genre":"H"},{"title":"Puddysticks","studio":"Ind.","date":"1/19","year":"2026","fq":"FY26 Q2","genre":"C"},{"title":"They Will Kill You","studio":"Warner Bros.","date":"1/19","year":"2026","fq":"FY26 Q2","genre":"H"},{"title":"Forbidden Fruits","studio":"IFC","date":"1/19","year":"2026","fq":"FY26 Q2","genre":"C"},{"title":"Bandmelam","studio":"SARIGAMA1","date":"1/19","year":"2026","fq":"FY26 Q2","genre":"RC"},{"title":"Crybaby Bridge","studio":"Ind.","date":"1/19","year":"2026","fq":"FY26 Q2","genre":"S"},{"title":"Michael (2026)","studio":"Lionsgate","date":"1/19","year":"2026","fq":"FY26 Q2","genre":"M"},{"title":"Fuze","studio":"RSA","date":"1/19","year":"2026","fq":"FY26 Q2","genre":"A"},{"title":"Desert Warrior","studio":"Vertical","date":"1/19","year":"2026","fq":"FY26 Q2","genre":"A"},{"title":"Over Your Dead Body","studio":"IFC","date":"1/19","year":"2026","fq":"FY26 Q2","genre":"C"},{"title":"American Youngboy","studio":"Ind.","date":"1/19","year":"2026","fq":"FY26 Q2","genre":"DOC"},{"title":"Two Seasons, Two Strangers","studio":"Ind.","date":"1/19","year":"2026","fq":"FY26 Q2","genre":"D"},{"title":"Passenger (2026)","studio":"Paramount","date":"1/19","year":"2026","fq":"FY26 Q2","genre":"H"},{"title":"I Love Boosters","studio":"Neon","date":"1/19","year":"2026","fq":"FY26 Q2","genre":"C"},{"title":"Corporate Retreat","studio":"WESTERN2","date":"1/19","year":"2026","fq":"FY26 Q2","genre":"C"},{"title":"Jackass: Best And Last","studio":"Paramount","date":"1/19","year":"2026","fq":"FY26 Q2","genre":"C"},{"title":"Supergirl","studio":"Warner Bros.","date":"1/19","year":"2026","fq":"FY26 Q2","genre":"A"},{"title":"Billy Idol Should Be Dead","studio":"Ind.","date":"2/14","year":"2026","fq":"FY26 Q2","genre":"DOC"},{"title":"Pout-Pout Fish, The","studio":"VPD","date":"2/16","year":"2026","fq":"FY26 Q2","genre":"C"},{"title":"Ready Or Not 2: Here I Come","studio":"SL","date":"2/16","year":"2026","fq":"FY26 Q2","genre":"H"},{"title":"Exhibition On Screen: Turner & Constable 2026","studio":"Ind.","date":"2/16","year":"2026","fq":"FY26 Q2","genre":"SE"},{"title":"Allen Mystery Movie","studio":"Ind.","date":"2/16","year":"2026","fq":"FY26 Q2","genre":""},{"title":"Lee Cronin\'S The Mummy","studio":"Warner Bros.","date":"2/16","year":"2026","fq":"FY26 Q2","genre":"H"},{"title":"Mother Mary","studio":"A24","date":"2/16","year":"2026","fq":"FY26 Q2","genre":"S"},{"title":"Normal (2026)","studio":"MAG","date":"2/16","year":"2026","fq":"FY26 Q2","genre":"A"},{"title":"Die4","studio":"ABRAMORAMA1","date":"2/16","year":"2026","fq":"FY26 Q2","genre":"DOC"},{"title":"Pahaad","studio":"Ind.","date":"2/16","year":"2026","fq":"FY26 Q2","genre":"D"},{"title":"Top Gun 40Th Anniversary","studio":"Paramount","date":"2/16","year":"2026","fq":"FY26 Q2","genre":"ADV"},{"title":"Obsession (2026)","studio":"FOC","date":"2/16","year":"2026","fq":"FY26 Q2","genre":"H"},{"title":"Hunting Matthew Nichols","studio":"Ind.","date":"4/5","year":"2026","fq":"FY26 Q3","genre":"S"},{"title":"Faces Of Death (2026)","studio":"IFC","date":"4/5","year":"2026","fq":"FY26 Q3","genre":"H"},{"title":"Billie Eilish - Hit Me Hard And Soft: The Tour (Live In 3D)","studio":"Paramount","date":"4/5","year":"2026","fq":"FY26 Q3","genre":"SE"},{"title":"Mortal Kombat Ii","studio":"Warner Bros.","date":"4/5","year":"2026","fq":"FY26 Q3","genre":"A"},{"title":"Disclosure Day","studio":"Universal","date":"4/5","year":"2026","fq":"FY26 Q3","genre":"SCIF"},{"title":"Stop! That! Train!","studio":"Bleecker St.","date":"4/5","year":"2026","fq":"FY26 Q3","genre":"C"},{"title":"Furious, The","studio":"Lionsgate","date":"4/5","year":"2026","fq":"FY26 Q3","genre":"A"},{"title":"Sacred Heart: His Reign Has No End","studio":"Fathom","date":"4/5","year":"2026","fq":"FY26 Q3","genre":"DOC"},{"title":"Ponyo - Studio Ghibli Fest 2026","studio":"Fathom","date":"4/5","year":"2026","fq":"FY26 Q3","genre":"SE"},{"title":"Evil Dead Burn","studio":"Warner Bros.","date":"4/5","year":"2026","fq":"FY26 Q3","genre":"H"},{"title":"Breadwinner, The","studio":"Sony","date":"4/22","year":"2026","fq":"FY26 Q3","genre":"C"},{"title":"Pressure (2026)","studio":"FOC","date":"4/22","year":"2026","fq":"FY26 Q3","genre":"D"},{"title":"Wizard Of The Kremlin, The","studio":"Vertical","date":"5/10","year":"2026","fq":"FY26 Q3","genre":"S"},{"title":"Mobile Suit Gundam Hathaway: The Sorcery Of Nymph Circe","studio":"EMICK1","date":"5/10","year":"2026","fq":"FY26 Q3","genre":"ANI"},{"title":"I Don\'T Speak English (Sp)","studio":"Ind.","date":"5/10","year":"2026","fq":"FY26 Q3","genre":"C"},{"title":"Death Of Robin Hood, The","studio":"A24","date":"5/10","year":"2026","fq":"FY26 Q3","genre":"S"},{"title":"Leviticus","studio":"Neon","date":"5/10","year":"2026","fq":"FY26 Q3","genre":"H"},{"title":"Gregg Allman: The Music Of My Soul","studio":"VARIANCE1","date":"5/10","year":"2026","fq":"FY26 Q3","genre":"DOC"},{"title":"Odyssey, The (2026)","studio":"Universal","date":"5/10","year":"2026","fq":"FY26 Q3","genre":"A"},{"title":"Insidious: Out Of The Further","studio":"Sony","date":"5/10","year":"2026","fq":"FY26 Q3","genre":"H"},{"title":"Mutiny","studio":"Lionsgate","date":"5/10","year":"2026","fq":"FY26 Q3","genre":"A"},{"title":"Magic Faraway Tree, The","studio":"Vertical","date":"5/10","year":"2026","fq":"FY26 Q3","genre":"FAM"},{"title":"Spa Weekend","studio":"BLACK6","date":"5/10","year":"2026","fq":"FY26 Q3","genre":"C"},{"title":"Castle In The Sky 40Th Anniversary - Studio Ghibli Fest 2026","studio":"Fathom","date":"5/10","year":"2026","fq":"FY26 Q3","genre":"ADV"},{"title":"Resident Evil","studio":"Sony","date":"5/10","year":"2026","fq":"FY26 Q3","genre":"H"},{"title":"Weight, The","studio":"Vertical","date":"5/10","year":"2026","fq":"FY26 Q3","genre":"S"},{"title":"Shaun The Sheep: The Beast Of Mossy Bottom","studio":"GKIDS","date":"5/10","year":"2026","fq":"FY26 Q3","genre":"FAM"},{"title":"Street Fighter (2026)","studio":"Paramount","date":"5/10","year":"2026","fq":"FY26 Q3","genre":"ADV"},{"title":"Sense And Sensibility","studio":"FOC","date":"5/10","year":"2026","fq":"FY26 Q3","genre":"D"},{"title":"Backrooms","studio":"A24","date":"5/19","year":"2026","fq":"FY26 Q3","genre":"H"},{"title":"Tekkonkinkreet 20Th Anniversary","studio":"GKIDS","date":"5/25","year":"2026","fq":"FY26 Q3","genre":"ANI"},{"title":"Revolutionary America","studio":"Fathom","date":"5/25","year":"2026","fq":"FY26 Q3","genre":"DOC"},{"title":"Last Viking, The","studio":"GOLDWYN","date":"5/25","year":"2026","fq":"FY26 Q3","genre":"C"},{"title":"Spider-Man: Brand New Day","studio":"Sony","date":"5/25","year":"2026","fq":"FY26 Q3","genre":"A"},{"title":"Mongoose, The","studio":"GOLDWYN","date":"5/25","year":"2026","fq":"FY26 Q3","genre":"A"},{"title":"Christmas At The Kringles","studio":"BRIARCLIFF2","date":"5/25","year":"2026","fq":"FY26 Q3","genre":"C"},{"title":"Bleach: Thousand-Year Blood War - The Calamity","studio":"Fathom","date":"6/21","year":"2026","fq":"FY26 Q3","genre":"SE"},{"title":"Motor City","studio":"IFC","date":"6/21","year":"2026","fq":"FY26 Q3","genre":"A"},{"title":"Bad Counselors","studio":"Fathom","date":"6/21","year":"2026","fq":"FY26 Q3","genre":"FAM"},{"title":"Buddy (2026)","studio":"RSA","date":"6/21","year":"2026","fq":"FY26 Q3","genre":"H"},{"title":"Coyote Vs. Acme","studio":"FALLING1","date":"6/21","year":"2026","fq":"FY26 Q3","genre":"FAM"},{"title":"Cliffhanger (2026)","studio":"ROW1","date":"6/21","year":"2026","fq":"FY26 Q3","genre":"A"},{"title":"Idiots","studio":"IFC","date":"6/21","year":"2026","fq":"FY26 Q3","genre":"C"},{"title":"Heart Of The Beast","studio":"Paramount","date":"6/21","year":"2026","fq":"FY26 Q3","genre":"A"},{"title":"Forgotten Island","studio":"Universal","date":"6/21","year":"2026","fq":"FY26 Q3","genre":"C"},{"title":"Victorian Psycho","studio":"Bleecker St.","date":"6/21","year":"2026","fq":"FY26 Q3","genre":"H"},{"title":"Charlie Harper","studio":"ROW1","date":"6/21","year":"2026","fq":"FY26 Q3","genre":"R"},{"title":"Princess Mononoke - Studio Ghibli Fest 2026","studio":"Fathom","date":"6/21","year":"2026","fq":"FY26 Q3","genre":"ADV"},{"title":"Klara And The Sun","studio":"Sony","date":"6/21","year":"2026","fq":"FY26 Q3","genre":""},{"title":"Clayface","studio":"Warner Bros.","date":"6/21","year":"2026","fq":"FY26 Q3","genre":"H"},{"title":"Wife & Dog","studio":"BLACK6","date":"6/21","year":"2026","fq":"FY26 Q3","genre":"S"},{"title":"Wildwood","studio":"Fathom","date":"6/21","year":"2026","fq":"FY26 Q3","genre":"ADV"},{"title":"Focker-In-Law","studio":"Universal","date":"6/21","year":"2026","fq":"FY26 Q3","genre":"C"},{"title":"Hershey","studio":"Angel","date":"6/21","year":"2026","fq":"FY26 Q3","genre":"D"},{"title":"Angry Birds Movie 3, The","studio":"Paramount","date":"6/21","year":"2026","fq":"FY26 Q3","genre":"FAM"},{"title":"Mr. Irrelevant","studio":"Paramount","date":"6/21","year":"2026","fq":"FY26 Q3","genre":"D"},{"title":"Jumanji: Open World","studio":"Sony","date":"6/21","year":"2026","fq":"FY26 Q3","genre":"C"},{"title":"Werwulf","studio":"FOC","date":"6/21","year":"2026","fq":"FY26 Q3","genre":"H"},{"title":"Place In Hell, A","studio":"Neon","date":"6/21","year":"2026","fq":"FY26 Q3","genre":"S"},{"title":"Gail Daughtry And The Celebrity Sex Pass","studio":"Sony Classics","date":"7/1","year":"2026","fq":"FY26 Q4","genre":"C"},{"title":"My Neighbor Totoro - Studio Ghibli Fest 2026","studio":"Fathom","date":"7/4","year":"2026","fq":"FY26 Q4","genre":"SE"},{"title":"Dhamaal 4","studio":"SHREE6","date":"7/4","year":"2026","fq":"FY26 Q4","genre":"C"},{"title":"Paw Patrol: The Dino Movie","studio":"Paramount","date":"7/4","year":"2026","fq":"FY26 Q4","genre":"ANI"},{"title":"End Of Oak Street, The","studio":"Warner Bros.","date":"7/4","year":"2026","fq":"FY26 Q4","genre":"A"},{"title":"Nimrods","studio":"FALLING1","date":"7/4","year":"2026","fq":"FY26 Q4","genre":""},{"title":"Brink Of War, The","studio":"Angel","date":"7/4","year":"2026","fq":"FY26 Q4","genre":"D"},{"title":"Practical Magic Film, A","studio":"Warner Bros.","date":"7/4","year":"2026","fq":"FY26 Q4","genre":"C"},{"title":"Uprising, The","studio":"FOC","date":"9/7","year":"2026","fq":"FY26 Q4","genre":"D"},{"title":"Hope (2026)","studio":"Neon","date":"9/7","year":"2026","fq":"FY26 Q4","genre":"S"},{"title":"Tom And Jerry: The Forbidden Compass","studio":"VPD","date":"9/7","year":"2026","fq":"FY26 Q4","genre":"C"},{"title":"Runner (2026)","studio":"Angel","date":"9/7","year":"2026","fq":"FY26 Q4","genre":"A"},{"title":"Passion Of The Christ, The (2026 Event)","studio":"Fathom","date":"9/7","year":"2026","fq":"FY26 Q4","genre":"D"},{"title":"Fix, The","studio":"BRIARCLIFF2","date":"9/7","year":"2026","fq":"FY26 Q4","genre":"A"},{"title":"Social Reckoning, The","studio":"Sony","date":"9/7","year":"2026","fq":"FY26 Q4","genre":"D"},{"title":"Other Mommy","studio":"Universal","date":"9/7","year":"2026","fq":"FY26 Q4","genre":"H"},{"title":"Gone With The Wind (2026 Event)","studio":"Fathom","date":"9/7","year":"2026","fq":"FY26 Q4","genre":"D"},{"title":"Guillermo Del Toro\'S Pan\'S Labyrinth 20Th Anniversary","studio":"Fathom","date":"9/7","year":"2026","fq":"FY26 Q4","genre":"S"},{"title":"Angel And The Badman","studio":"Angel","date":"9/7","year":"2026","fq":"FY26 Q4","genre":"W"},{"title":"Ebenezer: A Christmas Carol","studio":"Paramount","date":"9/7","year":"2026","fq":"FY26 Q4","genre":"D"},{"title":"Great Beyond, The","studio":"Warner Bros.","date":"9/7","year":"2026","fq":"FY26 Q4","genre":"ADV"},{"title":"Zero A.D.","studio":"Angel","date":"9/7","year":"2026","fq":"FY26 Q4","genre":"A"},{"title":"California Schemin\'","studio":"MAGENTA2","date":"10/12","year":"2026","fq":"FY27 Q1","genre":"C"},{"title":"Poetic License","studio":"ROW1","date":"10/12","year":"2026","fq":"FY27 Q1","genre":"C"},{"title":"Spirited Away 25Th Anniversary - Studio Ghibli Fest 2026","studio":"Fathom","date":"10/12","year":"2026","fq":"FY27 Q1","genre":"ADV"},{"title":"Hunger Games: Sunrise On The Reaping","studio":"Lionsgate","date":"10/12","year":"2026","fq":"FY27 Q1","genre":"ADV"},{"title":"November 1963","studio":"FALLING1","date":"11/11","year":"2026","fq":"FY27 Q1","genre":"S"},{"title":"Dune: Part Three","studio":"Warner Bros.","date":"11/11","year":"2026","fq":"FY27 Q1","genre":"SCIF"},{"title":"It\'S A Wonderful Life 80Th Anniversary","studio":"Fathom","date":"11/11","year":"2026","fq":"FY27 Q1","genre":"D"},{"title":"Nightingale, The (2027)","studio":"Sony","date":"1/1","year":"2027","fq":"FY27 Q2","genre":"D"},{"title":"Wishful Thinking","studio":"Sony Classics","date":"1/1","year":"2027","fq":"FY27 Q2","genre":"C"},{"title":"Narnia: The Magician\'S Nephew","studio":"NETFLIX1","date":"1/1","year":"2027","fq":"FY27 Q2","genre":"ADV"},{"title":"Untitled Mike Flanagan Exorcist Film","studio":"Universal","date":"1/1","year":"2027","fq":"FY27 Q2","genre":"H"},{"title":"Get Lite","studio":"Paramount","date":"1/1","year":"2027","fq":"FY27 Q2","genre":"D"},{"title":"Revenge Of La Llorona, The","studio":"Warner Bros.","date":"1/1","year":"2027","fq":"FY27 Q2","genre":""},{"title":"Air Bud Returns","studio":"CINEVERSE1","date":"1/18","year":"2027","fq":"FY27 Q2","genre":"FAM"},{"title":"K-Pop: The Debut","studio":"Paramount","date":"1/18","year":"2027","fq":"FY27 Q2","genre":"D"},{"title":"Live Like That","studio":"Sony","date":"1/18","year":"2027","fq":"FY27 Q2","genre":"FAM"},{"title":"Panic Carefully","studio":"Warner Bros.","date":"1/18","year":"2027","fq":"FY27 Q2","genre":"S"},{"title":"Godzilla X Kong: Supernova","studio":"Warner Bros.","date":"1/18","year":"2027","fq":"FY27 Q2","genre":"ADV"},{"title":"Day Drinker","studio":"Lionsgate","date":"1/18","year":"2027","fq":"FY27 Q2","genre":"A"},{"title":"Untitled F.A.S.T. Film","studio":"Warner Bros.","date":"1/18","year":"2027","fq":"FY27 Q2","genre":"A"},{"title":"Spaceballs: The New One","studio":"Amazon","date":"1/18","year":"2027","fq":"FY27 Q2","genre":"C"},{"title":"Sonic The Hedgehog 4","studio":"Paramount","date":"2/15","year":"2027","fq":"FY27 Q2","genre":"ANI"},{"title":"Wolf Creek: Legacy","studio":"CINEVERSE1","date":"2/15","year":"2027","fq":"FY27 Q2","genre":"S"},{"title":"Untitled James Wan Paranormal Activity","studio":"Paramount","date":"2/15","year":"2027","fq":"FY27 Q2","genre":"S"},{"title":"Catch, The","studio":"Universal","date":"2/15","year":"2027","fq":"FY27 Q2","genre":"C"},{"title":"Bad Fairies","studio":"Warner Bros.","date":"2/15","year":"2027","fq":"FY27 Q2","genre":"ANI"},{"title":"Spider-Man: Beyond The Spider-Verse","studio":"Sony","date":"2/15","year":"2027","fq":"FY27 Q2","genre":"ANI"},{"title":"Mummy Franchise, The","studio":"Universal","date":"2/15","year":"2027","fq":"FY27 Q2","genre":"ADV"},{"title":"Legend Of Zelda, The","studio":"Sony","date":"3/28","year":"2027","fq":"FY27 Q2","genre":"ADV"},{"title":"Monitor","studio":"SL","date":"3/28","year":"2027","fq":"FY27 Q2","genre":"H"},{"title":"How To Train Your Dragon 2","studio":"Universal","date":"5/9","year":"2027","fq":"FY27 Q3","genre":"ADV"},{"title":"Man Of Tomorrow","studio":"Warner Bros.","date":"5/9","year":"2027","fq":"FY27 Q3","genre":"ADV"},{"title":"Ocean\'S Prequel","studio":"Warner Bros.","date":"5/19","year":"2027","fq":"FY27 Q3","genre":""},{"title":"Quiet Place Part Iii, A","studio":"Paramount","date":"5/31","year":"2027","fq":"FY27 Q3","genre":""},{"title":"Untitled Minecraft Sequel, An","studio":"Warner Bros.","date":"6/20","year":"2027","fq":"FY27 Q3","genre":""},{"title":"Buds","studio":"Sony","date":"6/20","year":"2027","fq":"FY27 Q3","genre":"ANI"},{"title":"Untitled Nancy Meyers Film, An","studio":"Warner Bros.","date":"6/20","year":"2027","fq":"FY27 Q3","genre":"C"},{"title":"Teenage Mutant Ninja Turtles: Mutant Mayhem 2","studio":"Paramount","date":"7/4","year":"2027","fq":"FY27 Q4","genre":"ANI"},{"title":"Keanu Reeves Film, An","studio":"Warner Bros.","date":"7/4","year":"2027","fq":"FY27 Q4","genre":"A"},{"title":"Conjuring: First Communion, The","studio":"Warner Bros.","date":"7/4","year":"2027","fq":"FY27 Q4","genre":"H"},{"title":"Untitled Sony Pictures Animation","studio":"Sony","date":"9/6","year":"2027","fq":"FY27 Q4","genre":"ANI"},{"title":"Helldivers","studio":"Sony","date":"9/6","year":"2027","fq":"FY27 Q4","genre":""},{"title":"Untitled Event Film Directed By Daniels","studio":"Universal","date":"10/11","year":"2027","fq":"FY28 Q1","genre":""},{"title":"Untitled Gremlins Movie","studio":"Warner Bros.","date":"10/11","year":"2027","fq":"FY28 Q1","genre":""},{"title":"Lord Of The Rings: The Hunt For Gollum, The","studio":"Warner Bros.","date":"11/11","year":"2027","fq":"FY28 Q1","genre":"FAM"},{"title":"Housemaid\'S Secret, The","studio":"Lionsgate","date":"11/11","year":"2027","fq":"FY28 Q1","genre":"S"}];
+const SEG_COLORS={
+  'Studios':'#E87722','Pixar':'#E87722','Marvel':'#E87722','Lucasfilm':'#E87722','20th':'#E87722',
+  'Brand':'#003087','CSR':'#003087',
+  'Disney+':'#6B3FA0','Hulu':'#6B3FA0','Streaming':'#6B3FA0',
+  'ESPN':'#CC0000','Sports':'#CC0000','ABC':'#CC0000',
+  'Experiences':'#007A6E','Consumer Products':'#007A6E','Games':'#007A6E',
+  'Cross-Company':'#B8860B','Awards':'#888888'
+};
+function segClr(seg){for(const[k,c]of Object.entries(SEG_COLORS)){if(seg.includes(k))return c;}return'#555';}
+function fmtD(d){if(!d)return'';const p=d.split('-');if(p.length<3)return d;return parseInt(p[1])+'/'+parseInt(p[2]);}
+
+// ── HULU SLATE ───────────────────────────────────────────────
+const HULU_SLATE={
+  fq34_26:[
+    {t:"Never Change!",d:"6/17",c:"Film"},{t:"They Fight",d:"7/17",c:"Film"},
+    {t:"Not Suitable For Work S1",d:"6/2",c:"Drama"},{t:"The Bear S5",d:"6/25",c:"Drama"},
+    {t:"Furious S1",d:"7/27",c:"Drama"},{t:"The Shards S1",d:"8/5",c:"Drama"},
+    {t:"It's Always Sunny S18",d:"8/17",c:"Drama"},{t:"Adults S2",d:"8/27",c:"Drama"},
+    {t:"Drop: Snowfall Saga",d:"9/8",c:"Drama"},{t:"Reasonable Doubt S4",d:"9/17",c:"Drama"},
+    {t:"AHS S13",d:"Sep",c:"Drama"},
+    {t:"King of the Hill S15",d:"7/20",c:"Anim"},{t:"Futurama S14",d:"8/3",c:"Anim"},
+    {t:"Jamie Foxx Special",d:"Sep",c:"Stand-Up"},
+    {t:"Sports Illustrated Runway Show",d:"6/9",c:"Unscr"},{t:"Million Dollar Nannies S1",d:"6/17",c:"Unscr"},
+    {t:"House of Stassi S1",d:"Jul",c:"Unscr"},{t:"The Girls S1",d:"8/21",c:"Unscr"},
+    {t:"Killer in My Yearbook S1",d:"9/18",c:"Unscr"},{t:"Mormon Wives S5",d:"Sep",c:"Unscr"},
+    {t:"Chad Powers S2",d:"Sep",c:"Unscr"},
+    {t:"My Grandfather Charles Manson",d:"7/22",c:"Doc"},{t:"Travis Barker: Louder Than Fear",d:"Aug",c:"Doc"},
+    {t:"Billionaire Boys Club",d:"8/26",c:"Doc"},{t:"The Swan",d:"9/29",c:"Doc"},
+    {t:"Alice & Steve",d:"6/8",c:"Int'l"},{t:"A Shop For Killers S2",d:"Jul",c:"Int'l"},
+    {t:"Lollapalooza",d:"Jul",c:"Live Pass"},{t:"iHeart Radio Music Festival",d:"Sep",c:"Live Pass"},
+  ],
+  fq1_27:[
+    {t:"Phony S1",d:"10/20",c:"Drama"},{t:"Lowdown S2",d:"Oct",c:"Drama"},
+    {t:"All's Fair S2",d:"Nov",c:"Drama"},{t:"Only Murders S6",d:"12/8",c:"Drama"},
+    {t:"Family Guy Halloween Special",d:"Oct",c:"Anim"},{t:"Family Guy Holiday Special",d:"Nov",c:"Anim"},
+    {t:"Bob's Burgers Holiday Short",d:"Dec",c:"Anim"},
+    {t:"Bobby Lee: Finally",d:"Nov",c:"Comedy"},{t:"Shoresy S6",d:"Dec",c:"Comedy"},
+    {t:"Kardashians S8",d:"Oct",c:"Unscr"},{t:"Mormon Wives: OC S1",d:"Nov",c:"Unscr"},
+    {t:"The Circle S1",d:"11/17",c:"Unscr"},
+    {t:"Swipe Right on the Devil",d:"Oct",c:"Doc"},{t:"Clown Panic",d:"Oct",c:"Doc"},
+    {t:"Preppy Murder",d:"Nov",c:"Doc"},{t:"Boner Killer",d:"Nov",c:"Doc"},
+    {t:"FY27 AH Film #1",d:"Dec",c:"Film"},{t:"Mission: Yozakura Family S2B",d:"Oct",c:"Film"},
+    {t:"Austin City Limits",d:"Oct",c:"Live Pass"},
+  ],
+  fq2_27:[
+    {t:"The Spot S1",d:"1/13",c:"Drama"},{t:"The Land S1",d:"2/15",c:"Drama"},
+    {t:"Cry Wolf",d:"Feb",c:"Drama"},{t:"Paradise S3",d:"Mar",c:"Drama"},
+    {t:"A Very Young Frankenstein S1",d:"Mar",c:"Comedy"},{t:"Am I Being Unreasonable S3",d:"Jan",c:"Comedy"},
+    {t:"Andy Samberg Stand-Up Special",d:"Mar",c:"Stand-Up"},
+    {t:"Mormon Wives S6",d:"Mar",c:"Unscr"},{t:"Ring by Spring Break S1",d:"Mar",c:"Unscr"},
+    {t:"The Mob S1",d:"Mar",c:"Unscr"},{t:"Love Thy Nader S2",d:"Jan",c:"Unscr"},
+    {t:"Road to Sankofa",d:"Jan",c:"Doc"},{t:"Unt. 50 Cent Doc",d:"Feb",c:"Doc"},
+    {t:"13 Again",d:"Feb",c:"Doc"},
+    {t:"Painter",d:"Jan",c:"Film"},
+  ],
+  fq3_27:[
+    {t:"Disinherited S1",d:"Apr",c:"Drama"},{t:"Count My Lies",d:"May",c:"Drama"},
+    {t:"Beauty Broker S1",d:"Jun",c:"Drama"},
+    {t:"Malcolm in the Middle S2",d:"Apr",c:"Comedy"},{t:"FY27 Onyx Comedy #1",d:"Jun",c:"Comedy"},
+    {t:"Comedy 20th #2",d:"Jun",c:"Comedy"},
+    {t:"FY27 Medium Unscripted #2",d:"May",c:"Unscr"},{t:"Welcome to Wrexham S6",d:"May",c:"Unscr"},
+    {t:"FY27 Medium Unscripted #1",d:"Jun",c:"Unscr"},
+    {t:"Unt. Calvin Klein Doc",d:"Apr",c:"Doc"},{t:"Nancy Grace",d:"May",c:"Doc"},
+    {t:"Maestro",d:"Jun",c:"Doc"},
+    {t:"Romy and Michelle 2",d:"Apr",c:"Film"},{t:"Wrestle With Us",d:"Jun",c:"Film"},
+  ],
+  fq4_27:[
+    {t:"The Testaments S2",d:"Jul",c:"Drama"},{t:"Prison Break S1",d:"Jul",c:"Drama"},
+    {t:"Alien: Earth S2",d:"Aug",c:"Drama"},{t:"The Shards S2",d:"Aug",c:"Drama"},
+    {t:"FY27 Onyx Drama #1",d:"Sep",c:"Drama"},{t:"Seven Sisters S1",d:"Sep",c:"Drama"},
+    {t:"Adults S3",d:"Jul",c:"Comedy"},{t:"Schaffer/Manning S1",d:"Jul",c:"Comedy"},
+    {t:"King of the Hill S16",d:"Jul",c:"Anim"},
+    {t:"Kardashians S9",d:"Aug",c:"Unscr"},{t:"Mormon Wives S7",d:"Sep",c:"Unscr"},
+    {t:"Love U 2 Death",d:"Jul",c:"Doc"},{t:"Fall Guys",d:"Sep",c:"Doc"},
+    {t:"Such Brave Girls S3",d:"Jul",c:"Film"},{t:"FY27 Disney Japan x DTC",d:"Aug",c:"Film"},
+  ],
+  fq1_28:[
+    {t:"Conviction S1",d:"Oct",c:"Drama"},{t:"Far Cry S1",d:"Oct",c:"Drama"},
+    {t:"Drop S2",d:"Nov",c:"Drama"},{t:"Furious S2",d:"Dec",c:"Drama"},
+    {t:"It's Always Sunny S19",d:"Oct",c:"Comedy"},{t:"Only Murders S7",d:"Nov",c:"Comedy"},
+    {t:"Family Guy Halloween Special",d:"Oct",c:"Anim"},{t:"Futurama Holiday Special #1",d:"Nov",c:"Anim"},
+    {t:"Family Guy Holiday Special",d:"Nov",c:"Anim"},
+    {t:"Mormon Wives: OC S2",d:"Nov",c:"Unscr"},{t:"FY28 Medium Unscripted #1",d:"Dec",c:"Unscr"},
+    {t:"Unt. Luigi Doc",d:"Oct",c:"Doc"},{t:"Two Dragons",d:"Oct",c:"Doc"},
+    {t:"Unt. Savannah Bananas Doc",d:"Oct",c:"Doc"},
+  ],
+};
+
+const FQ_DEFS=[
+  {id:'fq34_26',fqs:['FY26 Q3','FY26 Q4'],label:'FY26 Q3–Q4',range:'Jun–Sep 2026',theme:'Summer tentpoles + World Cup'},
+  {id:'fq1_27',fqs:['FY27 Q1'],label:'FY27 Q1',range:'Oct–Dec 2026',theme:'Fall theatrical wave + Holiday',hot:true},
+  {id:'fq2_27',fqs:['FY27 Q2'],label:'FY27 Q2',range:'Jan–Mar 2027',theme:'Peak congestion — Feb stacks 4+ Tier 1',hot:true},
+  {id:'fq3_27',fqs:['FY27 Q3'],label:'FY27 Q3',range:'Apr–Jun 2027',theme:'Star Wars Celebration + Summer ramp'},
+  {id:'fq4_27',fqs:['FY27 Q4'],label:'FY27 Q4',range:'Jul–Sep 2027',theme:'Summer platform + fall TV slate'},
+  {id:'fq1_28',fqs:['FY28 Q1'],label:'FY28 Q1',range:'Oct–Dec 2027',theme:'Holiday close (limited source data)'},
+];
+
+const FQ_PREMIERES={
+  fq34_26:[
+    {name:'Hulu Animayhem (Summer)',date:'Summer'},
+    {name:'Get Real — Unscripted',date:'Summer'},
+  ],
+  fq1_27:[
+    {name:'Abbott Elementary S5',date:'10/1'},{name:"Grey's Anatomy S22",date:'10/9'},
+    {name:'9-1-1 S9 / Nashville',date:'10/9'},{name:'Murdaugh Murders',date:'10/15'},
+    {name:'Kardashians S7',date:'10/23'},{name:"All's Fair S1",date:'11/4'},
+    {name:'Mormon Wives S3',date:'11/13'},{name:'Jonas Brothers Holiday',date:'11/14'},
+    {name:'Beatles Anthology',date:'11/26'},{name:'Wimpy Kid 4',date:'12/5'},
+    {name:'Percy Jackson S2',date:'12/10'},{name:'End of an Era',date:'12/12'},
+  ],
+  fq2_27:[
+    {name:'Will Trent S4 / The Rookie S8',date:'1/6'},{name:'Tell Me Lies S3',date:'1/13'},
+    {name:'The Beauty S1',date:'1/21'},{name:'American Idol',date:'1/26'},
+    {name:'Wonder Man',date:'1/27'},{name:'Muppets Special',date:'2/4'},
+    {name:'Paradise S2',date:'2/23'},{name:'Scrubs Reboot',date:'2/25'},
+    {name:'Mormon Wives S4',date:'3/12'},{name:'Daredevil S2',date:'3/24'},
+    {name:'Love Overboard',date:'3/26'},
+  ],
+  fq3_27:[
+    {name:'Maul: Shadow Lord',date:'4/6'},{name:'The Testaments S1',date:'4/8'},
+    {name:'Malcolm in the Middle',date:'4/10'},{name:'Nikki Glaser',date:'4/24'},
+    {name:'Deli Boys S2',date:'5/28'},{name:'The Bear S5',date:'6/25'},
+  ],
+  fq4_27:[
+    {name:"X-Men '97 S2",date:'7/1'},{name:'King of the Hill S15',date:'7/20'},
+    {name:'Furious',date:'7/27'},{name:'The Shards',date:'8/5'},
+    {name:'Chad Powers S2',date:'8/19'},{name:'Adults S2',date:'8/27'},
+    {name:'Snowfall Spinoff',date:'9/8'},{name:'American Horror Story S13',date:'9/24'},
+  ],
+  fq1_28:[],
+};
+
+
+// ── COMPETITIVE TOGGLE ────────────────────────────────────────────────
+let showCompetitive = false;
+function toggleCompetitive(){
+  showCompetitive = !showCompetitive;
+  const btn = document.getElementById('comp-toggle-btn');
+  if(btn){ btn.classList.toggle('on', showCompetitive); btn.textContent = (showCompetitive ? '✦' : '🎬') + ' Competitive'; }
+  renderCalendarFQ();
+}
+
+function openCalendarReport(){
+  document.getElementById('cr-overlay').classList.add('open');
+  renderCalendarFQ();
+}
+function closeCalendarReport(){document.getElementById('cr-overlay').classList.remove('open');}
+
+function renderCalendarFQ(){
+  const grid=document.getElementById('cr-fq-grid');
+  let total=0;
+  grid.innerHTML=FQ_DEFS.map(fq=>{
+    const evts=MARKETING_CALENDAR.filter(e=>fq.fqs.includes(e.fq));
+    // tentpoles: Tier 1 or 2, not purely cultural
+    const tps=evts.filter(e=>(e.tier==='1'||e.tier==='2')&&e.type!=='Seasonal/Cultural'&&e.type!=='Awards').sort((a,b)=>a.start.localeCompare(b.start));
+    // always-on (sports + streaming tier 2 + CP)
+    const ao=evts.filter(e=>(e.type==='Sports'||(e.type==='Streaming'&&e.tier==='2')||e.type==='Consumer Products')&&e.tier!=='1');
+    // cultural
+    const cult=evts.filter(e=>e.type==='Seasonal/Cultural'||(!e.tier&&e.type!=='Tentpole'&&e.type!=='Brand Platform'));
+    const prems=FQ_PREMIERES[fq.id]||[];
+    total+=tps.length;
+
+    const tpHTML=tps.length?`<div class="fq-section-lbl">Tentpoles &amp; Platforms</div>`+tps.map(e=>{
+      const c=segClr(e.segment);
+      const nm=e.moment.replace(' (Theatrical)','').replace(' Marketing Launch','').replace(' - Brand Platform','').replace(' Brand Platform','').replace(' Surround','').replace(' Re-Release','*');
+      return `<div class="tp-card" style="border-left-color:${c}">
+        <div class="tp-name">${nm}</div>
+        <div class="tp-meta"><span class="tp-date">${fmtD(e.start)}</span>${e.tier?`<span class="tp-tier ${e.tier==='1'?'tp-t1':'tp-t2'}">T${e.tier}</span>`:''}</div>
+      </div>`;
+    }).join(''):'';
+
+    const premHTML=prems.length?`<div class="fq-section-lbl">Premieres &amp; TV</div><ul class="prem-list">`+prems.map(p=>`<li class="prem-item"><span class="prem-name">${p.name}</span><span class="prem-date">${p.date}</span></li>`).join('')+`</ul>`:'';
+
+    const aoHTML=ao.length?`<div class="fq-section-lbl">Always-On &amp; Sports</div><div class="pills">`+ao.map(e=>{
+      const c=segClr(e.segment);
+      const nm=e.moment.replace(' - Fall Live TV','').replace(' - Spring Live TV (2027)','').replace(' - Spring Live TV','').replace(' - Summer Campaign','').replace(' Campaign','').replace(' (Summer)','').replace(' (2026)','').replace(' (2027)','');
+      return `<span class="pill" style="background:${c}22;color:${c};border:1px solid ${c}44">${nm}</span>`;
+    }).join('')+`</div>`:'';
+
+    const cultTxts=cult.map(e=>e.moment.replace(/^(Cultural\/seasonal observance.*$)/,'').trim()).filter(Boolean).slice(0,10);
+    const cultHTML=cultTxts.length?`<div class="fq-section-lbl">Cultural (Untiered)</div><div class="cultural-txt">${cultTxts.join(' · ')}</div>`:'';
+
+    // Hulu Originals section
+    const huluItems = HULU_SLATE[fq.id] || [];
+    const huluHTML = huluItems.length ? `<div class="hulu-section"><div class="fq-section-lbl" style="color:#1CE783">Hulu Originals</div>`+huluItems.map(h=>`<div class="hulu-item"><span class="hulu-title">${h.t}</span><span class="hulu-date">${h.d}</span></div>`).join('')+`</div>` : '';
+
+    // Competitive section
+    const compEvts = showCompetitive ? COMPETITIVE_RELEASES.filter(c=>c.fq===fq.fqs[0]||(fq.fqs.length>1&&c.fq===fq.fqs[1])) : [];
+    const compHTML = compEvts.length ? `<div class="comp-section"><div class="fq-section-lbl">Competitive</div>`+compEvts.map(c=>`<div class="comp-item"><span class="comp-title">${c.title}</span><span class="comp-studio">${c.studio}</span></div>`).join('')+`</div>` : '';
+
+    return `<div class="fq-col">
+      <div class="fq-col-header">
+        <div class="fq-col-label">${fq.label}</div>
+        <div class="fq-col-range">${fq.range}</div>
+        <div class="fq-col-theme${fq.hot?' hot':''}">${fq.theme}</div>
+      </div>
+      <div class="fq-col-body">${tpHTML}${premHTML}${aoHTML}${cultHTML}${huluHTML}${compHTML}</div>
+    </div>`;
+  }).join('');
+  document.getElementById('cr-stat').textContent=`${MARKETING_CALENDAR.length} calendar moments`;
+}
+
+function exportCalendarCSV(){
+  const h=['Date','End Date','Moment/Campaign','Segment','Region','Type','Tier','Fiscal Quarter','CY Quarter','Notes'];
+  const rows=MARKETING_CALENDAR.map(e=>[e.start,e.end,e.moment,e.segment,e.region,e.type,e.tier,e.fq,e.quarter,e.notes].map(v=>`"${String(v||'').replace(/"/g,'""')}"`).join(','));
+  const csv='data:text/csv;charset=utf-8,'+encodeURIComponent([h.join(','),...rows].join('\n'));
+  const a=document.createElement('a');a.href=csv;a.download='Disney_Marketing_Calendar_'+new Date().toISOString().slice(0,10)+'.csv';a.click();
+}
+
+function exportCalendarPDF(){
+  const SC={'Studios':'#1a3a6e','Pixar':'#1a3a6e','Marvel':'#1a3a6e','Lucasfilm':'#1a3a6e','20th':'#1a3a6e','Brand':'#111','CSR':'#111','Disney+':'#006AC3','Hulu':'#006AC3','Streaming':'#006AC3','ESPN':'#CC0000','Sports':'#CC0000','ABC':'#CC0000','Experiences':'#2E7D32','Consumer Products':'#2E7D32','Cross-Company':'#5a3e8a','Awards':'#888'};
+  function sc(s){for(const[k,c]of Object.entries(SC)){if(s&&s.includes(k))return c;}return'#555';}
+  function fmtPD(d){if(!d)return'';const p=d.split('-');if(p.length<3)return d;return parseInt(p[1])+'/'+parseInt(p[2]);}
+  function nm(s){return(s||'').replace(' (Theatrical)','').replace(' Marketing Launch','').replace(' Brand Platform','').replace(' - Brand Platform','').replace(' Surround','').replace(' Re-Release','*').trim();}
+
+  const colsHTML=FQ_DEFS.map(fq=>{
+    const evts=MARKETING_CALENDAR.filter(e=>fq.fqs.includes(e.fq));
+    const tps=evts.filter(e=>e.type!=='Seasonal/Cultural'&&e.type!=='Sports'&&e.type!=='Streaming'&&(e.tier==='1'||e.tier==='2')).sort((a,b)=>a.start.localeCompare(b.start)).slice(0,8);
+    const prems=(FQ_PREMIERES[fq.id]||[]).slice(0,6);
+    const ao=evts.filter(e=>e.type==='Sports'||e.type==='Streaming').slice(0,4);
+    const cult=evts.filter(e=>e.type==='Seasonal/Cultural').map(e=>nm(e.moment)).filter(Boolean).slice(0,5);
+    const comp=showCompetitive?COMPETITIVE_RELEASES.filter(c=>fq.fqs.includes(c.fq)||(fq.fqs.length>1&&fq.fqs[1]===c.fq)).slice(0,5):[];
+    const tpH=tps.length?'<div class="sl">Tentpoles &amp; Platforms</div>'+tps.map(e=>{const c=sc(e.segment);return '<div class="card" style="border-left-color:'+c+'"><div class="cn">'+nm(e.moment)+'</div><div class="cm"><span class="cd">'+fmtPD(e.start)+'</span>'+(e.tier?'<span class="t'+e.tier+'">T'+e.tier+'</span>':'')+'</div></div>';}).join(''):'';
+    const premH=prems.length?'<div class="sl">Premieres &amp; TV</div><ul class="pl">'+prems.map(p=>'<li class="pi"><span class="pn">'+p.name+'</span><span class="pd">'+p.date+'</span></li>').join('')+'</ul>':'';
+    const aoH=ao.length?'<div class="sl">Always-On &amp; Sports</div><div class="pills">'+ao.map(e=>'<span class="pill" style="background:'+sc(e.segment)+'15;color:'+sc(e.segment)+';border:1px solid '+sc(e.segment)+'30">'+nm(e.moment)+'</span>').join('')+'</div>':'';
+    const cultH=cult.length?'<div class="sl">Cultural</div><div class="cult">'+cult.join(' &middot; ')+'</div>':'';
+    const huluPDF=(HULU_SLATE[fq.id]||[]).slice(0,10);
+    const huluH=huluPDF.length?'<div class="sl" style="color:#1CE783">Hulu Originals</div><ul class="pl">'+huluPDF.map(h=>'<li class="pi"><span class="pn" style="color:#1CE783">'+h.t+'</span><span class="pd">'+h.d+'</span></li>').join('')+'</ul>':'';
+    const compH=comp.length?'<div class="sl comp-lbl">Competitive</div>'+comp.map(c=>'<div class="ci"><span class="ct">'+c.title+'</span><span class="cs">'+c.studio+'</span></div>').join(''):'';
+    return '<div class="col"><div class="ch"><div class="cl">'+fq.label+'</div><div class="cr2">'+fq.range+'</div><div class="ct2'+(fq.hot?' hot':'')+' ">'+fq.theme+'</div></div><div class="cb">'+tpH+premH+aoH+cultH+huluH+compH+'</div></div>';
+  }).join('');
+
+  const pdfHTML='<!DOCTYPE html><html><head><meta charset="utf-8"><title>Global Disney Marketing Calendar</title>'
+  +'<style>*{margin:0;padding:0;box-sizing:border-box}'
+  +'@page{size:11in 8.5in landscape;margin:.22in .28in}'
+  +'html{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}'
+  +'body{font-family:\'Segoe UI\',Helvetica,Arial,sans-serif;font-size:6pt;color:#111;width:100%}'
+  +'#wrap{display:flex;flex-direction:column;width:10.44in;height:8.06in}'
+  +'.hdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:3px;flex-shrink:0}'
+  +'h1{font-size:13pt;font-weight:800;color:#002875;letter-spacing:-.3px;line-height:1.1}'
+  +'.sub{font-size:6.5pt;color:#E87722;margin:1px 0;font-weight:600}'
+  +'.meta{font-size:4.5pt;color:#777;line-height:1.5}'
+  +'.draft{font-size:6pt;color:#C00;font-weight:700}'
+  +'.leg{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:3px;padding:2px 0;border-bottom:1px solid #ddd;align-items:center;flex-shrink:0}'
+  +'.ll{font-size:5pt;font-weight:700;color:#555;margin-right:2px}'
+  +'.li{display:flex;align-items:center;gap:2px;font-size:4.5pt;color:#555}'
+  +'.ld{width:5px;height:5px;border-radius:50%;flex-shrink:0}'
+  +'.grid{display:grid;grid-template-columns:repeat(6,1fr);border:1px solid #bbb;border-radius:3px;overflow:hidden;flex:1;min-height:0}'
+  +'.col{border-right:1px solid #ddd;display:flex;flex-direction:column;overflow:hidden}'
+  +'.col:last-child{border-right:none}'
+  +'.ch{background:#f3f3f7;padding:3px 5px 2px;border-bottom:1px solid #ddd;flex-shrink:0}'
+  +'.cl{font-size:7pt;font-weight:800;color:#002875}'
+  +'.cr2{font-size:5pt;color:#777;margin-top:.5px}'
+  +'.ct2{font-size:4.5pt;color:#999;font-style:italic;line-height:1.3;margin-top:1px}'
+  +'.ct2.hot{color:#C00;font-weight:700;font-style:normal}'
+  +'.cb{padding:3px 4px;overflow:hidden;flex:1}'
+  +'.sl{font-size:4pt;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:#bbb;margin:3px 0 2px}'
+  +'.sl:first-child{margin-top:0}'
+  +'.comp-lbl{color:#8a6a9a}'
+  +'.card{border-left:2px solid #999;padding:2px 3px;margin-bottom:2px;background:#f7f7fa;border-radius:0 2px 2px 0}'
+  +'.cn{font-size:5.5pt;font-weight:700;color:#111;line-height:1.3}'
+  +'.cm{display:flex;align-items:center;gap:2px;margin-top:1px}'
+  +'.cd{font-size:4.5pt;color:#777}'
+  +'.t1{background:#FFF3CC;color:#7A4F00;font-size:4pt;font-weight:800;padding:0 2px;border-radius:2px}'
+  +'.t2{background:#E8F0FE;color:#1A3DB5;font-size:4pt;font-weight:800;padding:0 2px;border-radius:2px}'
+  +'.pl{margin:0;padding:0;list-style:none}'
+  +'.pi{display:flex;justify-content:space-between;padding:.5px 0;border-bottom:1px solid #f0f0f0;font-size:4.5pt;line-height:1.4}'
+  +'.pi:last-child{border:none}'
+  +'.pn{color:#222;flex:1}'
+  +'.pd{color:#888;white-space:nowrap;margin-left:2px;font-size:4pt}'
+  +'.pills{display:flex;flex-wrap:wrap;gap:2px}'
+  +'.pill{font-size:4pt;padding:1px 3px;border-radius:4px;font-weight:700;white-space:nowrap;line-height:1.5}'
+  +'.cult{font-size:4pt;color:#888;line-height:1.8}'
+  +'.ci{display:flex;justify-content:space-between;padding:.5px 0;border-bottom:1px solid #f5f0f7;font-size:4.5pt}'
+  +'.ci:last-child{border:none}'
+  +'.ct{color:#444;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}'
+  +'.cs{font-size:4pt;color:#9a7aaa;white-space:nowrap;margin-left:2px;font-weight:600}'
+  +'.foot{display:flex;justify-content:space-between;margin-top:2px;padding-top:2px;border-top:1px solid #ddd;font-size:4pt;color:#aaa;flex-shrink:0}'
+  +'.pbtn{position:fixed;bottom:14px;right:14px;background:#002875;color:#fff;border:none;border-radius:8px;padding:8px 18px;font-size:10pt;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.2);font-family:inherit}'
+  +'@media print{.pbtn{display:none}#wrap{transform:scale(var(--s,1));transform-origin:top left}}'
+  +'.hulu-sl{font-size:4pt;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:#1CE783;margin:3px 0 2px}'
+  +'</style></head><body>'
+  +'<div id="wrap">'
+  +'<div class="hdr"><div>'
+  +'<h1>Global Disney Marketing Calendar</h1>'
+  +'<div class="sub">One-view executive summary &middot; June 2026 &ndash; December 2027 &middot; CMO &amp; Marketing Leadership</div>'
+  +'<div class="meta">Fall \'26 &amp; Feb \'27 are the gravity centers &bull; cards = tentpoles &bull; pills = always-on/sports &bull; * = confirm date'+(showCompetitive?' &bull; <strong style="color:#5a3e8a">Competitive view ON</strong>':'')+'</div>'
+  +'</div><div class="draft">DRAFT FOR REVIEW</div></div>'
+  +'<div class="leg">'
+  +'<span class="ll">Segment:</span>'
+  +'<span class="li"><span class="ld" style="background:#1a3a6e"></span>Studios</span>'
+  +'<span class="li"><span class="ld" style="background:#111"></span>Brand</span>'
+  +'<span class="li"><span class="ld" style="background:#006AC3"></span>Disney+/Hulu</span>'
+  +'<span class="li"><span class="ld" style="background:#CC0000"></span>ESPN</span>'
+  +'<span class="li"><span class="ld" style="background:#2E7D32"></span>Experiences</span>'
+  +'<span class="li"><span class="ld" style="background:#5a3e8a"></span>Cross-Co.</span>'
+  +'<span style="margin-left:5px;font-size:4pt;color:#bbb">&bull; T1=enterprise tentpole &bull; T2=major release</span>'
+  +'</div>'
+  +'<div class="grid">'+colsHTML+'</div>'
+  +'<div class="foot">'
+  +'<span>Sources: Planning Calendars Living Doc (6/1/26), BOD synergy deck &bull; * confirm date &bull; Premiere detail FY27 only</span>'
+  +'<span>Generated '+new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})+'</span>'
+  +'</div></div>'
+  +'<button class="pbtn" onclick="window.print()">🖼️&nbsp;Print / Save PDF</button>'
+  +'<script>'
+  +'window.addEventListener(\'load\',function(){'
+  +'var wrap=document.getElementById(\'wrap\');if(!wrap)return;'
+  +'var availH=(8.5-0.44)*96,availW=(11-0.56)*96;'
+  +'var rH=wrap.scrollHeight,rW=wrap.scrollWidth;'
+  +'if(rH>availH||rW>availW){'
+  +'var s=Math.min(availH/rH,availW/rW);'
+  +'wrap.style.transform=\'scale(\'+s+\')\';'
+  +'wrap.style.transformOrigin=\'top left\';'
+  +'wrap.style.width=(availW/s)+\'px\';'
+  +'document.documentElement.style.setProperty(\'--s\',s);}'
+  +'});'
+  +'<\/scr'+'ipt>'
+  +'</body></html>';
+
+  const w=window.open('','_blank','width=1250,height=820');
+  w.document.write(pdfHTML);
+  w.document.close();
+}
+</script>
+</body></html>
