@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DMO — Executive Overview · The Walt Disney Company</title>
+<style>
+:root{--bg:#06060E;--surface:#10101A;--surface2:#14141F;--border:#1E1E2C;--gold:#C8A84B;--gold-l:rgba(200,168,75,.14);--eyebrow:rgba(200,168,75,.65);--blue:#3D7BCC;--blue-l:rgba(61,123,204,.14);--text:#F0EFE8;--muted:#8A8A96;--subtle:#3A3A54;--espn:#F0584F;--exp:#5BBF5B;--intl:#9B7ED9;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;padding:40px 32px;max-width:1140px;margin:0 auto;line-height:1.5;-webkit-font-smoothing:antialiased}
+header{border-bottom:1px solid var(--border);padding-bottom:20px;margin-bottom:28px}
+.eyebrow{color:var(--eyebrow);font-size:12px;letter-spacing:.22em;text-transform:uppercase;font-weight:600;margin-bottom:8px}
+h1{font-size:28px;font-weight:600;letter-spacing:.2px}
+.sub{color:var(--muted);font-size:14px;margin-top:6px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:30px}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px}
+.kpi .l{color:var(--muted);font-size:12px;letter-spacing:.04em;text-transform:uppercase}
+.kpi .v{font-size:32px;font-weight:600;color:var(--gold);margin-top:4px}
+h2{font-size:13px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:0 0 16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:14px;margin-bottom:34px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px 20px}
+.ch{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--border);padding-bottom:10px;margin-bottom:10px}
+.seg{font-weight:600;font-size:15px;color:var(--gold)}
+.cnt{font-size:12px;color:var(--muted)}
+.own{font-size:13px;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--gold);display:inline-block}
+ul{list-style:none} li{font-size:13.5px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04);display:flex;align-items:center;gap:10px}
+li:last-child{border-bottom:none}
+.b{font-size:10px;font-weight:700;padding:1px 7px;border-radius:5px;flex:none;letter-spacing:.03em}
+.b1{background:var(--gold-l);color:var(--gold);border:1px solid rgba(200,168,75,.35)}
+.b2{background:var(--blue-l);color:#8FB6EE;border:1px solid rgba(61,123,204,.3)}
+.bu{background:rgba(138,138,150,.12);color:var(--muted);border:1px solid var(--subtle)}
+.brow{display:flex;align-items:center;gap:14px;font-size:13.5px;margin-bottom:11px}
+.bl{width:210px;color:var(--muted)}
+.bartrk{flex:1;height:10px;background:var(--surface2);border-radius:5px;overflow:hidden}
+.bar{display:block;height:100%;background:var(--gold);border-radius:5px}
+.bv{font-weight:600;width:24px;text-align:right}
+.note{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:10px;padding:14px 18px;font-size:13px;color:var(--muted);margin-top:8px}
+.legend{display:flex;gap:16px;font-size:12px;color:var(--muted);margin:-6px 0 24px}
+.legend span{display:flex;align-items:center;gap:6px}
+footer{margin-top:32px;color:var(--subtle);font-size:12px;border-top:1px solid var(--border);padding-top:16px}
+.dt-intro{font-size:13px;color:var(--muted);margin:-6px 0 18px;line-height:1.55}
+.dt-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:34px}
+@media(max-width:900px){.dt-grid{grid-template-columns:1fr}}
+.dt-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px 20px;border-top:3px solid var(--dt-accent)}
+.dt-card .ch{margin-bottom:12px}
+.dt-card .seg{color:var(--dt-accent)}
+.dt-phase{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:5px;margin-bottom:14px}
+.dt-phase.scoping{background:rgba(138,138,150,.14);color:var(--muted);border:1px solid var(--subtle)}
+.dt-steps{display:flex;gap:4px;margin-bottom:14px}
+.dt-step{flex:1;height:4px;border-radius:2px;background:var(--surface2)}
+.dt-step.done{background:var(--dt-accent);opacity:.85}
+.dt-step.cur{background:var(--dt-accent);opacity:.45}
+.dt-meta{font-size:12.5px;color:var(--muted);margin-bottom:8px}
+.dt-meta b{color:var(--text);font-weight:600}
+.dt-next{font-size:13px;color:var(--text);margin-bottom:10px;line-height:1.45}
+.dt-next span{color:var(--muted);font-size:11px;letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:3px}
+.dt-flag{font-size:12px;color:var(--muted);padding-top:10px;border-top:1px solid rgba(255,255,255,.05);line-height:1.4}
+.dt-flag b{color:#e8c877;font-weight:600}
+.dt-summary{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:18px}
+.dt-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 16px;flex:1;min-width:140px}
+.dt-stat .l{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.dt-stat .v{font-size:22px;font-weight:600;color:var(--gold);margin-top:2px}
+</style></head><body>
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:22px">
+<a href="index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text)"><span style="background:var(--gold);color:#1a1300;font-weight:700;font-size:12px;padding:4px 8px;border-radius:6px;letter-spacing:.05em">DMO</span><span style="font-size:13px;color:var(--muted)">Disney Marketing Operations</span></a>
+<a href="index.html" style="font-size:13px;color:var(--gold);text-decoration:none">&larr; Back to hub</a>
+</div>
+<header><div class="eyebrow">The Walt Disney Company · Global Marketing</div>
+<h1>Disney Marketing Operations — Executive Overview</h1>
+<div class="sub">Campaign portfolio · FY26 Q3 – FY28 Q1 · structured on the global marketing operating model</div></header>
+
+<div class="kpis">
+<div class="kpi"><div class="l">Active campaigns</div><div class="v">45</div></div>
+<div class="kpi"><div class="l">Owners assigned</div><div class="v">6</div></div>
+<div class="kpi"><div class="l">Segments</div><div class="v">6</div></div>
+<div class="kpi"><div class="l">Calendar moments</div><div class="v">103</div></div>
+</div>
+
+<h2>Discovery Tour — segment onboarding</h2>
+<p class="dt-intro">MO&amp;T grow pillar · time-boxed listening tour for segments not yet on the OS · produces a per-segment readout and onboarding roadmap onto the calendar and Claude program</p>
+<div class="dt-summary">
+  <div class="dt-stat"><div class="l">Segments live on OS</div><div class="v">1 / 6</div></div>
+  <div class="dt-stat"><div class="l">Discovery targets</div><div class="v">3</div></div>
+  <div class="dt-stat"><div class="l">Readouts complete</div><div class="v">0</div></div>
+  <div class="dt-stat"><div class="l">Tour window</div><div class="v" style="font-size:16px;margin-top:6px">Q3 FY26</div></div>
+</div>
+<div class="dt-grid">
+
+<div class="dt-card" style="--dt-accent:var(--espn)">
+  <div class="ch"><span class="seg">ESPN</span><span class="cnt">Step 1 of 5</span></div>
+  <div class="dt-phase scoping">Scoping</div>
+  <div class="dt-steps"><span class="dt-step done"></span><span class="dt-step"></span><span class="dt-step"></span><span class="dt-step"></span><span class="dt-step"></span></div>
+  <div class="dt-meta"><b>Partner:</b> Tina Thornton</div>
+  <div class="dt-meta"><b>Calendar:</b> 7 Tier 1/2 moments mapped · health unset</div>
+  <div class="dt-next"><span>Next</span>Finalize tour plan and standard question set · schedule listening sessions</div>
+  <div class="dt-flag"><b>Watch:</b> ESPN on Disney+ live-sports unlock scenario is board-adjacent — coordinate Discovery Tour with DTC programming/rights work</div>
+</div>
+
+<div class="dt-card" style="--dt-accent:var(--exp)">
+  <div class="ch"><span class="seg">Experiences</span><span class="cnt">Step 1 of 5</span></div>
+  <div class="dt-phase scoping">Scoping</div>
+  <div class="dt-steps"><span class="dt-step done"></span><span class="dt-step"></span><span class="dt-step"></span><span class="dt-step"></span><span class="dt-step"></span></div>
+  <div class="dt-meta"><b>Partner:</b> Scott Hudgins</div>
+  <div class="dt-meta"><b>Calendar:</b> 2 Tier 2 moments mapped · parks/DSE visitation focus</div>
+  <div class="dt-next"><span>Next</span>Build readout template · define what standardizes vs. stays local for parks ops</div>
+  <div class="dt-flag">Relationship established via global marketing org · tour dates not yet locked</div>
+</div>
+
+<div class="dt-card" style="--dt-accent:var(--intl)">
+  <div class="ch"><span class="seg">International</span><span class="cnt">Step 0 of 5</span></div>
+  <div class="dt-phase scoping">Scoping</div>
+  <div class="dt-steps"><span class="dt-step cur"></span><span class="dt-step"></span><span class="dt-step"></span><span class="dt-step"></span><span class="dt-step"></span></div>
+  <div class="dt-meta"><b>Partner:</b> TBC — confirm International marketing lead</div>
+  <div class="dt-meta"><b>Calendar:</b> Not yet on domestic spine · domestic-first pilot</div>
+  <div class="dt-next"><span>Next</span>Name the International partner · decide onboarding-roadmap format that feeds Calendar + Claude SteerCo</div>
+  <div class="dt-flag"><b>Blocker:</b> Lead unconfirmed · Claude rollout is domestic Q4 FY26 — International is a future cycle</div>
+</div>
+
+</div>
+
+<h2>Campaign portfolio by segment</h2>
+<div class="legend"><span><span class="b b1">T1</span> Enterprise tentpole</span><span><span class="b b2">T2</span> Major release</span><span><span class="b bu">—</span> Untiered</span></div>
+<div class="grid"><div class="card">
+      <div class="ch"><span class="seg">Studios</span><span class="cnt">10</span></div>
+      <div class="own"><span class="dot"></span>Martha Morrison</div>
+      <ul><li><span class="b b1">T1</span>Moana (Live-Action)</li><li><span class="b b1">T1</span>The Mandalorian & Grogu</li><li><span class="b b1">T1</span>Avengers: Doomsday</li><li><span class="b b1">T1</span>Toy Story 5</li><li><span class="b b1">T1</span>Star Wars: A New Hope 50th</li><li><span class="b b1">T1</span>Star Wars Celebration</li><li><span class="b b2">T2</span>The Devil Wears Prada 2</li><li><span class="b b2">T2</span>Gatto</li><li><span class="b b2">T2</span>Avengers: Endgame Re-Release</li><li><span class="b b2">T2</span>Ice Age: Boiling Point</li></ul></div><div class="card">
+      <div class="ch"><span class="seg">Television & Streaming</span><span class="cnt">15</span></div>
+      <div class="own"><span class="dot"></span>Shannon Ryan</div>
+      <ul><li><span class="b b1">T1</span>'The Land' Marketing Launch</li><li><span class="b b2">T2</span>Get Real — Reality Campaign</li><li><span class="b b2">T2</span>Zombies 5 / Descendants</li><li><span class="b b2">T2</span>Drama Campaign</li><li><span class="b b2">T2</span>Hulu Black Friday 2026</li><li><span class="b b2">T2</span>Throwback Campaign</li><li><span class="b b2">T2</span>Huluween</li><li><span class="b b2">T2</span>Oscars (ABC Telecast)</li><li><span class="b b2">T2</span>Hulu & D+ Late Summer Promo</li><li><span class="b b2">T2</span>Hulu Black Friday 2027</li><li><span class="b b2">T2</span>Hulu Animayhem</li><li><span class="b b2">T2</span>D+/Hulu Price Increase — Effective</li><li><span class="b b2">T2</span>D+/Hulu Price Increase — Notice</li><li><span class="b b2">T2</span>Verts (Vertical Video)</li><li><span class="b b2">T2</span>Hotstar Migration</li></ul></div><div class="card">
+      <div class="ch"><span class="seg">ESPN</span><span class="cnt">7</span></div>
+      <div class="own"><span class="dot"></span>Tina Thornton</div>
+      <ul><li><span class="b b1">T1</span>Super Bowl LXI Surround</li><li><span class="b bu">—</span>FIFA World Cup 26</li><li><span class="b b2">T2</span>League Partnerships & EDTC</li><li><span class="b b2">T2</span>NFL Fall Live TV 2027</li><li><span class="b b2">T2</span>NBA Playoffs Spring</li><li><span class="b b2">T2</span>NFL Fall Live TV</li><li><span class="b b2">T2</span>NBA Playoffs Spring 2027</li></ul></div><div class="card">
+      <div class="ch"><span class="seg">Experiences</span><span class="cnt">2</span></div>
+      <div class="own"><span class="dot"></span>Scott Hudgins</div>
+      <ul><li><span class="b b2">T2</span>Mexico & Las Vegas</li><li><span class="b b2">T2</span>Parks & DSE Visitation</li></ul></div><div class="card">
+      <div class="ch"><span class="seg">Consumer Products</span><span class="cnt">3</span></div>
+      <div class="own"><span class="dot"></span>Ron Faris</div>
+      <ul><li><span class="b b2">T2</span>CP Key Month (Holiday)</li><li><span class="b b2">T2</span>Halloween & Seasonal Product</li><li><span class="b b2">T2</span>CP Key Month (Summer)</li></ul></div><div class="card">
+      <div class="ch"><span class="seg">Enterprise / Cross-Company</span><span class="cnt">8</span></div>
+      <div class="own"><span class="dot"></span>Joanna Balikian</div>
+      <ul><li><span class="b b1">T1</span>Summer of Disney 2026</li><li><span class="b b1">T1</span>Summer of Disney 2027</li><li><span class="b b1">T1</span>Holiday Brand Platform 2026</li><li><span class="b b1">T1</span>Holiday Brand Platform 2027</li><li><span class="b b1">T1</span>Project Gemini</li><li><span class="b b2">T2</span>San Diego Comic-Con 2027</li><li><span class="b b2">T2</span>Fortnite Integration</li><li><span class="b b2">T2</span>San Diego Comic-Con</li></ul></div></div>
+
+<h2>Campaigns by segment</h2>
+<div class="brow"><span class="bl">Television & Streaming</span><span class="bartrk"><span class="bar" style="width:100%"></span></span><span class="bv">15</span></div><div class="brow"><span class="bl">Studios</span><span class="bartrk"><span class="bar" style="width:67%"></span></span><span class="bv">10</span></div><div class="brow"><span class="bl">Enterprise / Cross-Company</span><span class="bartrk"><span class="bar" style="width:53%"></span></span><span class="bv">8</span></div><div class="brow"><span class="bl">ESPN</span><span class="bartrk"><span class="bar" style="width:47%"></span></span><span class="bv">7</span></div><div class="brow"><span class="bl">Consumer Products</span><span class="bartrk"><span class="bar" style="width:20%"></span></span><span class="bv">3</span></div><div class="brow"><span class="bl">Experiences</span><span class="bartrk"><span class="bar" style="width:13%"></span></span><span class="bv">2</span></div>
+
+<div class="note"><b style="color:var(--text)">Campaign health is intentionally not shown.</b> Health (RAG) is set by each campaign owner at the bi-monthly review — a status signal nobody maintains erodes trust. Status reflects planning stage; owners default to segment leaders pending campaign-lead assignment.</div>
+
+<footer>Source: Disney Marketing Operations Hub (Airtable) · Discovery Tour status from MO&amp;T operating model · Prototype / working demo · Updated June 26, 2026</footer>
+</body></html>
