@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Strategy HQ — DMO</title>
+<style>
+:root{color-scheme:light;--bg:#f5f6f9;--card:#fff;--ink:#1b1d22;--muted:#6b7280;--line:#e6e7ec;
+ --blue:#2a3bd6;--blue2:#6a2bd6;--link:#2563c9;--gold:#e0a93b;--green:#1f7a3d;--red:#b3261e;
+ --marvel:#b3261e;--pixar:#1f5fa8;--luca:#1c1c28;--fox:#C8A24B;--disney:#5b3fa3;--wdas:#7b3fb0;}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:14px}
+button{font-family:inherit;cursor:pointer}
+.nav{background:linear-gradient(90deg,var(--blue),var(--blue2));color:#fff;height:56px;display:flex;align-items:center;padding:0 22px;position:sticky;top:0;z-index:40}
+.logo{font-weight:900;font-size:20px;letter-spacing:1px;background:linear-gradient(90deg,#ffd24d,#ff7ad9,#7ad7ff);-webkit-background-clip:text;background-clip:text;color:transparent;padding:3px 6px;border-radius:6px;border:1px solid rgba(255,255,255,.35)}
+.nav .items{margin-left:34px;display:flex;gap:24px;font-size:13.5px}
+.nav .items a{color:#e7e9ff;text-decoration:none;padding:18px 0;border-bottom:3px solid transparent}
+.nav .items a.on{color:#fff;border-bottom-color:#fff;font-weight:600}
+.nav .sp{flex:1}
+.nav .act{display:flex;gap:9px}
+.nav .act button{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.3);color:#fff;font-weight:600;font-size:12px;padding:7px 13px;border-radius:8px}
+.nav .act button:hover{background:rgba(255,255,255,.28)}
+.nav .launch{margin-right:14px;width:34px;height:34px;border-radius:8px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.14);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.nav .launch:hover{background:rgba(255,255,255,.3)}
+.appmenu{position:fixed;top:52px;left:16px;z-index:70;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 16px 44px rgba(20,24,60,.22);padding:10px;width:308px;display:none}
+.appmenu.open{display:block}
+.appmenu .amh{font-size:10.5px;text-transform:uppercase;letter-spacing:.6px;color:#8a93a8;padding:6px 8px 6px;font-weight:800}
+.appmenu a{display:flex;align-items:center;gap:11px;padding:9px 10px;border-radius:9px;text-decoration:none;color:#26303f}
+.appmenu a:hover{background:#f1f3f9}.appmenu a.on{background:#eef0ff}
+.appmenu .ai{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.appmenu .at{font-size:13px;font-weight:700}.appmenu .ad{font-size:11px;color:var(--muted)}
+.sub{background:#eef0f5;border-bottom:1px solid var(--line);padding:11px 26px;font-size:14px;color:#3a4356;font-weight:600}
+.wrap{max-width:1180px;margin:0 auto;padding:22px 26px 60px}
+h2{font-size:18px;font-weight:800;margin:26px 0 14px}
+h2:first-child{margin-top:6px}
+.recent{display:grid;grid-template-columns:1fr 2fr;gap:18px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.ph{background:#eef0f5;padding:11px 16px;font-weight:700;font-size:13px;color:#3a4356;display:flex;align-items:center;gap:8px}
+.ph .dot{width:8px;height:8px;border-radius:50%;background:var(--gold)}
+.pb{padding:6px 16px 12px}
+.pl-row{display:grid;grid-template-columns:1.4fr 1.6fr auto;gap:10px;padding:10px 0;border-top:1px solid var(--line);align-items:start;font-size:13px}
+.pl-row:first-child{border-top:none}
+.pl-title{font-weight:700;color:var(--link);cursor:pointer}
+.pl-plan a{display:block;color:var(--link);cursor:pointer;padding:1px 0}
+.pl-plan a::before{content:"\2022";color:var(--gold);margin-right:6px}
+.pl-time{color:var(--muted);font-size:11.5px;text-align:right;white-space:nowrap}
+.empty{color:var(--muted);font-size:13px;padding:18px 4px}
+.toolbar{display:flex;align-items:center;gap:12px;margin:0 0 14px}
+.search{flex:1;max-width:320px;display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:8px 14px}
+.search input{border:none;outline:none;flex:1;font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:11px;overflow:hidden;cursor:pointer;transition:.15s}
+.card:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(20,24,60,.12)}
+.key{height:150px;display:flex;align-items:flex-end;padding:10px;color:#fff;position:relative}
+.key .badge{position:absolute;top:9px;right:9px;font-size:9px;font-weight:800;background:rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.4);padding:2px 7px;border-radius:10px;text-transform:uppercase;letter-spacing:.4px}
+.key .kt{font-weight:800;font-size:15px;line-height:1.15;text-shadow:0 1px 6px rgba(0,0,0,.4)}
+.cmeta{padding:9px 11px 11px}
+.cstudio{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
+.cdates{font-size:12px;margin-top:5px;color:#3a4356}.cdates b{color:var(--ink)}
+.stchip{display:inline-block;margin-top:7px;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px}
+.st-active{background:#eaf5ee;color:var(--green)} .st-planning{background:#fbf3e2;color:#9a6700} .st-complete{background:#eef3fb;color:var(--pixar)} .st-none{background:#eef0f3;color:#8a93a0}
+.hl-panel{margin-top:6px;display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.hl-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.hl-card .ht{font-weight:800;font-size:14px;margin-bottom:2px;cursor:pointer}
+.hl-card .hs{font-size:11px;color:var(--muted);margin-bottom:10px}
+.hl-stats{display:flex;gap:8px;margin-bottom:10px}
+.hl-stats .b{flex:1;text-align:center;background:#f5f6fb;border:1px solid var(--line);border-radius:8px;padding:7px 4px}
+.hl-stats .b .n{font-size:17px;font-weight:800;color:var(--blue)}.hl-stats .b .l{font-size:9.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
+.hl-card .full{font-size:12px;color:var(--link);font-weight:700;cursor:pointer}.hl-card .full::after{content:" \2192"}
+.hstats{display:flex;gap:10px;margin:4px 0 10px}
+.hstats .b{flex:1;text-align:center;background:#f5f6fb;border:1px solid var(--line);border-radius:9px;padding:10px 6px}
+.hstats .b .n{font-size:20px;font-weight:800;color:var(--blue)}.hstats .b .l{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.pillars{margin:4px 0 0 18px}.pillars li{font-size:13px;line-height:1.5;color:#26303f;margin-bottom:3px}
+.hl-list{margin:4px 0 0 18px}.hl-list li{font-size:13px;line-height:1.55;color:#26303f;margin-bottom:4px}
+/* overlay */
+.ov{position:fixed;inset:0;background:rgba(18,20,40,.5);z-index:200;display:none;align-items:flex-start;justify-content:center;padding:30px 16px;overflow-y:auto;backdrop-filter:blur(2px)}
+.ov.open{display:flex}
+.prof{background:var(--card);border-radius:14px;width:100%;max-width:900px;overflow:hidden}
+.prof .top{background:linear-gradient(90deg,var(--blue),var(--blue2));color:#fff;padding:18px 24px;display:flex;align-items:flex-start;gap:14px}
+.prof .top .t{flex:1}.prof .top h3{font-size:21px;font-weight:800}.prof .top .meta{font-size:12.5px;color:#dfe3ff;margin-top:4px}
+.prof .top button{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);color:#fff;border-radius:8px;padding:7px 12px;font-weight:600;font-size:12px}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);padding:0 18px;background:#fafbff}
+.tabs button{background:none;border:none;padding:12px 14px;font-size:13px;font-weight:600;color:var(--muted);border-bottom:3px solid transparent}
+.tabs button.on{color:var(--blue);border-bottom-color:var(--blue)}
+.pbody{padding:20px 24px 28px}
+.sec{margin-bottom:18px}
+.sec h4{font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:#8a93a8;margin-bottom:6px}
+.sec p{font-size:13.5px;line-height:1.6;color:#26303f}
+.posi{background:#f3f1fb;border-left:3px solid var(--blue2);padding:12px 15px;border-radius:8px;font-size:15px;font-weight:600;color:#2a2350;line-height:1.45}
+.gtm{border-collapse:collapse;width:100%}
+.gtm td{border:1px solid var(--line);padding:8px 11px;font-size:12.5px;vertical-align:top}
+.gtm .ph2{font-weight:700;color:var(--blue);white-space:nowrap}.gtm .win{color:var(--muted);white-space:nowrap}
+.leads{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.leadbox{background:#fafbff;border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.leadbox .lh{font-size:10.5px;text-transform:uppercase;letter-spacing:.5px;color:#8a93a8;margin-bottom:3px}
+.leadbox .lv{font-size:12.5px;color:#26303f;line-height:1.4}
+.muted{color:var(--muted)} .prototype{font-size:11px;color:#9a6700;background:#fbf3e2;border:1px solid #ecd9a3;padding:2px 8px;border-radius:10px;font-weight:700}
+/* assistant */
+.asstbtn{position:fixed;bottom:22px;right:22px;z-index:60;background:linear-gradient(90deg,var(--blue),var(--blue2));color:#fff;border:none;border-radius:26px;padding:13px 20px;font-weight:700;font-size:14px;box-shadow:0 8px 26px rgba(42,59,214,.4)}
+.asst{position:fixed;bottom:22px;right:22px;width:380px;max-width:calc(100vw - 32px);height:520px;max-height:calc(100vh - 90px);background:var(--card);border:1px solid var(--line);border-radius:16px;z-index:61;display:none;flex-direction:column;overflow:hidden;box-shadow:0 18px 50px rgba(20,24,60,.3)}
+.asst.open{display:flex}
+.ahd{background:linear-gradient(90deg,var(--blue),var(--blue2));color:#fff;padding:13px 16px;display:flex;align-items:center;gap:9px}
+.ahd h3{font-size:14px;flex:1}.ahd .x{background:rgba(255,255,255,.2);border:none;color:#fff;border-radius:7px;width:26px;height:26px;font-size:14px}
+.athread{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px}
+.am{max-width:90%;font-size:13px;line-height:1.5}
+.am.u{align-self:flex-end;background:var(--blue);color:#fff;padding:9px 13px;border-radius:13px 13px 4px 13px}
+.am.b{align-self:flex-start;background:#f1f3f9;border:1px solid var(--line);padding:9px 13px;border-radius:13px 13px 13px 4px}
+.am.b a.act{color:var(--blue);font-weight:700;cursor:pointer;border-bottom:1px solid var(--gold)}
+.am.b table{border-collapse:collapse;margin-top:6px;width:100%}.am.b td{border:1px solid var(--line);padding:4px 8px;font-size:11.5px}
+.achips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.achip{font-size:11px;background:#eef0f8;border:1px solid var(--line);border-radius:14px;padding:5px 10px;color:#3a4356}.achip:hover{border-color:var(--blue);color:var(--blue)}
+.ain{display:flex;gap:8px;padding:11px;border-top:1px solid var(--line)}
+.ain input{flex:1;border:1px solid var(--line);border-radius:10px;padding:9px 12px;font-size:13px;outline:none}.ain input:focus{border-color:var(--blue)}
+.ain button{background:var(--blue);color:#fff;border:none;border-radius:10px;padding:0 15px;font-weight:700}
+/* report */
+.rwrap{background:#fff;width:100%;max-width:780px;border-radius:8px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.rtoolbar{display:flex;gap:8px;align-items:center;padding:11px 16px;background:#eef0f5;border-bottom:1px solid var(--line)}
+.rtoolbar .rt{flex:1;font-weight:700;font-size:12px;color:#33405a}
+.rtoolbar button{border:none;border-radius:7px;padding:7px 13px;font-size:11.5px;font-weight:700}.rtoolbar .print{background:var(--blue);color:#fff}.rtoolbar .close{background:#dfe2ea;color:#55606e}
+.sheet{padding:34px 40px 44px;font-family:Calibri,'Segoe UI',sans-serif;color:#1a1a1a}
+.sheet .hd{display:flex;align-items:center;gap:10px;border-bottom:3px solid var(--blue2);padding-bottom:10px;margin-bottom:14px}
+.sheet .hd .ti{font-size:20px;font-weight:800;color:var(--blue)}.sheet .hd .dt{margin-left:auto;font-size:11px;color:#7a8398}
+.sheet h4{font-size:11.5px;text-transform:uppercase;letter-spacing:.6px;color:#8a93a8;margin:16px 0 6px;border-bottom:1px solid #eee;padding-bottom:3px}
+.sheet p{font-size:13px;line-height:1.55;margin-bottom:5px}
+.sheet .posi{font-size:15px}.sheet table{width:100%;border-collapse:collapse;margin-top:4px}.sheet td{border:1px solid #e7eaf0;padding:6px 9px;font-size:12px}
+.sheet .rfoot{margin-top:22px;border-top:1px solid #e3e7ee;padding-top:8px;font-size:10.5px;color:#9aa3b5}
+@media print{.nav,.sub,.asstbtn,.asst,.rtoolbar,.ov.open>*:not(.rwrap){display:none!important}.wrap{display:none!important}.ov{position:static!important;display:block!important;background:#fff;padding:0}.rwrap{max-width:100%;box-shadow:none;border-radius:0}.sheet{padding:0}}
+</style></head>
+<body>
+<div class="nav">
+  <button class="launch" id="launch" title="DMO tools"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><rect x="0" y="0" width="4" height="4" rx="1"/><rect x="6" y="0" width="4" height="4" rx="1"/><rect x="12" y="0" width="4" height="4" rx="1"/><rect x="0" y="6" width="4" height="4" rx="1"/><rect x="6" y="6" width="4" height="4" rx="1"/><rect x="12" y="6" width="4" height="4" rx="1"/><rect x="0" y="12" width="4" height="4" rx="1"/><rect x="6" y="12" width="4" height="4" rx="1"/><rect x="12" y="12" width="4" height="4" rx="1"/></svg></button>
+  <a class="logo" href="index.html" style="text-decoration:none">DMO</a>
+  <div class="items"><a class="on">Strategy HQ</a><a href="pgs-beta.html">Publicity (PGS)</a><a href="dmo-dashboard.html">Calendars</a><a href="index.html">DMO Hub</a></div>
+  <span class="sp"></span>
+  <div class="act"><button id="btnReports">Reports</button><button id="btnAsk">&#9889; Ask Strategy</button></div>
+</div>
+<div class="appmenu" id="appmenu">
+ <div class="amh">DMO &mdash; Marketing Operating System</div>
+ <a href="index.html"><span class="ai" style="background:#eef0ff">&#127968;</span><div><div class="at">DMO Hub</div><div class="ad">Home / launcher</div></div></a>
+ <a href="dmo-dashboard.html"><span class="ai" style="background:#eaf5ee">&#128202;</span><div><div class="at">Executive View</div><div class="ad">Campaign portfolio overview</div></div></a>
+ <a href="pgs-beta.html"><span class="ai" style="background:#fbf4df">&#128203;</span><div><div class="at">PGS 2.0 &mdash; Publicity</div><div class="ad">Press, junkets, schedules</div></div></a>
+ <a class="on"><span class="ai" style="background:#eef0ff">&#127919;</span><div><div class="at">Strategy HQ</div><div class="ad">Briefs, positioning, GTM &middot; you are here</div></div></a>
+ <a href="https://mimp44.github.io/cd-demo/creative-director.html" target="_blank" rel="noopener"><span class="ai" style="background:#fbeef0">&#127916;</span><div><div class="at">Creative Director</div><div class="ad">Concepting, copy, trailers</div></div></a>
+ <a href="studios-creators.html"><span class="ai" style="background:#eef0ff">&#128241;</span><div><div class="at">Digital &amp; Creators</div><div class="ad">Creator &amp; influencer partnerships</div></div></a>
+ <a href="https://mimp44.github.io/claude101/claude101-demo.html" target="_blank" rel="noopener"><span class="ai" style="background:#f3eefb">&#10024;</span><div><div class="at">Claude 101</div><div class="ad">AI enablement</div></div></a>
+</div>
+<div class="sub">Your Strategy Headquarters</div>
+<div class="wrap" id="wrap"></div>
+<button class="asstbtn" id="asstFab">&#9889; Ask Strategy</button>
+<div class="asst" id="asst">
+ <div class="ahd"><span>&#9889;</span><h3>Strategy Assistant</h3><button class="x" id="asstX">&times;</button></div>
+ <div class="athread" id="athread"></div>
+ <div class="ain"><input id="ain" placeholder="Ask about briefs, positioning, GTM, what's next…"><button id="asend">Send</button></div>
+</div>
+<div class="ov" id="profOv"><div class="prof" id="profBox"></div></div>
+<div class="ov" id="modalOv"><div class="rwrap" id="modalBox"></div></div>
+<script>
+const DATA={"slate": [{"title": "Star Wars: Maul - Shadow Lord (Disney+)", "studio": "Lucasfilm", "us": "2026-04-06", "intl": "2026-04-06"}, {"title": "Disneynature's Orangutan (Disney+)", "studio": "Disney", "us": "2026-04-22", "intl": ""}, {"title": "The Devil Wears Prada 2", "studio": "20th Century Studios", "us": "2026-05-01", "intl": ""}, {"title": "The Punisher: One Last Kill (Disney+)", "studio": "Marvel Studios", "us": "2026-05-12", "intl": ""}, {"title": "The Mandalorian and Grogu", "studio": "Lucasfilm", "us": "2026-05-22", "intl": ""}, {"title": "Toy Story 5", "studio": "Pixar Animation Studios", "us": "2026-06-19", "intl": "2026-06-17"}, {"title": "X-Men '97 S2 (Disney+)", "studio": "Marvel Studios", "us": "2026-07-01", "intl": ""}, {"title": "Moana (Live Action)", "studio": "Disney", "us": "2026-07-10", "intl": "2026-07-08"}, {"title": "Star Wars: Visions Presents - The Ninth Jedi (Disney+)", "studio": "Lucasfilm", "us": "2026-08-05", "intl": ""}, {"title": "LEGO Disney Princess: Magical Mayhem (Disney+)", "studio": "Disney", "us": "2026-08-21", "intl": ""}, {"title": "The Dog Stars", "studio": "20th Century Studios", "us": "2026-08-28", "intl": ""}, {"title": "LEGO STAR WARS: The Mandalorian (Disney+)", "studio": "Lucasfilm", "us": "2026-09-02", "intl": ""}, {"title": "VisionQuest (Disney+)", "studio": "Marvel Studios", "us": "2026-10-14", "intl": ""}, {"title": "Whalefall", "studio": "20th Century Studios", "us": "2026-10-16", "intl": "2026-10-14"}, {"title": "Disney's Hexed", "studio": "Walt Disney Animation Studios", "us": "2026-11-25", "intl": "2026-11-25"}, {"title": "Avengers: Doomsday", "studio": "Marvel Studios", "us": "2026-12-18", "intl": ""}, {"title": "Ice Age: Boiling Point", "studio": "20th Century Studios", "us": "2027-02-05", "intl": "2027-02-03"}, {"title": "Gatto (Pixar)", "studio": "Pixar Animation Studios", "us": "2027-03-05", "intl": "2027-03-03"}, {"title": "Avengers: Secret Wars", "studio": "Marvel Studios", "us": "2027-05-07", "intl": ""}, {"title": "Beach Read", "studio": "20th Century Studios", "us": "2027-05-08", "intl": ""}, {"title": "Starfighter", "studio": "Lucasfilm", "us": "2027-05-28", "intl": ""}, {"title": "The Bluey Movie", "studio": "Disney", "us": "2027-08-06", "intl": "2027-08-04"}, {"title": "Frozen 3", "studio": "Walt Disney Animation Studios", "us": "2027-11-24", "intl": "2027-11-24"}, {"title": "Oswald (Disney+)", "studio": "Disney", "us": "", "intl": ""}, {"title": "Star Wars: Tales of the Empire (Disney+)", "studio": "Lucasfilm", "us": "", "intl": ""}, {"title": "Your Friendly Neighborhood Spider-Man S2 (Disney+)", "studio": "Marvel Studios", "us": "", "intl": ""}], "strat": {"The Devil Wears Prada 2": {"tier": "Tentpole", "status": "Active", "synopsis": "Twenty years after their iconic turns, Meryl Streep, Anne Hathaway, Emily Blunt and Stanley Tucci return to Runway Magazine in 20th Century Studios' sequel to the 2006 phenomenon. Directed by David Frankel, written by Aline Brosh McKenna.", "objective": "Convert massive nostalgic awareness into opening-weekend urgency, and broaden the audience from original fans (now 35-54) to Gen Z discovering the franchise through fashion and social culture.", "audience": "Core: women 25-54, original-film fans. Growth: Gen Z women via fashion, beauty and 'that-girl' culture. Cultural: fashion & luxury press, stylists, creators.", "positioning": "The most iconic boss is back. Fashion's sharpest comedy returns, twenty years later — and the stakes have never been higher.", "bigidea": "Runway is back. Make the campaign a fashion event — lean into real fashion-world fluency: house partnerships, magazine covers, creator styling moments, and a runway-grade key art system.", "gtm": [["Announce / Teaser", "April", "Re-introduce the world; nostalgia beat + first look (Esquire-style exclusive)"], ["Trailer + Fashion Press", "Mid-April (CinemaCon)", "Trailer & poster debut; fashion & luxury press surge"], ["Tickets / Hype", "Summer", "Tickets on sale; creator + retail/fashion partnerships"], ["Premiere + Reviews", "Late Apr", "Premiere moment; review embargo lift; talent press"], ["Release", "May 1", "Opening-weekend conversion; sustain via word-of-mouth"]], "competitive": "Counter-programs early-summer four-quadrant tentpoles by owning the adult-female and fashion/culture lanes — a differentiated, grown-up comedy in a CG-heavy corridor.", "leads": {"Strategy": "Martha Morrison, Kathryn Ross, Phoebe Leader, Shameen Abubakar", "Media": "Sheila Sluk, Lynda Greenfield, Joy Kim", "Publicity": "Lindsey Kiefer (Intl), Liz Lee"}, "pillars": ["Runway is back — fashion as the campaign", "Reactivate original fans (25-54)", "Broaden to Gen Z via fashion & social", "Fashion-press cultural takeover"], "partners": "Fashion houses, magazines, beauty, retail", "pc": 12, "markets": "8 markets", "highlights": ["Strong adult-female opening; fashion-press saturation", "Creator styling moments drove Gen Z reach", "Magazine covers + house partnerships landed the fashion-event positioning"]}, "Toy Story 5": {"tier": "Tentpole", "status": "Active", "synopsis": "Pixar's beloved toys return for their biggest adventure yet — the summer's marquee family event.", "objective": "Drive multi-quadrant family turnout and anchor the Summer of Disney brand platform; reactivate millennial parents who grew up with Woody and Buzz.", "audience": "Families with kids 2-11; millennial parents (nostalgia); collectors and superfans.", "positioning": "The toys are back — for their biggest, most heartfelt adventure. The summer event for the whole family.", "bigidea": "Summer of Disney anchor. Maximize cross-company flywheel — Consumer Products & retail, Parks tie-ins, and nostalgia content for parents — so the film shows up everywhere a family already is.", "gtm": [["Teaser", "Winter", "Franchise re-entry; emotional hook"], ["Trailer", "Spring", "Full story tease; CP/retail solicitation"], ["Summer of Disney", "Early summer", "Platform integration; Parks + retail activations"], ["Tickets / Premiere", "June", "Tickets on sale; premiere; family press"], ["Release", "June 19", "Opening-weekend + sustained family runs"]], "competitive": "Owns the family-summer corridor; differentiate on heart and franchise equity vs. other animated entries.", "leads": {"Strategy": "TBD", "Media": "TBD", "Publicity": "Global Publicity — Media Team"}, "pillars": ["Summer of Disney anchor", "Four-quadrant family turnout", "Millennial-parent nostalgia", "CP / retail + Parks flywheel"], "partners": "QSR, retail, Consumer Products, Parks", "pc": 20, "markets": "Global · 30+ markets", "highlights": ["Anchored the Summer of Disney brand platform", "Major CP & retail program in market", "Nostalgia + family messaging driving multi-quad turnout"]}, "Moana (Live Action)": {"tier": "Tentpole", "status": "Active", "synopsis": "The beloved animated adventure reimagined as a live-action, music-filled ocean epic, starring Dwayne Johnson.", "objective": "Convert deep animated-film love and Parks presence into a global theatrical event; lead with music, spectacle and star power.", "audience": "Families; fans of the animated film; Pacific Islander communities (authenticity); Dwayne Johnson's global fanbase.", "positioning": "The story you love, brought to life — an epic, music-filled journey across the ocean.", "bigidea": "Music + ocean spectacle as the hook; Dwayne Johnson star power up top; Parks/DCP synergy; cultural authenticity as a trust signal in every market.", "gtm": [["Teaser", "Spring", "Spectacle-first reveal; music tease"], ["Trailer", "Early summer", "Full trailer; international priority markets"], ["Tickets / Premiere", "July", "Tickets on sale; global premiere"], ["Release", "July 10", "Global rollout; first int'l 7/8"]], "competitive": "Differentiates on music, scale and four-quadrant warmth in a crowded summer; leverages built-in IP awareness.", "leads": {"Strategy": "TBD", "Media": "TBD", "Publicity": "Global Publicity — Media Team"}, "pillars": ["Music + ocean spectacle", "Dwayne Johnson star power", "Cultural authenticity", "Parks / DCP synergy"], "partners": "Consumer Products, Parks, music, retail (planned)", "pc": 14, "markets": "Global (planned)", "highlights": []}, "The Mandalorian and Grogu": {"tier": "Tentpole", "status": "Active", "synopsis": "Star Wars returns to the big screen with Mando and Grogu's first theatrical adventure (Lucasfilm).", "objective": "Translate streaming fandom into a theatrical event; broaden from core Star Wars fans to the family/Grogu mass audience.", "audience": "Core Star Wars fans; families (Grogu appeal); Disney+ subscribers.", "positioning": "Star Wars returns to theaters — the galaxy's favorite duo, on the biggest screen.", "bigidea": "Fan-first, cross-company tentpole: Star Wars Celebration energy, Grogu-led mass appeal, and deep Consumer Products + Parks synergy.", "gtm": [["Announce", "Winter", "Theatrical-event framing"], ["Trailer", "Spring", "Fan ignition + family broadening"], ["Tickets / Premiere", "May", "Tickets; premiere; fan events"], ["Release", "May 22", "Opening weekend; sustained fan + family runs"]], "competitive": "Owns the fan-event lane; theatrical scarcity vs. streaming-default expectations.", "leads": {"Strategy": "TBD", "Media": "TBD", "Publicity": "Global Publicity — Media Team"}, "pillars": ["Star Wars returns to theaters", "Grogu — four-quadrant magnet", "Fan-first ignition (Celebration)", "Cross-company synergy (CP + Parks)"], "partners": "Disney+, Parks, Consumer Products, Fandango, IMAX, retail", "pc": 15, "markets": "11 markets · Domestic + Global", "highlights": ["Multi-quad opening; franchise-best theatrical buzz", "World-premiere social-embargo strategy held; global junket (LA + EMEA)", "15+ promotional partners activated; CP & Parks tie-ins in market", "#1 social trends on trailer and tickets-on-sale beats"]}, "Avengers: Doomsday": {"tier": "Tentpole", "status": "Active", "synopsis": "Marvel Studios' event film — flagged as the 'DOOMSDAY' cross-company priority.", "objective": "Re-establish Avengers as the must-see cultural event of the year; build sustained momentum from the Endgame re-release lead-in.", "audience": "Four-quadrant; MCU core; lapsed fans re-engaged via Endgame re-release; global.", "positioning": "The Avengers face their greatest threat. The event the whole world shows up for.", "bigidea": "Event-scale, cross-company priority. Use the Endgame re-release (9/25) as a paid + earned lead-in; orchestrate a year-end cultural takeover.", "gtm": [["Lead-in", "Sep", "Endgame re-release as momentum engine"], ["Trailer / Hype", "Fall", "Event framing; global drumbeat"], ["Tickets / Premiere", "December", "Tickets; premiere; press"], ["Release", "Dec 18", "Year-end event; global day-and-date"]], "competitive": "Defines the holiday-event corridor; scale and cultural gravity as the moat.", "leads": {"Strategy": "TBD", "Media": "TBD", "Publicity": "Global Publicity — Media Team"}, "pillars": ["Event-scale cultural takeover", "Endgame re-release lead-in", "Four-quadrant + MCU core", "Global day-and-date"], "partners": "TBD — large-scale program in planning", "pc": 0, "markets": "Global (planned)", "highlights": []}, "The Dog Stars": {"tier": "Tentpole", "status": "Active", "synopsis": "Ridley Scott's prestige drama with an ensemble led by Jacob Elordi, Josh Brolin and Margaret Qualley.", "objective": "Build prestige + talent-driven awareness toward an end-of-summer release; convert critical and festival momentum into turnout.", "audience": "Adult/cinephile audiences; awards & prestige press; talent fanbases (Elordi/Qualley reach younger quads).", "positioning": "From Ridley Scott — a sweeping, star-driven story for audiences who still go to the movies for the movies.", "bigidea": "Prestige + talent as the engine: exclusive first looks, festival-grade premiere (London 8/20), and a disciplined review-embargo strategy that protects then ignites.", "gtm": [["First Look", "April", "Esquire exclusive + CinemaCon trailer/poster"], ["Trailer #2", "June", "Second trailer; talent features"], ["Premiere / Junket", "Aug 17-22", "World premiere London; global junket (EMEA/Domestic/Virtual)"], ["Review Lift / Release", "Aug 25-28", "Review embargo lifts 8/25; US release 8/28"]], "competitive": "Differentiates on prestige and star wattage in a late-summer window; talent breadth widens beyond the typical adult-drama quad.", "leads": {"Strategy": "TBD", "Media": "TBD", "Publicity": "Global Publicity — Media Team"}, "pillars": ["Prestige + Ridley Scott auteur", "Talent-driven reach (Elordi / Qualley)", "Festival-grade premiere (London)", "Disciplined review-embargo"], "partners": "Festivals, prestige press (planned)", "pc": 0, "markets": "Global (planned)", "highlights": []}}, "asof": "2026-06-26"};
+const SLATE=DATA.slate, STRAT=DATA.strat;
+const esc=s=>(s==null?"":String(s)).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+const fmtD=d=>{if(!d)return"TBD";const x=new Date(d);if(isNaN(x))return esc(d);return x.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"});};
+const TODAY=()=>{const n=new Date();return new Date(n.getFullYear(),n.getMonth(),n.getDate());};
+function studioColor(s){s=(s||"").toLowerCase();if(s.includes("marvel"))return"var(--marvel)";if(s.includes("pixar"))return"var(--pixar)";if(s.includes("lucas"))return"var(--luca)";if(s.includes("20th"))return"var(--fox)";if(s.includes("animation"))return"var(--wdas)";return"var(--disney)";}
+function strat(t){return STRAT[t]||{tier:"Slate",status:"Planning",objective:"Strategy brief in development. Core go-to-market objective to be defined with the title team.",audience:"Audience definition in progress.",positioning:"Positioning to be developed.",bigidea:"Campaign big idea to be developed.",gtm:[["Announce","TBD","Reveal & awareness"],["Trailer","TBD","Story tease"],["Release","",""]],competitive:"Competitive context to be assessed.",leads:{"Strategy":"TBD","Media":"TBD","Publicity":"TBD"},synopsis:""};}
+function upcoming(){const t=TODAY();return SLATE.filter(s=>s.us&&new Date(s.us)>=t).sort((a,b)=>new Date(a.us)-new Date(b.us));}
+function lifecycle(t){const s=SLATE.find(x=>x.title===t)||{};const td=TODAY();const has=!!STRAT[t];if(s.us){const u=new Date(s.us);if(u<td)return"Complete";if((u-td)/86400000<=56)return"In Market";}return has?"On Slate":"No Brief";}
+const LCCLS={"Complete":"st-complete","In Market":"st-active","On Slate":"st-planning","No Brief":"st-none"};
+function hlTitles(){return SLATE.map(s=>s.title).filter(t=>STRAT[t]&&(lifecycle(t)==="Complete"||lifecycle(t)==="In Market"));}
+
+/* ---- home ---- */
+function renderHome(){
+ const recent=[
+  ["The Devil Wears Prada 2",["Campaign Strategy Brief","Positioning & Messaging","GTM Timeline"],"Today, 9:44 AM"],
+  ["Moana (Live Action)",["GTM Timeline","Audience & Competitive"],"Today, 9:38 AM"],
+  ["Toy Story 5",["Campaign Strategy Brief","Positioning & Messaging"],"Yesterday, 5:51 PM"],
+  ["The Dog Stars",["Campaign Strategy Brief","GTM Timeline"],"Yesterday, 4:47 PM"],
+  ["Avengers: Doomsday",["Campaign Strategy Brief"],"6/24, 10:10 AM"],
+ ];
+ let h=`<h2>Recent</h2><div class="recent">
+  <div class="panel"><div class="ph"><span class="dot"></span> Announcements</div><div class="pb"><div class="empty">There are currently no active Announcements.</div></div></div>
+  <div class="panel"><div class="ph"><span class="dot"></span> Recent Strategy Plans <span class="muted" style="margin-left:auto;font-weight:500;font-size:11px">New in last 3 days</span></div><div class="pb">`;
+ recent.forEach(r=>{h+=`<div class="pl-row"><div class="pl-title" data-open="${esc(r[0])}">${esc(r[0])}</div>
+   <div class="pl-plan">${r[1].map(p=>`<a data-open="${esc(r[0])}">${esc(p)}</a>`).join("")}</div>
+   <div class="pl-time">${esc(r[2])}</div></div>`;});
+ h+=`</div></div></div>`;
+ // campaign highlights
+ const hl=hlTitles();
+ if(hl.length){h+=`<h2>Campaign Highlights</h2><div class="hl-panel">`;
+  hl.forEach(t=>{const st=strat(t),lc=lifecycle(t);
+   h+=`<div class="hl-card"><div class="ht" data-open="${esc(t)}">${esc(t)}</div><div class="hs"><span class="stchip ${LCCLS[lc]}">${esc(lc)}</span></div>
+    <div class="hl-stats"><div class="b"><div class="n">${(st.pillars||[]).length||'—'}</div><div class="l">Pillars</div></div><div class="b"><div class="n">${st.pc?st.pc+'+':'—'}</div><div class="l">Partners</div></div><div class="b"><div class="n" style="font-size:13px">${esc((st.markets||'—').split(' ')[0])}</div><div class="l">Markets</div></div></div>
+    <span class="full" data-hl="${esc(t)}">Full highlights</span></div>`;});
+  h+=`</div>`;}
+ // campaigns
+ h+=`<h2>Campaigns</h2><div class="toolbar"><div class="search">&#128269;<input id="csearch" placeholder="Search campaign or studio"></div><span class="muted" style="font-size:12px" id="ccount"></span></div><div class="grid" id="cgrid"></div>`;
+ document.getElementById("wrap").innerHTML=h;
+ document.querySelectorAll("[data-open]").forEach(e=>e.onclick=()=>openProfile(e.getAttribute("data-open")));
+ document.querySelectorAll("[data-hl]").forEach(e=>e.onclick=()=>openProfile(e.getAttribute("data-hl"),"highlights"));
+ renderGrid("");
+ const cs=document.getElementById("csearch");cs.oninput=()=>renderGrid(cs.value);
+}
+function renderGrid(q){
+ q=(q||"").toLowerCase();
+ const list=SLATE.filter(s=>!q||s.title.toLowerCase().includes(q)||s.studio.toLowerCase().includes(q));
+ const g=document.getElementById("cgrid");
+ g.innerHTML=list.map(s=>{const st=strat(s.title);const lc=lifecycle(s.title),stat=LCCLS[lc];
+  return `<div class="card" data-open="${esc(s.title)}">
+   <div class="key" style="background:linear-gradient(160deg,${studioColor(s.studio)},#11142e)"><span class="badge">${esc(st.tier||'Slate')}</span><div class="kt">${esc(s.title)}</div></div>
+   <div class="cmeta"><div class="cstudio">${esc(s.studio)}</div>
+   <div class="cdates">US: <b>${fmtD(s.us)}</b>${s.intl?`<br>Int'l: ${fmtD(s.intl)}`:""}</div>
+   <span class="stchip ${stat}">${esc(lc)}</span></div></div>`;}).join("");
+ document.getElementById("ccount").textContent=list.length+" titles";
+ g.querySelectorAll("[data-open]").forEach(e=>e.onclick=()=>openProfile(e.getAttribute("data-open")));
+}
+
+/* ---- profile ---- */
+let curTab="overview";
+function openProfile(title,tab){
+ const s=SLATE.find(x=>x.title===title)||{title,studio:"",us:"",intl:""};const st=strat(title);curTab=tab||"overview";
+ const box=document.getElementById("profBox");
+ box.innerHTML=`<div class="top"><div class="t"><h3>${esc(title)}</h3><div class="meta">${esc(s.studio)} · US ${fmtD(s.us)}${s.intl?` · Int'l ${fmtD(s.intl)}`:''} · ${esc(st.tier)}</div></div>
+   <button onclick="openReport('brief','${esc(title).replace(/'/g,"\\'")}')">&#128424; Brief PDF</button>
+   <button id="profClose">Close</button></div>
+  <div class="tabs">
+   <button data-t="overview">Overview</button><button data-t="brief">Strategy Brief</button><button data-t="positioning">Positioning</button><button data-t="gtm">GTM Timeline</button><button data-t="audience">Audience & Competitive</button><button data-t="highlights">Highlights</button>
+  </div><div class="pbody" id="pbody"></div>`;
+ box.querySelector("#profClose").onclick=()=>document.getElementById("profOv").classList.remove("open");
+ box.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>{curTab=b.getAttribute("data-t");paintTab(title);});
+ paintTab(title);
+ document.getElementById("profOv").classList.add("open");
+}
+function paintTab(title){
+ const st=strat(title),s=SLATE.find(x=>x.title===title)||{};const pb=document.getElementById("pbody");
+ document.querySelectorAll(".tabs button").forEach(b=>b.classList.toggle("on",b.getAttribute("data-t")===curTab));
+ const proto=STRAT[title]?"":` <span class="prototype">PROTOTYPE CONTENT</span>`;
+ let h="";
+ if(curTab==="overview"){
+  h+=st.synopsis?`<div class="sec"><h4>Synopsis</h4><p>${esc(st.synopsis)}</p></div>`:"";
+  h+=`<div class="sec"><h4>Objective${proto}</h4><p>${esc(st.objective)}</p></div>`;
+  h+=`<div class="sec"><h4>Team Leads</h4><div class="leads">`+Object.entries(st.leads).map(([k,v])=>`<div class="leadbox"><div class="lh">${esc(k)}</div><div class="lv">${esc(v)}</div></div>`).join("")+`</div></div>`;
+ } else if(curTab==="brief"){
+  h+=`<div class="sec"><h4>Objective${proto}</h4><p>${esc(st.objective)}</p></div>`;
+  h+=`<div class="sec"><h4>Big Idea</h4><p>${esc(st.bigidea)}</p></div>`;
+  h+=`<div class="sec"><h4>Positioning</h4><div class="posi">${esc(st.positioning)}</div></div>`;
+ } else if(curTab==="positioning"){
+  h+=`<div class="sec"><h4>Positioning Statement</h4><div class="posi">${esc(st.positioning)}</div></div>`;
+  h+=`<div class="sec"><h4>Big Idea</h4><p>${esc(st.bigidea)}</p></div>`;
+ } else if(curTab==="gtm"){
+  h+=`<div class="sec"><h4>Go-to-Market Timeline${proto}</h4><table class="gtm"><tbody>`+st.gtm.map(g=>`<tr><td class="ph2">${esc(g[0])}</td><td class="win">${esc(g[1])}</td><td>${esc(g[2])}</td></tr>`).join("")+`</tbody></table></div>`;
+ } else if(curTab==="audience"){
+  h+=`<div class="sec"><h4>Audience${proto}</h4><p>${esc(st.audience)}</p></div>`;
+  h+=`<div class="sec"><h4>Competitive & Marketplace</h4><p>${esc(st.competitive)}</p></div>`;
+ } else if(curTab==="highlights"){
+  const lc=lifecycle(title);
+  h+=`<div class="sec"><h4>Status</h4><p><span class="stchip ${LCCLS[lc]}" style="font-size:11px;padding:3px 10px">${esc(lc)}</span> &nbsp; <span class="muted">${esc(st.markets||'')}</span></p></div>`;
+  h+=`<div class="hstats"><div class="b"><div class="n">${(st.pillars||[]).length||'—'}</div><div class="l">Pillars</div></div><div class="b"><div class="n">${st.pc?st.pc+'+':'—'}</div><div class="l">Partners</div></div><div class="b"><div class="n" style="font-size:13px">${esc((st.markets||'—').split(' ')[0])}</div><div class="l">Markets</div></div></div>`;
+  if(st.pillars&&st.pillars.length)h+=`<div class="sec"><h4>Strategic Pillars</h4><ol class="pillars">${st.pillars.map(p=>`<li>${esc(p)}</li>`).join("")}</ol></div>`;
+  if(st.highlights&&st.highlights.length)h+=`<div class="sec"><h4>Campaign Highlights</h4><ul class="hl-list">${st.highlights.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>`;
+  else h+=`<div class="sec"><h4>Campaign Highlights</h4><p class="muted">Campaign not yet in market — highlights populate post-launch. Planned pillars and partner program shown above.</p></div>`;
+  h+=`<div class="sec"><h4>Partners</h4><p>${esc(st.partners||'TBD')}</p></div>`;
+ }
+ pb.innerHTML=h;
+}
+
+/* ---- reports ---- */
+function openReportsMenu(){
+ const opts=SLATE.map(s=>`<option>${esc(s.title)}</option>`).join("");
+ document.getElementById("modalBox").innerHTML=`<div class="rtoolbar"><span class="rt">Generate a report</span><button class="close" id="rmC">Close</button></div>
+  <div class="sheet"><h4>Campaign Strategy Brief (one-pager)</h4><div style="display:flex;gap:8px;margin-bottom:14px"><select id="rSel" style="flex:1;padding:8px;border:1px solid var(--line);border-radius:8px">${opts}</select><button class="rtoolbar print" style="border-radius:8px;padding:8px 14px" id="rGo">Open</button></div>
+  <h4>Campaign Highlights (one-pager)</h4><div style="display:flex;gap:8px;margin-bottom:14px"><select id="rHl" style="flex:1;padding:8px;border:1px solid var(--line);border-radius:8px">${opts}</select><button class="rtoolbar print" style="border-radius:8px;padding:8px 14px" id="rHlGo">Open</button></div>
+  <h4>Slate report</h4><button class="rtoolbar print" style="border-radius:8px;padding:8px 14px" id="rSlate">Strategy Slate Overview</button></div>`;
+ const ov=document.getElementById("modalOv");ov.classList.add("open");
+ document.getElementById("rmC").onclick=()=>ov.classList.remove("open");
+ document.getElementById("rGo").onclick=()=>openReport("brief",document.getElementById("rSel").value);
+ document.getElementById("rHlGo").onclick=()=>openReport("highlights",document.getElementById("rHl").value);
+ document.getElementById("rSlate").onclick=()=>openReport("slate");
+}
+function openReport(type,arg){
+ let title="Report",html="";const dt=new Date().toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"});
+ if(type==="brief"){const s=SLATE.find(x=>x.title===arg)||{title:arg,studio:"",us:""};const st=strat(arg);title="Strategy Brief";
+  const proto=STRAT[arg]?"":" (prototype content)";
+  html=`<div class="hd"><span class="ti">${esc(arg)} — Campaign Strategy Brief</span><span class="dt">${dt}</span></div>
+   <p><b>Studio:</b> ${esc(s.studio)} &nbsp;·&nbsp; <b>US Release:</b> ${fmtD(s.us)}${s.intl?` &nbsp;·&nbsp; <b>Int'l:</b> ${fmtD(s.intl)}`:''} &nbsp;·&nbsp; <b>Tier:</b> ${esc(st.tier)}</p>
+   ${st.synopsis?`<h4>Synopsis</h4><p>${esc(st.synopsis)}</p>`:''}
+   <h4>Objective${esc(proto)}</h4><p>${esc(st.objective)}</p>
+   <h4>Audience</h4><p>${esc(st.audience)}</p>
+   <h4>Positioning</h4><div class="posi" style="background:#f3f1fb;border-left:3px solid #6a2bd6;padding:10px 13px;border-radius:6px;font-weight:600">${esc(st.positioning)}</div>
+   <h4>Big Idea</h4><p>${esc(st.bigidea)}</p>
+   <h4>Go-to-Market Timeline</h4><table><tbody>${st.gtm.map(g=>`<tr><td style="font-weight:700;color:#2a3bd6;white-space:nowrap">${esc(g[0])}</td><td style="color:#6b7280;white-space:nowrap">${esc(g[1])}</td><td>${esc(g[2])}</td></tr>`).join("")}</tbody></table>
+   <h4>Competitive & Marketplace</h4><p>${esc(st.competitive)}</p>
+   <h4>Team Leads</h4><p>${Object.entries(st.leads).map(([k,v])=>`<b>${esc(k)}:</b> ${esc(v)}`).join(" &nbsp;·&nbsp; ")}</p>
+   <div class="rfoot">DMO Strategy HQ — prototype, slate sourced from Riley (snapshot ${DATA.asof}). Confidential.</div>`;
+ } else if(type==="highlights"){const s=SLATE.find(x=>x.title===arg)||{title:arg,studio:"",us:""};const st=strat(arg);const lc=lifecycle(arg);title="Campaign Highlights";
+  html=`<div class="hd"><span class="ti">${esc(arg)} — Campaign Highlights</span><span class="dt">${dt}</span></div>
+   <p><b>Status:</b> ${esc(lc)} &nbsp;·&nbsp; <b>Studio:</b> ${esc(s.studio)} &nbsp;·&nbsp; <b>US:</b> ${fmtD(s.us)} &nbsp;·&nbsp; <b>Markets:</b> ${esc(st.markets||'TBD')}</p>
+   <h4>Strategic Pillars (${(st.pillars||[]).length})</h4><ol>${(st.pillars||[]).map(p=>`<li>${esc(p)}</li>`).join("")||'<li>TBD</li>'}</ol>
+   <h4>Partners${st.pc?` (${st.pc}+)`:''}</h4><p>${esc(st.partners||'TBD')}</p>
+   <h4>Highlights</h4>${(st.highlights&&st.highlights.length)?`<ul>${st.highlights.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`:'<p>Campaign not yet in market — highlights populate post-launch.</p>'}
+   <div class="rfoot">DMO Strategy HQ — prototype, slate sourced from Riley (snapshot ${DATA.asof}). Confidential.</div>`;
+ } else if(type==="slate"){title="Strategy Slate";
+  const up=upcoming();
+  html=`<div class="hd"><span class="ti">Strategy Slate — Upcoming</span><span class="dt">${dt}</span></div>
+   <table><thead><tr><td style="font-weight:700">Title</td><td style="font-weight:700">Studio</td><td style="font-weight:700">US</td><td style="font-weight:700">Status</td></tr></thead><tbody>`+
+   up.map(s=>`<tr><td>${esc(s.title)}</td><td>${esc(s.studio)}</td><td>${fmtD(s.us)}</td><td>${esc(strat(s.title).status)}</td></tr>`).join("")+
+   `</tbody></table><div class="rfoot">DMO Strategy HQ — slate sourced from Riley (snapshot ${DATA.asof}).</div>`;
+ }
+ document.getElementById("modalBox").innerHTML=`<div class="rtoolbar"><span class="rt">${title}</span><button class="print" onclick="window.print()">&#128424; Print / Save PDF</button><button class="close" id="rC2">Close</button></div><div class="sheet">${html}</div>`;
+ const ov=document.getElementById("modalOv");ov.classList.add("open");
+ document.getElementById("rC2").onclick=()=>ov.classList.remove("open");
+}
+
+/* ---- assistant ---- */
+function findTitle(q){q=q.toLowerCase();let best=null;SLATE.forEach(s=>{const t=s.title.toLowerCase();if(q.includes(t)){if(!best||t.length>best.title.length)best=s;}});if(best)return best;
+ const al={"prada":"The Devil Wears Prada 2","devil wears":"The Devil Wears Prada 2","toy story":"Toy Story 5","moana":"Moana (Live Action)","mandalorian":"The Mandalorian and Grogu","mando":"The Mandalorian and Grogu","grogu":"The Mandalorian and Grogu","doomsday":"Avengers: Doomsday","dog stars":"The Dog Stars","x-men":"X-Men '97 S2 (Disney+)","xmen":"X-Men '97 S2 (Disney+)","visionquest":"VisionQuest (Disney+)","vision quest":"VisionQuest (Disney+)","whalefall":"Whalefall","gatto":"Gatto (Pixar)","frozen":"Frozen 3","punisher":"The Punisher: One Last Kill (Disney+)","maul":"Star Wars: Maul - Shadow Lord (Disney+)","ice age":"Ice Age: Boiling Point","secret wars":"Avengers: Secret Wars","beach read":"Beach Read","starfighter":"Starfighter","bluey":"The Bluey Movie"};
+ for(const k in al)if(q.includes(k))return SLATE.find(s=>s.title===al[k]);return null;}
+function answer(q){const ql=q.toLowerCase(),s=findTitle(q);
+ if(/(brief|strategy)/.test(ql)&&s)return {open:[s.title,"brief"],reply:`Opening the strategy brief for <b>${esc(s.title)}</b>.`};
+ if(/positioning|messag/.test(ql)&&s)return {open:[s.title,"positioning"],reply:`Positioning for <b>${esc(s.title)}</b>.`};
+ if(/(gtm|timeline|go.to.market|beats|phase)/.test(ql)&&s)return {open:[s.title,"gtm"],reply:`GTM timeline for <b>${esc(s.title)}</b>.`};
+ if(/(audience|competitive|market)/.test(ql)&&s)return {open:[s.title,"audience"],reply:`Audience & competitive for <b>${esc(s.title)}</b>.`};
+ if(/highlight/.test(ql)){if(s&&/(pdf|report|generate)/.test(ql))return {report:["highlights",s.title]};if(s)return {open:[s.title,"highlights"],reply:`Campaign highlights for <b>${esc(s.title)}</b>.`,follow:["Generate a highlights PDF","What's launching next?"]};const hl=hlTitles();return {html:`Campaigns with live highlights:<table><tbody>${hl.map(t=>`<tr><td><b>${esc(t)}</b></td><td>${esc(lifecycle(t))}</td></tr>`).join("")}</tbody></table>`,follow:hl.slice(0,3).map(t=>"Highlights for "+t)};}
+ if(/(generate|report|pdf|one.?pager)/.test(ql)){if(s)return {report:["brief",s.title]};return {menu:true,reply:"Opening the reports menu."};}
+ if(/(next|launching|upcoming|what'?s coming|slate)/.test(ql)){const up=upcoming().slice(0,8);return {html:`Next up on the slate:<table><tbody>${up.map(x=>`<tr><td>${fmtD(x.us)}</td><td><b>${esc(x.title)}</b></td><td>${esc(x.studio)}</td></tr>`).join("")}</tbody></table>`,follow:["Brief for "+up[0].title,"Generate a report"]};}
+ if(/help|what can you/.test(ql))return {html:"I can pull the <b>strategy brief, positioning, GTM timeline, and audience/competitive</b> for any title, show what's launching next, and generate a brief PDF.",follow:["What's launching next?","Brief for The Devil Wears Prada 2","Positioning for Moana"]};
+ if(s)return {open:[s.title,"overview"],reply:`Opening <b>${esc(s.title)}</b>.`,follow:["Brief for "+s.title,"GTM for "+s.title]};
+ return {html:"I can help with strategy briefs, positioning, GTM timelines, and the slate. Try “brief for Toy Story 5” or “what's launching next?”",follow:["What's launching next?","Generate a report"]};}
+function aAdd(role,html,follow){const th=document.getElementById("athread");const d=document.createElement("div");d.className="am "+role;
+ d.innerHTML=role==="u"?esc(html):html+(follow?`<div class="achips">${follow.map(f=>`<button class="achip">${esc(f)}</button>`).join("")}</div>`:"");
+ th.appendChild(d);
+ d.querySelectorAll("a.act").forEach(a=>a.onclick=()=>{const r=a.getAttribute("data-r");openReport.apply(null,r.split("|"));});
+ d.querySelectorAll(".achip").forEach(b=>b.onclick=()=>aRun(b.textContent));
+ th.scrollTop=th.scrollHeight;}
+function aRun(q){if(!q)return;aAdd("u",q);const r=answer(q);
+ if(r.open){openProfile.apply(null,r.open);aAdd("b",r.reply||"Opening…",r.follow);}
+ else if(r.report){openReport.apply(null,r.report);aAdd("b","Here's your brief — use Print / Save PDF.",r.follow);}
+ else if(r.menu){openReportsMenu();aAdd("b",r.reply,r.follow);}
+ else aAdd("b",r.html,r.follow);}
+
+/* ---- wire ---- */
+renderHome();
+const asst=document.getElementById("asst");
+function openAsst(){asst.classList.add("open");if(!document.getElementById("athread").children.length)aAdd("b","Hi Michael — I'm your strategy assistant. Ask me for a brief, positioning, a GTM timeline, campaign highlights, or what's launching next.",["What's launching next?","Campaign highlights for Toy Story 5","Brief for The Devil Wears Prada 2"]);}
+document.getElementById("asstFab").onclick=openAsst;
+document.getElementById("btnAsk").onclick=openAsst;
+document.getElementById("asstX").onclick=()=>asst.classList.remove("open");
+document.getElementById("asend").onclick=()=>{const v=document.getElementById("ain").value.trim();if(v){document.getElementById("ain").value="";aRun(v);}};
+document.getElementById("ain").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();document.getElementById("asend").click();}});
+document.getElementById("btnReports").onclick=openReportsMenu;
+["profOv","modalOv"].forEach(id=>document.getElementById(id).onclick=e=>{if(e.target.id===id)e.currentTarget.classList.remove("open");});
+const launch=document.getElementById("launch"),appmenu=document.getElementById("appmenu");
+launch.onclick=e=>{e.stopPropagation();appmenu.classList.toggle("open");};
+document.addEventListener("click",e=>{if(!appmenu.contains(e.target)&&!launch.contains(e.target))appmenu.classList.remove("open");});
+</script>
+</body></html>

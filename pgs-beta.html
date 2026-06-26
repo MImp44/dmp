@@ -15,6 +15,15 @@ button{font-family:inherit;cursor:pointer}
 .tbtn{border:1px solid var(--line);background:var(--card);color:#3a4356;font-weight:600;font-size:12px;padding:7px 12px;border-radius:8px;margin-left:8px}
 .tbtn:hover{border-color:var(--navy);color:var(--navy)}
 .tbtn.pri{background:var(--navy);color:#fff;border-color:var(--navy)}.tbtn.pri:hover{background:var(--navy2)}
+.launch{margin-right:12px;width:34px;height:34px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--navy);display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer}
+.launch:hover{border-color:var(--navy)}
+.appmenu{position:fixed;top:52px;left:14px;z-index:60;background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:0 16px 44px rgba(11,28,63,.18);padding:10px;width:308px;display:none}
+.appmenu.open{display:block}
+.appmenu .amh{font-size:10.5px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);padding:6px 8px;font-weight:800}
+.appmenu a{display:flex;align-items:center;gap:11px;padding:9px 10px;border-radius:9px;text-decoration:none;color:var(--ink)}
+.appmenu a:hover{background:#f1f3f9}.appmenu a.on{background:#eef0ff}
+.appmenu .ai{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.appmenu .at{font-size:13px;font-weight:700}.appmenu .ad{font-size:11px;color:var(--muted)}
 .wrap{max-width:760px;margin:0 auto;padding:54px 20px 40px;min-height:100vh;display:flex;flex-direction:column}
 /* hero */
 .hero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 0 60px}
@@ -101,11 +110,22 @@ button{font-family:inherit;cursor:pointer}
 </style></head>
 <body>
 <div class="top">
+  <button class="launch" id="launch" title="DMO tools"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><rect x="0" y="0" width="4" height="4" rx="1"/><rect x="6" y="0" width="4" height="4" rx="1"/><rect x="12" y="0" width="4" height="4" rx="1"/><rect x="0" y="6" width="4" height="4" rx="1"/><rect x="6" y="6" width="4" height="4" rx="1"/><rect x="12" y="6" width="4" height="4" rx="1"/><rect x="0" y="12" width="4" height="4" rx="1"/><rect x="6" y="12" width="4" height="4" rx="1"/><rect x="12" y="12" width="4" height="4" rx="1"/></svg></button>
   <div class="brand"><span class="bdg">PGS</span><span class="bname">2.0<span class="v"></span></span><span class="bsub">— Publicity Global System</span></div>
   <div class="sp"></div>
   <button class="tbtn" id="btnData">Browse data</button>
   <button class="tbtn" id="btnReports">Reports</button>
   <button class="tbtn pri" id="btnNew">+ New record</button>
+</div>
+<div class="appmenu" id="appmenu">
+ <div class="amh">DMO &mdash; Marketing Operating System</div>
+ <a href="index.html"><span class="ai" style="background:#eef0ff">&#127968;</span><div><div class="at">DMO Hub</div><div class="ad">Home / launcher</div></div></a>
+ <a href="dmo-dashboard.html"><span class="ai" style="background:#eaf5ee">&#128202;</span><div><div class="at">Executive View</div><div class="ad">Campaign portfolio overview</div></div></a>
+ <a class="on"><span class="ai" style="background:#fbf4df">&#128203;</span><div><div class="at">PGS 2.0 &mdash; Publicity</div><div class="ad">Press, junkets, schedules &middot; you are here</div></div></a>
+ <a href="strategy.html"><span class="ai" style="background:#eef0ff">&#127919;</span><div><div class="at">Strategy HQ</div><div class="ad">Briefs, positioning, GTM</div></div></a>
+ <a href="https://mimp44.github.io/cd-demo/creative-director.html" target="_blank" rel="noopener"><span class="ai" style="background:#fbeef0">&#127916;</span><div><div class="at">Creative Director</div><div class="ad">Concepting, copy, trailers</div></div></a>
+ <a href="studios-creators.html"><span class="ai" style="background:#eef0ff">&#128241;</span><div><div class="at">Digital &amp; Creators</div><div class="ad">Creator &amp; influencer partnerships</div></div></a>
+ <a href="https://mimp44.github.io/claude101/claude101-demo.html" target="_blank" rel="noopener"><span class="ai" style="background:#f3eefb">&#10024;</span><div><div class="at">Claude 101</div><div class="ad">AI enablement</div></div></a>
 </div>
 <div class="wrap">
   <div class="hero" id="hero">
@@ -287,5 +307,8 @@ document.getElementById("btnData").onclick=openData;
 document.getElementById("dataClose").onclick=()=>document.getElementById("dataOv").classList.remove("open");
 document.getElementById("rClose").onclick=()=>document.getElementById("reportOv").classList.remove("open");
 ["modalOv","dataOv","reportOv"].forEach(id=>document.getElementById(id).onclick=e=>{if(e.target.id===id)e.currentTarget.classList.remove("open");});
+const launch=document.getElementById("launch"),appmenu=document.getElementById("appmenu");
+launch.onclick=e=>{e.stopPropagation();appmenu.classList.toggle("open");};
+document.addEventListener("click",e=>{if(!appmenu.contains(e.target)&&!launch.contains(e.target))appmenu.classList.remove("open");});
 </script>
 </body></html>
